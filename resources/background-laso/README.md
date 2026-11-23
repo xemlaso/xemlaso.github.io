@@ -4,4 +4,4 @@
 
 Thư mục này trong project chỉ để **đồng bộ / chỉnh sửa** ảnh rồi push lên repo `dichhocvn.github.io`; không bắt buộc có bản sao local để chạy site.
 
-Trong Cấu hình: option hiển thị **tên không đuôi**; **Âm Dương vector** = SVG nội bộ; **Không nền** = không ảnh, không SVG.
+Trong Cấu hình: option hiển thị **tên không đuôi**; **Âm Dương vector** = SVG nội bộ (mặc định của template `tuvivietnam` khi chưa lưu lựa chọn); **Không nền** = không ảnh, không SVG.

@@ -11,7 +11,11 @@ function createSandbox() {
 
   function el(id, extra = {}) {
     const o = {
-      style: {},
+      style: {
+        setProperty() {},
+        removeProperty() {},
+        getPropertyValue() { return ""; },
+      },
       dataset: {},
       value: "",
       textContent: "",
@@ -20,8 +24,14 @@ function createSandbox() {
       selectedIndex: 0,
       innerHTML: "",
       options: [],
-      classList: {
+        classList: {
         _s: new Set(),
+        add(...names) {
+          names.forEach((name) => this._s.add(name));
+        },
+        remove(...names) {
+          names.forEach((name) => this._s.delete(name));
+        },
         toggle(name, on) {
           if (on === undefined) {
             if (this._s.has(name)) this._s.delete(name);
@@ -638,7 +648,7 @@ module.exports = [
       el("gridScalerOuter", { style: {} });
       el("lysoApiWrap", { style: {} });
       el("lysoApiImage", { src: "" });
-      el("lasoWrap", { style: {} });
+      el("lasoWrap", { style: { setProperty() {}, removeProperty() {}, getPropertyValue() { return ""; } } });
       el("luuModeBar", { style: { display: "flex" } });
       el("chkXemHan", { checked: true });
       el("gt", { value: "nam" });
@@ -703,7 +713,7 @@ module.exports = [
       el("gridScalerOuter", { style: {} });
       el("lysoApiWrap", { style: {} });
       el("lysoApiImage", { src: "" });
-      el("lasoWrap", { style: {} });
+      el("lasoWrap", { style: { setProperty() {}, removeProperty() {}, getPropertyValue() { return ""; } } });
       el("gt", { value: "nam" });
       el("gio", { value: "10:00" });
       el("ngayDL", { value: "1" });
@@ -748,7 +758,7 @@ module.exports = [
       el("gridScalerOuter", { style: {} });
       el("lysoApiWrap", { style: {} });
       const img = el("lysoApiImage", { src: "" });
-      el("lasoWrap", { style: {} });
+      el("lasoWrap", { style: { setProperty() {}, removeProperty() {}, getPropertyValue() { return ""; } } });
       el("gt", { value: "nu" });
       el("gio", { value: "14:30" });
       el("ngayDL", { value: "20" });

@@ -1,6 +1,6 @@
 // ── Dialog + kiểm tra ngày trước khi Lập lá số (mobile + desktop) ──
     function validateLapSoDateInputs(tab) {
-      const t = tab || window._currentTab || 'AL';
+      const t = tab || window._currentTab || 'DL';
       if (t === 'DL') {
         const dd = document.getElementById('ngayDL')?.value;
         const mm = document.getElementById('thangDL')?.value;

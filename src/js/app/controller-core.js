@@ -2,13 +2,13 @@
     let _lastJson = null;
 
     function lapLaSo() {
-      if ((window._currentTab || 'AL') !== 'SEARCH' && typeof clearSearchResultsState === 'function' && window._searchResults?.length) {
+      if ((window._currentTab || 'DL') !== 'SEARCH' && typeof clearSearchResultsState === 'function' && window._searchResults?.length) {
         clearSearchResultsState();
       }
       const errEl = document.getElementById('err');
       errEl.style.display = 'none';
 
-      const tab = window._currentTab || 'AL';
+      const tab = window._currentTab || 'DL';
       if (typeof validateLapSoDateInputs === 'function') {
         const check = validateLapSoDateInputs(tab);
         if (check && !check.ok) {

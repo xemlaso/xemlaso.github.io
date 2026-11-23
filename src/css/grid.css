@@ -401,27 +401,58 @@
       text-align: center;
       overflow: hidden;
       position: relative;
-    }
-
-    /* Mặc định ẩn; chỉ hiện khi chọn «Âm Dương vector» (#lasoWrap.laso-center-decor-yinyang) */
-    .center-bg {
-      position: absolute;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
       z-index: 0;
     }
 
-    #lasoWrap.laso-center-decor-yinyang .center-bg {
-      display: flex;
+    /* Lớp nền ô giữa luôn hiện để đặt slogan; SVG Âm Dương chỉ hiện khi chọn «Âm Dương vector» */
+    .center-bg {
+      position: absolute;
+      inset: 0;
+      display: block;
+      pointer-events: none;
+      container-type: size;
     }
 
     .center-bg svg {
+      display: none;
       width: 88%;
       height: 88%;
       opacity: 0.10;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #lasoWrap.laso-center-decor-yinyang .center-bg svg {
+      display: block;
+    }
+
+    .center-mark {
+      position: absolute;
+      right: 5px;
+      bottom: 10px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: max-content;
+      pointer-events: none;
+    }
+
+    .center-slogan {
+      display: block;
+      height: 20cqh;
+      width: auto;
+    }
+
+    .center-antin {
+      display: block;
+      box-sizing: border-box;
+      width: 0;
+      min-width: 100%;
+      height: auto;
+      padding-top: 5px;
     }
 
     .center>*:not(.center-bg) {
@@ -467,7 +498,7 @@
       height: auto;
     }
 
-    #lasoWrap.laso-center-wallpaper-on .center-bg {
+    #lasoWrap.laso-center-wallpaper-on .center-bg svg {
       display: none;
     }
 

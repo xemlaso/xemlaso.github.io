@@ -395,6 +395,11 @@ window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(d
     }
     const quanHeMenhCuc = quanheMenhCuc(hanhNapAm, hanhCuc);
     const thanCu = V ? (V.find(c => c.isThan)?.cungChuc || '—') : '—';
+    let ngayDLText = '—';
+    if (typeof lunar2Solar === 'function') {
+      const sol = lunar2Solar(ngayAL, thangAL, namAL, 0);
+      if (sol && sol[0] && sol[1] && sol[2]) ngayDLText = `${sol[0]}/${sol[1]}/${sol[2]}`;
+    }
 
     const isMono = getComputedStyle(document.documentElement).getPropertyValue('--mono-mode').trim() === '1';
     const bl = isMono ? '#000000' : 'rgb(51,47,142)';
@@ -418,30 +423,34 @@ window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(d
       </tr>`;
 
     return `<div class="center" style="grid-row:2/4;grid-column:2/4;align-items:center;justify-content:center;padding:0;overflow-y:auto;text-align:left;">
-      <div class="center-bg">${bq}</div>
+      <div class="center-bg">${bq}<div class="center-mark"><img class="center-slogan" src="resources/sologan-laso/dich_hoc_tinh_hoa3.png" alt=""><img class="center-antin" src="resources/sologan-antin/an_tin_icon3.png" alt=""></div></div>
       <div style="width:67%;position:relative;z-index:1;margin:auto;">
       <div style="text-align:center;width:100%;margin-bottom:6px;">
-        <div style="font-size:11px;font-weight:bold;color:${bl};letter-spacing:1px;">LÁ SỐ TỬ VI</div>
+        <div style="font-size:13px;font-weight:bold;color:${bl};letter-spacing:1px;">LÁ SỐ TỬ VI</div>
       </div>
-      <table style="width:100%;border-collapse:collapse;font-size:11px;font-family:Arial,sans-serif;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:Arial,sans-serif;">
         ${row('Họ tên:', hoTen || '—')}
-        ${row('Năm:', namAL, canChi)}
+        ${row('Năm:', `${namAL} - ${canChi}`)}
+        ${row('Ngày DL:', ngayDLText)}
         ${row('Ngày AL:', `${ngayAL}/${thangAL}/${namAL}`)}
         ${row('Giờ:', `${gioSinh} (${tenChiGio})`)}
-        ${showNamHan ? `<tr>
-          <td style="font-weight:bold;color:#111;white-space:nowrap;padding:1.5px 8px 1.5px 0;vertical-align:top;">Năm hạn:</td>
-          <td colspan="2" style="color:${bl};padding:1.5px 0;vertical-align:top;font-weight:700;font-size:13px;">${namXem}</td>
-        </tr>` : ''}
+      
         ${row('Âm Dương:', amDuong)}
         ${row('Nạp Âm:', napAm || '—')}
         ${row('Cục:', tenCuc)}
+        <tr><td colspan="3" style="padding:1.5px 0;font-size:13px;line-height:1.2;">&nbsp;</td></tr>
         ${row('Chủ Mệnh:', cungMenhSao)}
         ${row('Chủ Thân:', cungThanSao)}
         ${row('Đại hạn:', thuanChieu ? 'Thuận chiều' : 'Nghịch chiều')}
-        ${row('Thân cư:', `Cung ${thanCu}`)}
-        <tr><td></td><td colspan="2" style="color:${bl};font-size:11px;padding:1.5px 0;">${amDuongLy}</td></tr>
-        <tr><td></td><td colspan="2" style="color:${bl};font-size:11px;padding:1.5px 0;">${quanHeMenhCuc}</td></tr>
-        <tr><td></td><td colspan="2" style="color:${bl};font-size:11px;padding:1.5px 0;">Thân cư ${thanCu}</td></tr>
+        <tr><td colspan="3" style="padding:1.5px 0;font-size:13px;line-height:1.2;">&nbsp;</td></tr>
+        <tr><td></td><td colspan="2" style="color:${bl};font-size:13px;padding:1.5px 0;font-weight:bold;">${amDuongLy}</td></tr>
+        <tr><td></td><td colspan="2" style="color:${bl};font-size:13px;padding:1.5px 0;font-weight:bold;">${quanHeMenhCuc}</td></tr>
+        <tr><td></td><td colspan="2" style="color:${bl};font-size:13px;padding:1.5px 0;font-weight:bold;">Thân cư ${thanCu}</td></tr>
+        <tr><td colspan="3" style="padding:1.5px 0;font-size:13px;line-height:1.2;">&nbsp;</td></tr>
+          ${showNamHan ? `<tr>
+          <td style="font-weight:bold;color:#111;white-space:nowrap;padding:1.5px 8px 1.5px 0;vertical-align:top;">Năm hạn:</td>
+          <td colspan="2" style="color:${bl};padding:1.5px 0;vertical-align:top;font-weight:700;font-size:14px;">${namXem}</td>
+        </tr>` : ''}
       </table>
       </div>
     </div>`;

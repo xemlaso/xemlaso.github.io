@@ -180,6 +180,16 @@
       padding-bottom: 2px;
     }
 
+    body[data-layout="desktop"] .laso-wrap {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    body[data-layout="desktop"] .grid-scaler-outer,
+    body[data-layout="desktop"] .grid-scaler {
+      min-height: 0;
+    }
+
     /* Wrapper để scale lá số responsive */
     /* Wrapper responsive */
     body.laso-lyso-api #gridScalerOuter {

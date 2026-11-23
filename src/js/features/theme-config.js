@@ -25,7 +25,8 @@
     const LASO_BG_STORAGE_KEY = 'tuviLasoBgChoice';
     const ANSAO_METHOD_STORAGE_KEY = 'tuviAnSaoMethod';
     const ANSAO_METHODS = new Set(['lyso', 'trungchau', 'thaithulang']);
-    const DEFAULT_ANSAO_METHOD = 'lyso';
+    const DEFAULT_ANSAO_METHOD = 'thaithulang';
+    const DEFAULT_TEMPLATE = 'tuvivietnam';
     /** Khi UI đang lyso.vn, quét tìm lá số local vẫn cần một method tính sao. */
     const LOCAL_COMPUTE_WHEN_LYSO = 'thaithulang';
     /** Value trong `<select>` cho SVG Âm Dương (không phải tên file) */
@@ -168,6 +169,11 @@
         '--color-hung': '#e67e22',
         '--color-border': '#a0845c',
       },
+      tuvivietnam: {
+        ...DEFAULT_CONFIG,
+        '--color-bg-cung': 'rgb(241, 240, 236)',
+        '--fs-sao': '12px',
+      },
     };
 
     function setLysoTemplateLock(isLocked) {
@@ -282,6 +288,8 @@
 
     function applyTemplate(name) {
       const cfg = TEMPLATES[name] || DEFAULT_CONFIG;
+      const templateSelect = document.getElementById('templateSelect');
+      if (templateSelect && TEMPLATES[name]) templateSelect.value = name;
       setCssVar('--mono-mode', '0');
       Object.entries(cfg).forEach(([k, v]) => setCssVar(k, v));
       syncConfigUI(cfg);
@@ -333,17 +341,16 @@
     }
 
     function resetConfig() {
-      Object.entries(DEFAULT_CONFIG).forEach(([k, v]) => setCssVar(k, v));
-      syncConfigUI(DEFAULT_CONFIG);
-      const templateSelect = document.getElementById('templateSelect');
-      if (templateSelect) templateSelect.value = 'classic';
-      document.querySelectorAll('#cfgPanel select:not([data-var])').forEach(el => el.selectedIndex = 0);
+      document.querySelectorAll('#cfgPanel select:not([data-var]):not(#templateSelect)').forEach(el => el.selectedIndex = 0);
       try { localStorage.removeItem(LASO_BG_STORAGE_KEY); } catch (_) {}
+      const bgSel = document.getElementById('lasoBgSelect');
+      if (bgSel) bgSel.value = LASO_BG_YINYANG;
+      applyTemplate(DEFAULT_TEMPLATE);
       const lyso = isLysoTemplateActive();
       setLysoTemplateLock(lyso);
       if (lyso) return;
       toggleLysoApiMode(false);
-      applyLasoBackgroundChoice('');
+      applyLasoBackgroundChoice(LASO_BG_YINYANG);
       if (_lastJson) {
         const gridEl = document.getElementById('grid');
         TUVI_RENDER.render(_lastJson, gridEl);
@@ -384,7 +391,7 @@
         btn.title = locked ? 'Cấu hình chỉ dùng khi không chọn lyso.vn (API ảnh)' : '';
       }
       if (locked && window._currentTab === 'CFG' && typeof switchTab === 'function') {
-        switchTab(window._lastFormTab || 'AL');
+        switchTab(window._lastFormTab || 'DL');
       }
     }
 
@@ -406,7 +413,7 @@
 
     /** Chỉ vẽ lá số của tab đang mở. Tab khác chỉ nhận giá trị option. */
     function renderChartForOpenTab() {
-      const tab = window._currentTab || 'AL';
+      const tab = window._currentTab || 'DL';
       if (tab === 'CFG') return;
       if (tab === 'SEARCH') {
         const idx = window._currentSearchResultIdx;
@@ -427,7 +434,7 @@
       if (method === 'lyso') setLysoTemplateLock(true);
       else {
         setLysoTemplateLock(false);
-        if (triggerCompute && (window._currentTab || 'AL') !== 'SEARCH') toggleLysoApiMode(false);
+        if (triggerCompute && (window._currentTab || 'DL') !== 'SEARCH') toggleLysoApiMode(false);
       }
       syncCfgTabLock();
       if (triggerCompute) renderChartForOpenTab();
@@ -497,7 +504,10 @@
       try {
         const saved = localStorage.getItem(LASO_BG_STORAGE_KEY);
         if (saved !== null && [...sel.options].some(o => o.value === saved)) sel.value = saved;
-        else if (saved) try { localStorage.removeItem(LASO_BG_STORAGE_KEY); } catch (_) {}
+        else {
+          if (saved) try { localStorage.removeItem(LASO_BG_STORAGE_KEY); } catch (_) {}
+          sel.value = LASO_BG_YINYANG;
+        }
       } catch (_) {}
       applyLasoBackgroundChoice(sel.value);
     })();
@@ -508,6 +518,7 @@
         saved = normalizeAnSaoMethod(localStorage.getItem(ANSAO_METHOD_STORAGE_KEY));
       } catch (_) {}
       window.setAnSaoMethod(saved, false);
+      window.applyTemplate(DEFAULT_TEMPLATE);
     })();
 
     // Gắn auto-convert khi nhập dương lịch

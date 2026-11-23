@@ -1,6 +1,7 @@
 // ── Tab switching ─────────────────────────────────────────
-    let _currentTab = 'AL';
+    let _currentTab = 'DL';
     window._currentTab = _currentTab;
+    window._lastFormTab = 'DL';
 
     function switchTab(tab) {
       if (tab === 'CFG' && typeof isLysoTemplateActive === 'function' && isLysoTemplateActive()) return;
