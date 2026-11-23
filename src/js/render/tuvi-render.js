@@ -222,28 +222,52 @@ const TUVI_RENDER = (() => {
         return { arrows };
       }
 
-      // Lộc Kỵ truy tung: cung chọn phi Lộc → A; A phi Kỵ → B; B phi Kỵ → C …
-      // Dừng khi: tự hóa Kỵ, Kỵ nhập cung đã đi qua, không tìm thấy sao, hoặc quá 12 bước
+           // Lộc Kỵ truy tung (theo phi tinh phái, 祿隨忌走):
+      //   cung chọn phi Lộc → X; can X phi Kỵ → Y; can Y phi Kỵ → Z …
+      // Dừng khi: Kỵ nhập/xung Mệnh · về cung đã qua · cung nhận tự hóa Kỵ · gặp Kỵ sinh niên
+      //           · hoặc đủ MAX_KY bước Kỵ
+      const MAX_KY = 3;
       function tinhTruyTung(chi) {
+        const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
         const arrows = [];
         let step = 1;
         const add = (from, to, hoa) => arrows.push({ from, to, hoa, label: '', step: step++ });
+        if (!json) return { arrows, flow: true, endReason: '' };
 
         const a = phiHoa(chi, 0);
-        if (a === null) return { arrows };
+        if (a === null) return { arrows, flow: true, endReason: 'Không tìm thấy sao hóa Lộc' };
         add(chi, a, 0);
 
+        const menh = chiIdx(json.meta.chiCungMenh);
+        const xungMenh = doiCung(menh);
+        // Cung có Kỵ sinh niên = cung đang chứa sao "Hóa Kị" trên lá số
+        const cKySN = json.cung.find(c => c.sao.some(s => s.name === 'Hóa Kị'));
+        const chiKySN = cKySN ? chiIdx(cKySN.diaChi) : null;
+        if (a === chiKySN) return { arrows, flow: true, endReason: 'Lộc nhập cung Kỵ sinh niên' };
         const visited = new Set([chi, a]);
-        let from = a;
-        for (let n = 0; n < 12; n++) {
+        let from = a, endReason = '';
+        for (let n = 0; n < MAX_KY; n++) {
           const to = phiHoa(from, 3);
-          if (to === null) break;
+          if (to === null) { endReason = 'Không tìm thấy sao hóa Kỵ'; break; }
           add(from, to, 3);
-          if (to === from || visited.has(to)) break;
+
+          const reasons = [];
+          if (to === from) reasons.push('Tự hóa Kỵ');
+          if (to === menh) reasons.push('Kỵ nhập Mệnh');
+          if (to === xungMenh) reasons.push('Kỵ xung Mệnh');
+          if (to === chiKySN) reasons.push('Gặp Kỵ sinh niên');
+          if (to !== from && visited.has(to)) reasons.push('Về cung đã qua');
+          if (to !== from && phiHoa(to, 3) === to) {           // cung nhận tự hóa Kỵ
+            add(to, to, 3);
+            reasons.push('Cung nhận tự hóa Kỵ');
+          }
+          if (reasons.length) { endReason = reasons.join(' · '); break; }
+
           visited.add(to);
           from = to;
+          if (n === MAX_KY - 1) endReason = `Đủ ${MAX_KY} bước Kỵ`;
         }
-        return { arrows, flow: true };
+        return { arrows, flow: true, endReason };
       }
 
       function tinhFly(chi) {
@@ -307,7 +331,7 @@ const TUVI_RENDER = (() => {
         return `<div class="tt-chain">
           <div class="tt-title">Lộc Kỵ truy tung</div>` + rows.map(r =>
           `<div class="tt-row tt-fade${r.cung ? ' tt-cung' : ' tt-link'}${r.end ? ' tt-end' : ''}" style="--d:${r.d}s">
-            ${r.html}${r.end ? ' <span class="tt-stop">■ kết thúc</span>' : ''}</div>`).join('') + `</div>`;
+              ${r.html}${r.end ? ` <span class="tt-stop">■ ${state.endReason || 'kết thúc'}</span>` : ''}</div>`).join('') + `</div>`;
       }
 
       // Hiện box ở giữa lá số: luôn có box Phi hóa, thêm box truy tung nếu đang bật

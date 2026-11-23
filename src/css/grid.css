@@ -787,6 +787,7 @@
       margin-top: 1px;
       z-index: 5;
       display: flex;
+      flex-direction: column;   /* ← THÊM: mỗi tự hóa 1 dòng */
       gap: 2px;
     }
     .top-chi .tu-hoa > span {
