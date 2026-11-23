@@ -77,14 +77,32 @@
             <!-- Dương lịch fields -->
             <div class="fg dl-field"><label>Ngày DL</label>
               <select id="ngayDLMob" class="form-mobile-select" aria-label="Ngày dương lịch"></select>
-              <input id="ngayDL" type="number" min="1" max="31" value="11" class="form-desktop-number-input">
+              <!-- <input id="ngayDL" type="number" min="1" max="31" value="11" class="form-desktop-number-input"> -->
+              <select id="ngayDL" class="form-desktop-number-input" aria-label="Ngày dương lịch"></select>
             </div>
             <div class="fg dl-field"><label>Tháng DL</label>
               <select id="thangDLMob" class="form-mobile-select" aria-label="Tháng dương lịch"></select>
-              <input id="thangDL" type="number" min="1" max="12" value="11" class="form-desktop-number-input">
+              <!-- <input id="thangDL" type="number" min="1" max="12" value="11" class="form-desktop-number-input"> -->
+              <select id="thangDL" class="form-desktop-number-input" aria-label="Tháng dương lịch">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
             </div>
-            <div class="fg dl-field"><label>Năm DL</label>
+            <!-- <div class="fg dl-field"><label>Năm DL</label>
               <input id="namDL" type="number" value="1993">
+            </div> -->
+            <div class="fg dl-field"><label>Năm DL</label>
+              <select id="namDL" aria-label="Năm dương lịch"></select>
             </div>
             <!-- Kết quả quy đổi (desktop; ẩn trên mobile — không chiếm chỗ) -->
             <div class="fg dl-field dl-convert-line" style="grid-column:1/-1">
@@ -97,7 +115,21 @@
                 <span class="gio-colon" aria-hidden="true">:</span>
                 <select id="gioMinuteMob" aria-label="Phút"></select>
               </div>
-              <input id="gio" type="text" value="04:00" class="form-desktop-number-input" oninput="syncGioToGioXem()">
+              <select id="gio" class="form-desktop-number-input" aria-label="Giờ sinh"
+              onchange="syncGioToGioXem()">
+              <option value="00:00">Giờ Tý (23h-1h)</option>
+              <option value="02:00">Giờ Sửu (1h-3h)</option>
+              <option value="04:00" selected>Giờ Dần (3h-5h)</option>
+              <option value="06:00">Giờ Mão (5h-7h)</option>
+              <option value="08:00">Giờ Thìn (7h-9h)</option>
+              <option value="10:00">Giờ Tị (9h-11h)</option>
+              <option value="12:00">Giờ Ngọ (11h-13h)</option>
+              <option value="14:00">Giờ Mùi (13h-15h)</option>
+              <option value="16:00">Giờ Thân (15h-17h)</option>
+              <option value="18:00">Giờ Dậu (17h-19h)</option>
+              <option value="20:00">Giờ Tuất (19h-21h)</option>
+              <option value="22:00">Giờ Hợi (21h-23h)</option>
+            </select>
             </div>
             <div class="fg"><label>Giới tính</label>
               <select id="gt">
@@ -250,6 +282,7 @@
 
             </div>
           </div>
+ 
         </div><!-- end formAreaLaso -->
 
         <!-- Lá số -->

@@ -1,6 +1,66 @@
 // ── Controller: kết nối form → logic → render ────────────
     let _lastJson = null;
 
+    // Dropdown năm DL: (năm hiện tại - 100) → (năm hiện tại + 5), mặc định năm hiện tại
+    (function initNamDLSelect() {
+      const sel = document.getElementById('namDL');
+      if (!sel || sel.tagName !== 'SELECT') return;
+      const now = new Date().getFullYear();
+      let html = '';
+      for (let y = now + 5; y >= now - 100; y--) {
+        html += `<option value="${y}"${y === now ? ' selected' : ''}>${y}</option>`;
+      }
+      sel.innerHTML = html;
+    })();
+    function setGioCanh(hhmm) {
+      const [h] = String(hhmm).split(':').map(Number);
+      const canh = Math.floor(((h + 1) % 24) / 2);          // 0=Tý … 11=Hợi
+      document.getElementById('gio').value = String(canh * 2).padStart(2, '0') + ':00';
+    }
+
+        // Dropdown giờ sinh: mọi lệnh gán gio.value = "HH:MM" tự quy về canh giờ
+        (function initGioSelect() {
+          const sel = document.getElementById('gio');
+          if (!sel || sel.tagName !== 'SELECT') return;
+    
+          const native = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value');
+          const toCanh = v => {
+            const m = String(v ?? '').match(/^\s*(\d{1,2})/);
+            if (!m) return null;
+            const canh = Math.floor(((+m[1] + 1) % 24) / 2);      // 0=Tý … 11=Hợi
+            return String(canh * 2).padStart(2, '0') + ':00';
+          };
+          Object.defineProperty(sel, 'value', {
+            get() { return native.get.call(this); },
+            set(v) { native.set.call(this, toCanh(v) ?? v); },
+          });
+    
+          // Mặc định = canh giờ hiện tại
+          sel.value = new Date().getHours() + ':00';
+          if (typeof syncGioToGioXem === 'function') syncGioToGioXem();
+        })();
+        
+    // Giờ sinh mặc định = canh giờ hiện tại
+    (function initGioCanhHienTai() {
+      const sel = document.getElementById('gio');
+      if (!sel || sel.tagName !== 'SELECT') return;
+      const h = new Date().getHours();
+      const canh = Math.floor(((h + 1) % 24) / 2);              // 0=Tý … 11=Hợi
+      sel.value = String(canh * 2).padStart(2, '0') + ':00';
+      if (typeof syncGioToGioXem === 'function') syncGioToGioXem();
+    })();
+
+    // Dropdown ngày DL: 1 → 31, mặc định 11
+    (function initNgayDLSelect() {
+      const sel = document.getElementById('ngayDL');
+      if (!sel || sel.tagName !== 'SELECT') return;
+      let html = '';
+      for (let d = 1; d <= 31; d++) {
+        html += `<option value="${d}"${d === 11 ? ' selected' : ''}>${d}</option>`;
+      }
+      sel.innerHTML = html;
+    })();
+
     function lapLaSo() {
       if ((window._currentTab || 'DL') !== 'SEARCH' && typeof clearSearchResultsState === 'function' && window._searchResults?.length) {
         clearSearchResultsState();
