@@ -216,8 +216,8 @@
               <div class="fg">
                 <label>Template màu</label>
                 <select id="templateSelect" onchange="applyTemplate(this.value)">
-                  <option value="tuvivietnam" selected>Tích hợp Nam Bắc phái</option>
-                  <option value="classic">Cổ điển (hiện tại)</option>
+                  <option value="tuvivietnam" selected>Hiện đại</option>
+                  <option value="classic">Cổ điển</option>
                   <option value="mono">Đơn sắc (không màu)</option>
                   <option value="pastel">Nhạt</option>
                 </select>
@@ -387,6 +387,8 @@
             </span> -->
           </div>
           <button class="btn-prompt" onclick="exportPrompt()">📋 Xuất Prompt</button>
+
+          <button type="button" class="laso-download-btn" onclick="downloadLasoImage(this)">⬇ Tải ảnh</button>
         </div>
 
         <div id="searchResultMobileDock" style="display:none;"></div>
@@ -538,7 +540,8 @@
   <script src="src/js/features/form-mobile-pickers.js"></script>
   <script src="src/js/features/prompt-export.js"></script>
 
-
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.js"></script>
+  <script src="src/js/laso-download.js"></script>
 </body>
 
 </html>

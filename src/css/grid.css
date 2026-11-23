@@ -1,19 +1,69 @@
+/* Nút */
+.laso-download-btn {
+  padding: 4px 10px;
+  border: 1px solid #c8b88a;
+  border-radius: 6px;
+  background: #fff;
+  color: #4a2e08;
+  font-size: 12px;
+  cursor: pointer;
+}
+.laso-download-btn:disabled { opacity: .6; cursor: wait; }
+
+/* Khi đang chụp: tắt mọi hiệu ứng, hiện trạng thái cuối */
+
+
+.capturing *,
+.capturing *::before,
+.capturing *::after {
+  animation: none !important;
+  transition: none !important;
+}
+.capturing .tt-fade { opacity: 1 !important; }
+.capturing .tt-line { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+
+/* Lớp xem ảnh (nhấn giữ để lưu) */
+.laso-dl-overlay {
+  position: fixed; inset: 0;
+  z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, .75);
+  padding: 12px;
+}
+.laso-dl-panel {
+  max-width: 100%; max-height: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.laso-dl-hint {
+  color: #fff; font: 13px/1.4 Arial, sans-serif; text-align: center;
+}
+.laso-dl-img {
+  max-width: 100%; max-height: 80vh;
+  background: #fff;
+  border-radius: 4px;
+  -webkit-touch-callout: default;      /* cho phép nhấn giữ trên iOS */
+  user-select: auto;
+}
+.laso-dl-close {
+  padding: 6px 18px;
+  border: none; border-radius: 6px;
+  background: #fff; color: #333;
+  font-size: 13px; cursor: pointer;
+}
+
+
+    
     /* ── Ô cung — flex dọc 3 vùng ──────────────────────────── */
     .cung {
       background: var(--color-bg-cung);
       display: flex;
       flex-direction: column;
       overflow: visible;
-      width: 4.3cm;
-      min-height: 6cm;
+      /* width: 163px;
+      min-height: 227px; */
       position: relative;
       z-index: 1;
     }
-
-    /* Nén text dọc 85% cho toàn bộ nội dung trong cung */
-    .cung-top,
-    .cung-mid,
-    .cung-bot {}
 
     .cung.menh {
       background: var(--color-bg-cung);
@@ -996,3 +1046,47 @@
         white-space: nowrap;
       }
     }
+
+
+  /* ══ Kích thước & viền lá số — biến toàn cục ═════════════════ */
+:root {
+  /* Ô cung */
+  --laso-cell-w: 163px;                       /* ≈ 4.3cm, số nguyên để không lẻ pixel */
+  --laso-cell-h: 227px;                       /* ≈ 6cm, chiều cao tối thiểu */
+
+  /* Đường phân cách giữa các cung (mọi ô giống nhau) - nếu đổi thì phải chọn số nguyên*/
+  --laso-cell-border-width: 1px; 
+  --laso-cell-border-color: #3b2a14;
+
+  /* Viền bao quanh lá số */
+  --laso-outer-border-width: 2px;
+  --laso-outer-border-color: #3b2a14;
+}
+
+#grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, var(--laso-cell-w)) !important;
+  grid-template-rows: repeat(4, minmax(var(--laso-cell-h), auto)) !important;
+  gap: var(--laso-cell-border-width) !important;           /* = đường phân cách */
+  background: var(--laso-cell-border-color) !important;    /* màu lộ qua khe = màu đường phân cách */
+  border: var(--laso-outer-border-width) solid var(--laso-outer-border-color) !important;
+  width: max-content;
+}
+
+/* Ô cung & ô trung tâm: không viền, chỉ có nền (che phần nền lưới) */
+#grid > .cung,
+#grid > .center {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  width: auto !important;          /* lấp đúng ô lưới */
+  min-height: 0 !important;        /* chiều cao do grid-template-rows quyết định */
+  background: var(--color-bg-cung);
+}
+
+/* Ô được chọn: chỉ đổi nền, không đổi viền */
+#grid > .cung.hl-selected,
+#grid > .cung.hl-doi,
+#grid > .cung.hl-tamhop {
+  border-color: transparent !important;
+}
