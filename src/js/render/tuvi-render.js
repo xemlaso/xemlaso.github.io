@@ -603,6 +603,19 @@ const TUVI_RENDER = (() => {
           html += renderCung({ ...c, tenDV: dvMap[ci] || '', tenLN: lnMap[ci] || '', tenThang: thangMap[ci] || '', dvSao: rawDvSao, canCung, isLNDV: ci === chiLNDV, tuHoa });
           
         });
+
+        // Hóa xuất: can cung hóa sao nằm ở cung xung chiếu
+        const xuat = [];
+        cung.forEach(c => {
+          const ci = chiIdx(c.diaChi);
+          const can = TUVI_DATA.BANG_THIENCAN_CUNGMENH[canIdx(meta.canNam)][ci];
+          const doi = cung.find(x => chiIdx(x.diaChi) === doiCung(ci));
+          (TUVI_DATA.TU_HOA[can] || []).forEach((tenSao, h) => {
+            if (doi?.sao.some(s => s.name === tenSao)) xuat.push({ from: ci, to: doiCung(ci), hoa: h });
+          });
+        });
+        PILL_ENGINE.setXuat?.(xuat);
+
         html += CENTER_RENDERER.renderCenter(meta);
         gridEl.innerHTML = html;
         requestAnimationFrame(() => PILL_ENGINE.render(meta, gridEl, _lastLuuPills));

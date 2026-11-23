@@ -469,9 +469,65 @@ window.TUVI_RENDER_SHARED.createPillEngine = function createPillEngine(deps) {
     if (gridEl) {
       gridEl.querySelector('.center')?.classList.toggle('dim', !!state);
       renderTuHoa(gridEl);
+      renderXuat(gridEl);          // ← THÊM
     }
   }
 
+    // ── Hóa xuất: can cung hóa sao nằm ở cung xung chiếu ──
+    let _xuat = [];                 // [{ from, to, hoa }]
+  
+  
+    function setXuat(list) { _xuat = list || []; }
+  
+    const XUAT_LEN = 30;                                    // độ dài mũi tên (px)
+    const XUAT_MAU = '#555';                                // màu mũi tên: đen nhạt
+    const XUAT_KH = ['A', 'B', 'C', 'D'];                   // Lộc, Quyền, Khoa, Kỵ
+    const XUAT_KH_MAU = ['#2e8b57', '#c0392b', '#7d3c98', '#000'];
+  
+    function renderXuat(gridEl) {
+      gridEl.querySelector('.xuat-svg')?.remove();
+      if (_fly || !_xuat.length) return;          // đang xem phi hóa/truy tung thì ẩn
+      const scale = getScale();
+  
+      // Gom theo cung xuất phát: { from, to, hoas: [0..3] }
+      const groups = {};
+      _xuat.forEach(x => {
+        (groups[x.from] ||= { from: x.from, to: x.to, hoas: [] }).hoas.push(x.hoa);
+      });
+  
+      let body = '';
+      Object.values(groups).forEach(g => {
+        const p0 = anchorPoint(g.from, gridEl, scale);
+        const p2 = anchorPoint(g.to, gridEl, scale);
+        if (!p0 || !p2) return;
+        const dx = p2.x - p0.x, dy = p2.y - p0.y, len = Math.hypot(dx, dy) || 1;
+        const ux = dx / len, uy = dy / len;
+        const L = Math.min(XUAT_LEN, len);
+        const ex = p0.x + ux * L, ey = p0.y + uy * L;
+  
+        body += `<line x1="${p0.x}" y1="${p0.y}" x2="${ex}" y2="${ey}"
+          stroke="${XUAT_MAU}" stroke-width="1.4" stroke-opacity="0.8" marker-end="url(#xu-arrow)"/>`;
+  
+        // Nhãn: hàng vòng tròn ngay sau đầu mũi tên, xếp vuông góc với hướng mũi tên
+        const R = 8, gap = 2;
+        const cx = ex + ux * (R + 3), cy = ey + uy * (R + 3);
+        const px = -uy, py = ux;                          // hướng vuông góc
+        const hoas = g.hoas.sort();
+        hoas.forEach((h, i) => {
+          const s = (i - (hoas.length - 1) / 2) * (R * 2 + gap);
+          const bx = cx + px * s, by = cy + py * s;
+          body += `<circle cx="${bx}" cy="${by}" r="${R}" fill="${XUAT_KH_MAU[h]}"/>
+            <text x="${bx}" y="${by}" fill="#fff" font-size="12" font-weight="bold"
+              text-anchor="middle" dominant-baseline="central">${XUAT_KH[h]}</text>`;
+        });
+      });
+  
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('class', 'xuat-svg');
+      svg.innerHTML = `<defs><marker id="xu-arrow" viewBox="0 0 10 10" refX="9" refY="5"
+          markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${XUAT_MAU}"/></marker></defs>${body}`;
+      gridEl.appendChild(svg);
+    }
   function pillPos(c1, c2, gridEl) {
     const g1 = CHI_GRID_R[c1], g2 = CHI_GRID_R[c2];
     if (!g1 || !g2) return null;
@@ -583,9 +639,10 @@ window.TUVI_RENDER_SHARED.createPillEngine = function createPillEngine(deps) {
     }
     renderTamHop(gridEl);   // ← THÊM DÒNG NÀY
     renderTuHoa(gridEl);
+    renderXuat(gridEl);          // ← THÊM
   }
 
-  return { render,setTuHoa };
+  return { render,setTuHoa,setXuat };
 };
 
 window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(deps) {
