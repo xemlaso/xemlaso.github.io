@@ -215,24 +215,24 @@ const ANSAO_THAITHULANG = (() => {
     "Thiên Tướng": { ty: "v", suu: "d", dan: "m", mao: "h", thin: "v", ti: "d", ngo: "v", mui: "d", than: "m", dau: "h", tuat: "v", hoi: "d" },
     "Tử Vi": { ty: "b", suu: "d", dan: "m", mao: "b", thin: "v", ti: "m", ngo: "m", mui: "d", than: "m", dau: "b", tuat: "v", hoi: "b" },
     "Vũ Khúc": { ty: "v", suu: "m", dan: "v", mao: "d", thin: "m", ti: "h", ngo: "v", mui: "m", than: "v", dau: "d", tuat: "m", hoi: "h" },
-    "Văn Xương": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "d", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "d" },
-    "Văn Khúc": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "d", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "d" },
-    "Địa Không": { ty: "h", suu: "h", dan: "d", mao: "h", thin: "h", ti: "d", ngo: "h", mui: "h", than: "d", dau: "h", tuat: "h", hoi: "d" },
-    "Địa Kiếp": { ty: "h", suu: "h", dan: "d", mao: "h", thin: "h", ti: "d", ngo: "h", mui: "h", than: "d", dau: "h", tuat: "h", hoi: "d" },
-    "Đại Hao": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
-    "Tiểu Hao": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
-    "Đà La": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "h", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "h" },
-    "Thiên Mã": { ty: "h", suu: "h", dan: "d", mao: "h", thin: "h", ti: "d", ngo: "h", mui: "h", than: "h", dau: "h", tuat: "h", hoi: "h" },
-    "Linh Tinh": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "d", ti: "d", ngo: "d", mui: "h", than: "h", dau: "h", tuat: "h", hoi: "h" },
-    "Kình Dương": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "h", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "h" },
-    "Hỏa Tinh": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "d", ti: "d", ngo: "d", mui: "h", than: "h", dau: "h", tuat: "h", hoi: "h" },
-    "Thiên Hư": { ty: "d", suu: "d", dan: "h", mao: "d", thin: "h", ti: "h", ngo: "d", mui: "d", than: "h", dau: "d", tuat: "h", hoi: "h" },
-    "Hóa Kị": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "h", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "h" },
-    "Thiên Hình": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
-    "Bạch Hổ": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
-    "Thiên Khốc": { ty: "d", suu: "d", dan: "h", mao: "d", thin: "h", ti: "h", ngo: "d", mui: "d", than: "h", dau: "d", tuat: "h", hoi: "h" },
-    "Thiên Diêu": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "h", dau: "d", tuat: "d", hoi: "h" },
-    "Tang Môn": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
+    // "Văn Xương": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "d", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "d" },
+    // "Văn Khúc": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "d", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "d" },
+    // "Địa Không": { ty: "h", suu: "h", dan: "d", mao: "h", thin: "h", ti: "d", ngo: "h", mui: "h", than: "d", dau: "h", tuat: "h", hoi: "d" },
+    // "Địa Kiếp": { ty: "h", suu: "h", dan: "d", mao: "h", thin: "h", ti: "d", ngo: "h", mui: "h", than: "d", dau: "h", tuat: "h", hoi: "d" },
+    // "Đại Hao": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
+    // "Tiểu Hao": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
+    // "Đà La": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "h", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "h" },
+    // "Thiên Mã": { ty: "h", suu: "h", dan: "d", mao: "h", thin: "h", ti: "d", ngo: "h", mui: "h", than: "h", dau: "h", tuat: "h", hoi: "h" },
+    // "Linh Tinh": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "d", ti: "d", ngo: "d", mui: "h", than: "h", dau: "h", tuat: "h", hoi: "h" },
+    // "Kình Dương": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "h", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "h" },
+    // "Hỏa Tinh": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "d", ti: "d", ngo: "d", mui: "h", than: "h", dau: "h", tuat: "h", hoi: "h" },
+    // "Thiên Hư": { ty: "d", suu: "d", dan: "h", mao: "d", thin: "h", ti: "h", ngo: "d", mui: "d", than: "h", dau: "d", tuat: "h", hoi: "h" },
+    // "Hóa Kị": { ty: "h", suu: "d", dan: "h", mao: "h", thin: "d", ti: "h", ngo: "h", mui: "d", than: "h", dau: "h", tuat: "d", hoi: "h" },
+    // "Thiên Hình": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
+    // "Bạch Hổ": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
+    // "Thiên Khốc": { ty: "d", suu: "d", dan: "h", mao: "d", thin: "h", ti: "h", ngo: "d", mui: "d", than: "h", dau: "d", tuat: "h", hoi: "h" },
+    // "Thiên Diêu": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "h", dau: "d", tuat: "d", hoi: "h" },
+    // "Tang Môn": { ty: "h", suu: "h", dan: "d", mao: "d", thin: "h", ti: "h", ngo: "h", mui: "h", than: "d", dau: "d", tuat: "h", hoi: "h" },
   };
 
   const ttlData = (() => {
@@ -245,7 +245,7 @@ const ANSAO_THAITHULANG = (() => {
         "L.Bạch Hổ": [8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7],
       };
 
-      // L.Đại Hao / L.Tiểu Hao thuộc vòng Bác Sĩ, khởi từ Lộc Tồn (theo can năm xem).
+      // L.Đại Hao / L.Tiểu Hao thuộc vòng Bác Sỹ, khởi từ Lộc Tồn (theo can năm xem).
       const locTonByCan = TTL_SAO_THEO_CAN["Lộc Tồn"];
       const luuTheoCan = {
         "L.Tiểu Hao": locTonByCan.map((chi) => (chi + 3) % 12),
@@ -294,7 +294,7 @@ const ANSAO_THAITHULANG = (() => {
       return out;
     }
 
-    // Vòng Bác Sĩ (TTL), khởi Lộc Tồn.
+    // Vòng Bác Sỹ (TTL), khởi Lộc Tồn.
     function computeBacSiRing({ chiLocTon, thuanChieu }) {
       // TTL dùng hai chuỗi khác nhau cho an thuận/an nghịch.
       const bacSiRingRaw = thuanChieu
@@ -306,7 +306,7 @@ const ANSAO_THAITHULANG = (() => {
             "Bác Sỹ", "Quan Phủ", "Phục Binh", "Đại Hao", "Bệnh Phù", "Hỉ Thần",
             "Phi Liêm", "Tấu Thư", "Tướng Quân", "Tiểu Hao", "Thanh Long", "Lực Sĩ",
           ];
-      const rename = { "Bác Sỹ": "Bác Sĩ" };
+      const rename = { "Bác Sỹ": "Bác Sỹ" };
       const bacSiRing = [];
       const seen = new Set();
       bacSiRingRaw.forEach((name) => {

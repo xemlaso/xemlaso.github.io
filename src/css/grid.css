@@ -117,8 +117,12 @@
     }
 
     .badge-t {
-      background: #2980b9;
+      background: #000000;
       color: #fff;
+      padding: 5px;
+     
+      font-weight: bold;
+      font-size: 11px;
     }
 
     /* ── MIDDLE: chính tinh (2 hàng) + cát/hung (2 cột) ────── */

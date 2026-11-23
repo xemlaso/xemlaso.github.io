@@ -237,7 +237,7 @@ function enrichWithLuuStars(laso, namXem, method = "trungchau") {
   Object.entries(C.L_SAO_THEO_CAN || {}).forEach(([tenSao, arr]) => pushToChi(arr[canNamXem], tenSao));
   Object.entries(lSaoTheoChiMethod || {}).forEach(([tenSao, arr]) => pushToChi(arr[chiNamXem], tenSao));
 
-  const HOA_TEN = ["Hóa Lộc", "Hóa Quyền", "Hóa Khoa", "Hóa Kỵ"];
+  const HOA_TEN = ["Hóa Lộc", "Hóa Quyền", "Hóa Khoa", "Hóa Kị"];
   const chiCuaSao = (tenSao) => {
     const c = laso.cung.find((x) => (x.sao || []).some((s) => s.name === tenSao));
     return c ? chiIdx(c.diaChi) : undefined;
@@ -325,11 +325,11 @@ module.exports = [
           sm: { "Thiên Tướng": "H", "Thiên Hình": "Đ" },
         },
         "Phụ Mẫu": {
-          names: ["Thiên Cơ", "Thiên Lương", "Hữu Bật", "Hóa Khoa", "Hoa Cái", "Long Trì", "Địa Kiếp", "Đà La", "Hóa Kỵ", "Quan Phủ", "Quan Phù", "Thiên La", "L.Đà La"],
+          names: ["Thiên Cơ", "Thiên Lương", "Hữu Bật", "Hóa Khoa", "Hoa Cái", "Long Trì", "Địa Kiếp", "Đà La", "Hóa Kị", "Quan Phủ", "Quan Phù", "Thiên La", "L.Đà La"],
           sm: { "Thiên Cơ": "M", "Thiên Lương": "M", "Địa Kiếp": "H", "Đà La": "Đ"},
         },
         "Phúc Đức": {
-          names: ["Tử Vi", "Thất Sát", "Văn Xương", "Lộc Tồn", "Tam Thai", "Bác Sĩ", "Nguyệt Đức", "L.Lộc Tồn", "Linh Tinh", "Tử Phù", "Kiếp Sát", "Phá Toái"],
+          names: ["Tử Vi", "Thất Sát", "Văn Xương", "Lộc Tồn", "Tam Thai", "Bác Sỹ", "Nguyệt Đức", "L.Lộc Tồn", "Linh Tinh", "Tử Phù", "Kiếp Sát", "Phá Toái"],
           sm: { "Tử Vi": "M", "Thất Sát": "V", "Văn Xương": "Đ", "Linh Tinh": "Đ" },
         },
         "Điền Trạch": {
@@ -373,7 +373,7 @@ module.exports = [
       const alias = {
         "LN Văn Tinh": "Lưu Niên Văn Tinh",
         "Đầu Quân": "Đẩu Quân",
-        "Bác Sỹ": "Bác Sĩ",
+        "Bác Sỹ": "Bác Sỹ",
         "Thiên Hỷ": "Thiên Hỉ",
       };
       const canon = (n) => alias[n] || n;
@@ -409,7 +409,7 @@ module.exports = [
           sm: { "Thiên Mã": "Đ", "Hỏa Tinh": "Đ", "Đại Hao": "Đ", "Thiên Hư": "H" },
         },
         "Phụ Mẫu": {
-          names: ["Liêm Trinh", "Phá Quân", "Long Đức", "Hóa Kỵ", "Phục Binh"],
+          names: ["Liêm Trinh", "Phá Quân", "Long Đức", "Hóa Kị", "Phục Binh"],
           sm: { "Liêm Trinh": "H", "Phá Quân": "H" },
         },
         "Phúc Đức": {
@@ -417,7 +417,7 @@ module.exports = [
           sm: { "Văn Khúc": "Đ", "Đà La": "Đ", "Bạch Hổ": "H" },
         },
         "Điền Trạch": {
-          names: ["Thiên Phủ", "Lộc Tồn", "Bác Sĩ", "Thiên Quan", "Phúc Đức", "Thiên Đức", "L.Lộc Tồn", "Kiếp Sát"],
+          names: ["Thiên Phủ", "Lộc Tồn", "Bác Sỹ", "Thiên Quan", "Phúc Đức", "Thiên Đức", "L.Lộc Tồn", "Kiếp Sát"],
           sm: { "Thiên Phủ": "Đ"},
         },
         "Quan Lộc": {
@@ -457,7 +457,7 @@ module.exports = [
       const alias = {
         "LN Văn Tinh": "Lưu Niên Văn Tinh",
         "Đầu Quân": "Đẩu Quân",
-        "Bác Sỹ": "Bác Sĩ",
+        "Bác Sỹ": "Bác Sỹ",
         "Thiên Hỷ": "Thiên Hỉ",
         "Điều Khách": "Điếu Khách",
       };
@@ -514,7 +514,7 @@ module.exports = [
           sm: { "Đà La": "Đ" },
         },
         "Thiên Di": {
-          names: ["Liêm Trinh", "Lộc Tồn", "Bác Sĩ", "L.Thiên Mã", "Bạch Hổ", "L.Tang Môn"],
+          names: ["Liêm Trinh", "Lộc Tồn", "Bác Sỹ", "L.Thiên Mã", "Bạch Hổ", "L.Tang Môn"],
           sm: { "Liêm Trinh": "V", "Bạch Hổ": "Đ" },
         },
         "Tật Ách": {
@@ -526,7 +526,7 @@ module.exports = [
           sm: { "Phá Quân": "Đ" },
         },
         "Tử Tức": {
-          names: ["Thiên Đồng", "Thai Phụ", "Bát Tọa", "Lưu Niên Văn Tinh", "Thiên Quan", "Hóa Kỵ", "Đại Hao", "Trực Phù"],
+          names: ["Thiên Đồng", "Thai Phụ", "Bát Tọa", "Lưu Niên Văn Tinh", "Thiên Quan", "Hóa Kị", "Đại Hao", "Trực Phù"],
           sm: { "Thiên Đồng": "Đ", "Đại Hao": "H" },
         },
         "Phu Thê": {
@@ -542,7 +542,7 @@ module.exports = [
       const alias = {
         "LN Văn Tinh": "Lưu Niên Văn Tinh",
         "Đầu Quân": "Đẩu Quân",
-        "Bác Sỹ": "Bác Sĩ",
+        "Bác Sỹ": "Bác Sỹ",
         "Thiên Hỷ": "Thiên Hỉ",
         "Điều Khách": "Điếu Khách",
         "Phu": "Phu Thê",

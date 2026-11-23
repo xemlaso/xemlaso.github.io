@@ -115,10 +115,10 @@ const ANSAO_TRUNGCHAU = (() => {
     'Thiên Tài': 'tho', 'Thiên Thọ': 'tho', 'Nguyệt Đức': 'hoa', 'Hồng Loan': 'thuy',
     'Thiên Hỉ': 'thuy', 'Giải Thần': 'moc', 'Đào Hoa': 'moc-thuy', 'Thiên Y': 'thuy',
     'Địa Giải': 'tho', 'Thiên Giải': 'hoa', 'Thiên Phúc': 'tho', 'Hóa Lộc': 'tho', 'Hóa Quyền': 'moc',
-    'Hóa Khoa': 'thuy', 'Hóa Kỵ': 'thuy', 'Kình Dương': 'kim-hoa', 'Đà La': 'kim-hoa',
+    'Hóa Khoa': 'thuy', 'Hóa Kị': 'thuy', 'Kình Dương': 'kim-hoa', 'Đà La': 'kim-hoa',
     'Hỏa Tinh': 'hoa', 'Linh Tinh': 'hoa', 'Địa Không': 'hoa', 'Địa Kiếp': 'hoa', 'Thiên Hình': 'hoa',
     'Thiên Diêu': 'thuy', 'Âm Sát': '', 'Thiên Nguyệt': '', 'Nguyệt Giải': '', 'Thiên Vu': '',
-    'Bác Sĩ': 'thuy', 'Lực Sĩ': 'hoa', 'Thanh Long': 'thuy', 'Tiểu Hao': 'hoa', 'Tướng Quân': 'moc',
+    'Bác Sỹ': 'thuy', 'Lực Sĩ': 'hoa', 'Thanh Long': 'thuy', 'Tiểu Hao': 'hoa', 'Tướng Quân': 'moc',
     'Tấu Thư': 'kim', 'Phi Liêm': 'hoa', 'Hỉ Thần': 'hoa', 'Bệnh Phù': 'tho-moc', 'Đại Hao': 'hoa',
     'Phục Binh': 'hoa', 'Quan Phủ': 'hoa', 'Quốc Ấn': 'tho', 'Đường Phù': 'moc', 'Thiên Quan': 'hoa',
     'Lưu Hà': 'thuy', 'Thiên Trù': 'tho', 'Thiên La': 'kim', 'Địa Võng': 'kim', 'Lưu Niên Văn Tinh': 'moc',
@@ -129,7 +129,7 @@ const ANSAO_TRUNGCHAU = (() => {
     'Phúc Đức': 'tho', 'Điếu Khách': 'hoa', 'Trực Phù': 'hoa',
     'Hối Khí': 'hoa', 'Quán Sách': 'thuy', 'Tiểu Hao-TT': 'hoa', 'Bệnh Phù-TT': 'tho-moc',
     'Tướng Tinh': 'hoa', 'Phan An': '', 'Tuế Dịch': '', 'Tức Thần': '',
-    'Tai Sát': 'hoa', 'Thiên Sát': 'hoa', 'Chỉ Bối': '', 'Hàm Trì': 'thuy',
+    'Tai Sát': 'hoa', 'Thiên Sát': 'hoa', 'Chỉ Bối': '', 'Đào Hoa': 'thuy',
     'Nguyệt Sát': 'hoa', 'Vong Thần': 'hoa',
   };
 
@@ -154,7 +154,7 @@ const ANSAO_TRUNGCHAU = (() => {
     const vongTuongTinh = [
       'Tướng Tinh', 'Phan An', 'Tuế Dịch', 'Tức Thần',
       'Hoa Cái', 'Kiếp Sát', 'Tai Sát', 'Thiên Sát',
-      'Chỉ Bối', 'Hàm Trì', 'Nguyệt Sát', 'Vong Thần',
+      'Chỉ Bối', 'Đào Hoa', 'Nguyệt Sát', 'Vong Thần',
     ];
     const viTriTuongTinhList = ['ty', 'dau', 'ngo', 'mao', 'ty', 'dau', 'ngo', 'mao', 'ty', 'dau', 'ngo', 'mao'];
     let viTri = TUVI_DIACHI_UTIL.NAMES[TUVI_DIACHI_UTIL.keyToIdx(viTriTuongTinhList[chiNam])];
@@ -195,7 +195,7 @@ const ANSAO_TRUNGCHAU = (() => {
         ];
     const normalize = (name) => String(name || '')
       .replace('-BS', '')
-      .replace('Bác Sỹ', 'Bác Sĩ');
+      .replace('Bác Sỹ', 'Bác Sỹ');
     const out = {};
     bacSiRaw.forEach((name, i) => {
       out[normalize(name)] = (chiLocTon + i) % 12;
@@ -277,7 +277,7 @@ const ANSAO_TRUNGCHAU = (() => {
       'Bát Tọa': ((chiHB - ngay + 1) % 12 + 12) % 12,
     };
 
-    // 9) Vòng Bác Sĩ (khởi từ Lộc Tồn)
+    // 9) Vòng Bác Sỹ (khởi từ Lộc Tồn)
     const chiLocTon = DD.SAO_THEO_CAN['Lộc Tồn'][canNam];
     const phu_bac_si = (typeof DD.computeBacSiRing === 'function')
       ? DD.computeBacSiRing({ chiLocTon, thuanChieu })

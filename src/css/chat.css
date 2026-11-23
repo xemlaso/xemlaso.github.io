@@ -66,7 +66,7 @@
 
     .chat-msg.thinking {
       align-self: flex-start;
-      background: #f0f0f0;
+      background: #d8cfcf;
       color: #888;
       font-style: italic;
     }

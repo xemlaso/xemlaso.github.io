@@ -46,7 +46,7 @@ const ANSAO_SHARED = (() => {
         })
       : {};
 
-    const HOA_TEN = ['Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kỵ'];
+    const HOA_TEN = ['Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kị'];
     const hoaViTri = {};
     D.TU_HOA[canNam].forEach((tenSaoHoa, i) => {
       if (viTriSao[tenSaoHoa] !== undefined) hoaViTri[HOA_TEN[i]] = viTriSao[tenSaoHoa];

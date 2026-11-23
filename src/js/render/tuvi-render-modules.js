@@ -16,8 +16,8 @@ window.TUVI_RENDER_SHARED.constants = {
     11: '#111118',
   },
   CAN_VIET_DAU: ['G', 'Ấ', 'B', 'Đ', 'M', 'K', 'C', 'T', 'N', 'Q'],
-  CAT_BOLD: ['Thiên Khôi', 'Thiên Việt', 'Tả Phụ', 'Hữu Bật', 'Văn Xương', 'Văn Khúc', 'Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kỵ', 'Hồng Loan', 'Đào Hoa'],
-  HUNG_BOLD: ['Đà La', 'Kình Dương', 'Địa Kiếp', 'Địa Không', 'Linh Tinh', 'Hỏa Tinh', 'Hóa Kỵ', 'Thiên Không', 'Cô Thần', 'Quả Tú', 'Thiên Hình', 'Thiên Diêu'],
+  CAT_BOLD: ['Thiên Khôi', 'Thiên Việt', 'Tả Phụ', 'Hữu Bật', 'Văn Xương', 'Văn Khúc', 'Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kị'],
+  HUNG_BOLD: ['Đà La', 'Kình Dương', 'Địa Kiếp', 'Địa Không', 'Linh Tinh', 'Hỏa Tinh', 'Hóa Kị', 'Thiên Không', 'Thiên Hình'],
   CHI_GRID_R: {
     5: { r: 1, c: 1 }, 6: { r: 1, c: 2 }, 7: { r: 1, c: 3 }, 8: { r: 1, c: 4 },
     9: { r: 2, c: 4 }, 10: { r: 3, c: 4 },

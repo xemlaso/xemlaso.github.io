@@ -95,7 +95,7 @@ THỜI CƠ NẮM BẮT: ...
 ## Format luận một năm (lưu niên)
 🗓️ LƯU NIÊN [NĂM] — [Can Chi]
 Lưu Niên Mệnh tại: Cung [...]
-Tứ Hóa năm [Can]: Lộc-[sao], Quyền-[sao], Khoa-[sao], Kỵ-[sao]
+Tứ Hóa năm [Can]: Lộc-[sao], Quyền-[sao], Khoa-[sao], Kị-[sao]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 LUẬN TỔNG QUÁT NĂM: [100-150 chữ]
 TỪNG QUÝ / THÁNG ĐẶC BIỆT:
@@ -112,7 +112,7 @@ LỜI KHUYÊN NĂM [...]: ...
 - Hợp: Tý-Sửu, Dần-Hợi, Mão-Tuất, Thìn-Dậu, Tị-Thân, Ngọ-Mùi → kết hợp năng lượng
 - Miếu/Vượng: sao phát huy tối đa | Hãm: hung tinh càng hung, cát tinh giảm tác dụng
 - Không đơn tinh: luôn xét tổng hợp chính tinh + phụ tinh + hóa tinh
-- Hóa Kỵ rơi vào Mệnh/Tài/Quan → luận kỹ tác hại và hóa giải
+- Hóa Kị rơi vào Mệnh/Tài/Quan → luận kỹ tác hại và hóa giải
 - Không phán chết/bệnh hiểm nghèo; không dùng ngôn ngữ gây sợ hãi
 - Luôn kết bằng "Lời thầy nhắn nhủ" — hướng tích cực, hành động cụ thể
 

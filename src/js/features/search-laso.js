@@ -4,7 +4,7 @@
   const GIO_QUET = ['23:00', '01:00', '03:00', '05:00', '07:00', '09:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'];
   const SEARCH_MAX_DAYS = 3660;
   const CAT_TINH_TARGETS = new Set(['thiên khôi', 'thiên việt', 'văn xương', 'văn khúc', 'hóa lộc', 'hóa quyền', 'hóa khoa', 'tả phụ', 'hữu bật']);
-  const HUNG_TINH_TARGETS = new Set(['linh tinh', 'hỏa tinh', 'kình dương', 'đà la', 'địa không', 'địa kiếp', 'hóa kỵ']);
+  const HUNG_TINH_TARGETS = new Set(['linh tinh', 'hỏa tinh', 'kình dương', 'đà la', 'địa không', 'địa kiếp', 'hóa kị']);
   const CO_QUA_TARGETS = new Set(['cô thần', 'quả tú']);
   let _searchInitDone = false;
   let _searchCancelled = false;

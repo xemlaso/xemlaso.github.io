@@ -21,7 +21,7 @@ const TUVI_RENDER = (() => {
 
       // ── Màu ngũ hành (render tự tính từ nguHanh trong JSON) ──
       const HANH_COLOR = {
-        kim: '#a8a8b0',  // bạc
+        kim: '#76767b',  // bạc
         moc: '#2d6a2d',  // xanh lá
         thuy: '#111118',  // đen
         hoa: '#c0392b',  // đỏ
@@ -36,7 +36,7 @@ const TUVI_RENDER = (() => {
       }
 
       // sucManh hiển thị dạng "(M)" inline, màu sẽ do parent div quyết định
-      const SM_LABEL = { 'M': '(M)', 'V': '(V)', 'Đ': '(Đ)', 'B': '(B)', 'H': '(H)' };
+      const SM_LABEL = { 'M': '(M)', 'V': '(V)', 'Đ': '(D)', 'B': '(B)', 'H': '(H)' };
       function smTag(star) {
         return star.sucManh && SM_LABEL[star.sucManh]
           ? `<span class="sm-inline">${SM_LABEL[star.sucManh]}</span>` : '';
@@ -278,9 +278,9 @@ const TUVI_RENDER = (() => {
 
         // Sao lưu quan trọng
         const SAOQT = new Set([
-          'ĐV.Hóa Lộc', 'ĐV.Hóa Quyền', 'ĐV.Hóa Khoa', 'ĐV.Hóa Kỵ',
-          'L.Hóa Lộc', 'L.Hóa Quyền', 'L.Hóa Khoa', 'L.Hóa Kỵ',
-          'L.Đào Hoa', 'L.Hàm Trì', 'L.Hồng Loan', 'L.Thiên Hỉ',
+          'ĐV.Hóa Lộc', 'ĐV.Hóa Quyền', 'ĐV.Hóa Khoa', 'ĐV.Hóa Kị',
+          'L.Hóa Lộc', 'L.Hóa Quyền', 'L.Hóa Khoa', 'L.Hóa Kị',
+          'L.Đào Hoa', 'L.Hồng Loan', 'L.Thiên Hỉ',
           'L.Kình Dương', 'L.Đà La', 'ĐV.Kình Dương', 'ĐV.Đà La',
           'L.Thiên Khôi', 'L.Thiên Việt',
           'L.Tang Môn', 'L.Bạch Hổ', 'L.Thiên Khốc', 'L.Thiên Hư',
@@ -368,7 +368,7 @@ const TUVI_RENDER = (() => {
           });
 
           // ĐV.Tứ Hóa: theo thiên can cung ĐV.Mệnh
-          const HOA_TEN = ['Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kỵ'];
+          const HOA_TEN = ['Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kị'];
           // Lookup: tên sao → chiIndex của cung chứa sao đó (từ cung[])
           const chiCuaSao = (tenSao) => {
             const c = cung.find(c => c.sao.some(s => s.name === tenSao));

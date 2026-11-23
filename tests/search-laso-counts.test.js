@@ -2,7 +2,7 @@ const { assert, TUVI_LOGIC, solar2Lunar } = require("./test-lib");
 
 const CHI = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tị", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
 const CAT_TINH_TARGETS = new Set(["thiên khôi", "thiên việt", "văn xương", "văn khúc", "hóa lộc", "hóa quyền", "hóa khoa", "tả phụ", "hữu bật"]);
-const HUNG_TINH_TARGETS = new Set(["linh tinh", "hỏa tinh", "kình dương", "đà la", "địa không", "địa kiếp", "hóa kỵ"]);
+const HUNG_TINH_TARGETS = new Set(["linh tinh", "hỏa tinh", "kình dương", "đà la", "địa không", "địa kiếp", "hóa kị"]);
 
 function normalizeStarName(name) {
   return String(name || "")

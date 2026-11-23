@@ -222,7 +222,7 @@
         'Hóa Lộc': { type: 'cat' },
         'Hóa Quyền': { type: 'cat' },
         'Hóa Khoa': { type: 'cat' },
-        'Hóa Kỵ': { type: 'hung' },
+        'Hóa Kị': { type: 'hung' },
 
         // ── Sao theo CAN năm → phải/trái tùy tính chất ──
         'Lộc Tồn': { type: 'cat' },
@@ -243,7 +243,7 @@
         'Lưu Niên Văn Tinh': { type: 'cat' },
 
         // ── Đẩu Quân (Thái Tuế → ngược tháng → thuận giờ) ──
-        'Đẩu Quân': { type: 'cat' },
+        'Đẩu Quân': { type: 'hung' },
 
         // ── Kiếp Sát & Hoa Cái (theo chi năm) ──
         'Kiếp Sát': { type: 'hung' },
@@ -336,12 +336,12 @@
         'Tam Thai': { type: 'cat' },
         'Bát Tọa': { type: 'cat' },
 
-        // ── Vòng Bác Sĩ (12 sao, khởi Lộc Tồn) ──
-        'Bác Sĩ': { type: 'cat' },
+        // ── Vòng Bác Sỹ (12 sao, khởi Lộc Tồn) ──
+        'Bác Sỹ': { type: 'cat' },
         'Lực Sĩ': { type: 'trung' },
         'Thanh Long': { type: 'cat' },
         'Tiểu Hao': { type: 'hung' },
-        'Tướng Quân': { type: 'cat' },
+        'Tướng Quân': { type: 'hung' },
         'Tấu Thư': { type: 'cat' },
         'Phi Liêm': { type: 'hung' },
         'Hỉ Thần': { type: 'cat' },

@@ -16,7 +16,7 @@
       const cung = j.cung;
       const CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
       const CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tị','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-      const HOA_TEN = ['Hóa Lộc','Hóa Quyền','Hóa Khoa','Hóa Kỵ'];
+      const HOA_TEN = ['Hóa Lộc','Hóa Quyền','Hóa Khoa','Hóa Kị'];
 
       const ci = str => TUVI_DIACHI_UTIL.nameToIdx(str, CHI);
       const chiGio = ci(m.tenChiGio);
@@ -30,7 +30,7 @@
       lines.push('• "Lưu cung": vị trí 12 cung lưu niên trên lá số bản mệnh.');
       lines.push('• "Tháng": T1..T12, mỗi giá trị là địa chi cung bản mệnh mà hạn tháng rơi vào');
       lines.push('  (tính theo Lưu Đẩu Quân: phụ thuộc tháng sinh, giờ sinh, năm xem).');
-      lines.push('• "Tứ hoá": Lộc/Quyền/Khoa/Kỵ → địa chi cung bản mệnh nhận hoá khí (sao hoá khí).');
+      lines.push('• "Tứ hoá": Lộc/Quyền/Khoa/Kị → địa chi cung bản mệnh nhận hoá khí (sao hoá khí).');
       lines.push('');
 
       for (let tuoi = tuoiFrom; tuoi <= tuoiTo; tuoi++) {
@@ -75,7 +75,7 @@
       const cung = j.cung;
       const CAN = ['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
       const CHI = ['Tý','Sửu','Dần','Mão','Thìn','Tị','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
-      const HOA_TEN = ['Hóa Lộc','Hóa Quyền','Hóa Khoa','Hóa Kỵ'];
+      const HOA_TEN = ['Hóa Lộc','Hóa Quyền','Hóa Khoa','Hóa Kị'];
 
       // Đọc năm xem hiện tại từ UI
       const namXemEl = document.getElementById('namXem');
