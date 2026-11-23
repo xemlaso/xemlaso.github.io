@@ -242,13 +242,101 @@ const TUVI_RENDER = (() => {
       }
 
       function tinhFly(chi) {
+        const phi = document.getElementById('chkPhiHoa')?.checked;
         const truyTung = document.getElementById('chkTruyTung')?.checked;
-        return truyTung ? tinhTruyTung(chi) : tinhTuHoaCung(chi);
+        if (truyTung) {
+          const s = tinhTruyTung(chi);
+          s.showPhi = phi;          // có hiện thêm box Phi hóa không
+          return s;
+        }
+        if (phi) {
+          const s = tinhTuHoaCung(chi);
+          s.showPhi = true;
+          return s;
+        }
+        return null;                // cả hai đều tắt → không vẽ gì
+      }
+     
+      
+      const MAU_HOA = ['#2e8b57', '#d35400', '#2471a3', '#222222'];
+
+      // "Tài Bạch (Ngọ)"
+      function tenCung(chi) {
+        const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
+        const c = json?.cung.find(c => chiIdx(c.diaChi) === chi);
+        return c ? `${c.cungChuc} <span class="tt-chi">(${c.diaChi})</span>` : CHI_STR[chi];
+      }
+
+      // Box Phi hóa của cung được click
+      function buildPhiHoaBox(chi) {
+        const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
+        if (!json) return '';
+        const can = TUVI_DATA.BANG_THIENCAN_CUNGMENH[canIdx(json.meta.canNam)][chi];
+        const rows = TUVI_DATA.TU_HOA[can].map((tenSao, h) => {
+          const to = phiHoa(chi, h);
+          const dich = to === null ? '—' : (to === chi ? '<i>tự hóa</i>' : tenCung(to));
+          return `<div class="tt-row ph-row">
+            <span class="ph-tag" style="background:${MAU_HOA[h]}">${HOA_TEN_NGAN[h]}</span>
+            ${tenSao} → ${dich}</div>`;
+        }).join('');
+        return `<div class="tt-chain ph-box">
+          <div class="tt-title">Phi hóa</div>
+          <div class="tt-row tt-cung">${tenCung(chi)} <span class="tt-chi">· can ${CAN_STR[can]}</span></div>
+          ${rows}</div>`;
+      }
+
+      // Box chuỗi Lộc Kỵ truy tung
+      function buildChainBox(state) {
+        const STEP = 0.7, DRAW = 0.6;   // khớp với renderTuHoa
+        const rows = [{ html: tenCung(state.arrows[0].from), cung: true, d: 0 }];
+        state.arrows.forEach((ar, i) => {
+          const self = ar.to === ar.from;
+          const d = i * STEP + DRAW;
+          rows.push({ d, html:
+            `<span class="tt-badge" style="background:${MAU_HOA[ar.hoa]}">${ar.step}</span>
+             <span style="color:${MAU_HOA[ar.hoa]}">↓ ${self ? 'Tự hóa ' : ''}${HOA_TEN_NGAN[ar.hoa]}</span>` });
+          if (!self) rows.push({ html: tenCung(ar.to), cung: true, d });
+        });
+        rows[rows.map(r => r.cung).lastIndexOf(true)].end = true;
+
+        return `<div class="tt-chain">
+          <div class="tt-title">Lộc Kỵ truy tung</div>` + rows.map(r =>
+          `<div class="tt-row tt-fade${r.cung ? ' tt-cung' : ' tt-link'}${r.end ? ' tt-end' : ''}" style="--d:${r.d}s">
+            ${r.html}${r.end ? ' <span class="tt-stop">■ kết thúc</span>' : ''}</div>`).join('') + `</div>`;
+      }
+
+      // Hiện box ở giữa lá số: luôn có box Phi hóa, thêm box truy tung nếu đang bật
+      function showFlyBoxes(state, chi, gridEl) {
+        gridEl?.querySelector('.fly-boxes')?.remove();
+        const center = gridEl?.querySelector('.center');
+        if (!center || !state || chi === null) return;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'fly-boxes';
+        const html = (state.showPhi ? buildPhiHoaBox(chi) : '')
+        + (state.flow && state.arrows.length ? buildChainBox(state) : '');
+      if (!html) return;
+      wrap.innerHTML = html;
+
+        // Gắn vào #grid, đặt đúng tâm ô trung tâm
+        wrap.style.position = 'absolute';
+        wrap.style.left = (center.offsetLeft + center.offsetWidth / 2) + 'px';
+        wrap.style.top = (center.offsetTop + center.offsetHeight / 2) + 'px';
+        wrap.style.transform = 'translate(-50%, -50%)';
+        wrap.style.maxWidth = (center.offsetWidth - 16) + 'px';
+        wrap.style.zIndex = 4;
+        gridEl.appendChild(wrap);
+      }
+
+      // Vẽ mũi tên + box cùng lúc
+      function applyFly(state, gridEl) {
+        PILL_ENGINE.setTuHoa?.(state, gridEl);
+        showFlyBoxes(state, _selectedChi, gridEl);
       }
 
       function refreshFly() {
         if (_selectedChi === null) return;
-        PILL_ENGINE.setTuHoa?.(tinhFly(_selectedChi), document.getElementById('grid'));
+        applyFly(tinhFly(_selectedChi), document.getElementById('grid'));
       }
       
       function clickCung(chi) {
@@ -257,12 +345,12 @@ const TUVI_RENDER = (() => {
         if (_selectedChi === chi) {
           _selectedChi = null;
           clearHighlight();
-          PILL_ENGINE.setTuHoa?.(null, gridEl);
+          applyFly(null, gridEl);
           return;
         }
         _selectedChi = chi;
         clearHighlight();
-        PILL_ENGINE.setTuHoa?.(tinhFly(chi), gridEl);
+        applyFly(tinhFly(chi), gridEl);
 
         // Tam phương tứ chính: cung chọn + đối cung + 2 tam hợp → cùng 1 màu
         const doi = doiCung(chi);

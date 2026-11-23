@@ -709,6 +709,72 @@
       user-select: none;
     }
 
+
+    .center { position: relative; }
+
+    .fly-boxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      align-items: flex-start;
+      width: max-content;
+      pointer-events: none;
+    }
+    .fly-boxes .ph-box { text-align: left; }
+    .fly-boxes .ph-row { font-size: 12px; white-space: nowrap; margin: 2px 0; }
+
+    .fly-boxes .ph-tag {
+      display: inline-block;
+      min-width: 38px;
+      padding: 1px 5px;
+      margin-right: 4px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      text-align: center;
+    }
+    
+    .tt-chain {
+     
+      min-width: 150px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      font: 12px/1.35 Arial, sans-serif;
+      text-align: center;
+      pointer-events: none;
+    }
+    .tt-chain .tt-title { font-weight: bold; font-size: 11px; color: #666; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
+    .tt-chain .tt-cung  { font-weight: bold; color: #111; font-size: 13px; }
+    .tt-chain .tt-chi   { font-weight: normal; color: #888; font-size: 11px; }
+    .tt-chain .tt-link  { font-size: 11px; font-weight: bold; margin: 1px 0; }
+    .tt-chain .tt-end   { color: #c0392b; }
+    .tt-chain .tt-stop  { font-size: 10px; font-weight: normal; color: #c0392b; }
+    .tt-chain .tt-badge {
+      display: inline-block; width: 15px; height: 15px; line-height: 15px;
+      border-radius: 50%; color: #fff; font-size: 9px; text-align: center; margin-right: 3px;
+    }
+    .tt-chain .tt-fade {
+      opacity: 0;
+      animation: tt-fade .25s ease-out forwards;
+      animation-delay: var(--d);
+    }
+
+
+    .truytung-nav-check-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #4a2e08;
+      cursor: pointer;
+      user-select: none;
+    }
+
     .han-nav-check-input {
       width: 14px;
       height: 14px;
