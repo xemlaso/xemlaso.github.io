@@ -284,6 +284,117 @@ window.TUVI_RENDER_SHARED.createPillEngine = function createPillEngine(deps) {
     gridEl.appendChild(svg);
   }
 
+  const HOA = [
+    { ten: 'Lộc',   mau: '#2e8b57' },
+    { ten: 'Quyền', mau: '#d35400' },
+    { ten: 'Khoa',  mau: '#2471a3' },
+    { ten: 'Kị',    mau: '#222222' },
+  ];
+  let _tuHoa = null; // { fromChi, targets: [chiLộc, chiQuyền, chiKhoa, chiKị] }
+
+  function renderTuHoa(gridEl) {
+    gridEl.querySelector('.tuhoa-svg')?.remove();
+    if (!_tuHoa) return;
+    const scale = getScale();
+    const { fromChi, targets } = _tuHoa;
+    const p0 = anchorPoint(fromChi, gridEl, scale);
+    if (!p0) return;
+
+    // Khung ô trung tâm (tọa độ đã chia scale)
+    const cEl = gridEl.querySelector('.center');
+    if (!cEl) return;
+    const gr = gridEl.getBoundingClientRect(), cr = cEl.getBoundingClientRect();
+    const box = {
+      l: (cr.left - gr.left) / scale, t: (cr.top - gr.top) / scale,
+      r: (cr.right - gr.left) / scale, b: (cr.bottom - gr.top) / scale,
+    };
+    const mx = (box.l + box.r) / 2, my = (box.t + box.b) / 2;   // tâm ô trung tâm
+    const M = 12;                                                // lề an toàn
+    const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+    
+    const rand = seed => { const x = Math.sin(seed * 9301 + 49297) * 233280; return x - Math.floor(x); };  // 0..1, cố định theo seed
+    const placed = [];   // vị trí các nhãn đã đặt
+    const overlaps = (x, y) => placed.some(p => Math.abs(p.x - x) < 38 && Math.abs(p.y - y) < 18);
+
+
+    let defs = '', body = '', tuHoaCount = 0;
+    HOA.forEach((h, i) => {
+      defs += `<marker id="th-arrow-${i}" viewBox="0 0 10 10" refX="9" refY="5"
+        markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${h.mau}"/></marker>`;
+      const to = targets[i];
+      if (to == null) return;
+
+      // Tự hóa: không vẽ mũi tên, chỉ ghi chữ cạnh điểm nối
+      if (to === fromChi) {
+        const vx = mx - p0.x, vy = my - p0.y, vl = Math.hypot(vx, vy) || 1;
+        const tx = p0.x + (vx / vl) * 30;
+        const ty = p0.y + (vy / vl) * 30 + (tuHoaCount++) * 16;
+        placed.push({ x: tx, y: ty });
+        body += `<text x="${tx}" y="${ty}" fill="${h.mau}" font-size="11"
+          font-weight="bold" text-anchor="middle" dominant-baseline="middle" class="th-label">Tự hóa ${h.ten}</text>`;
+        return;
+      }
+
+      const p2 = anchorPoint(to, gridEl, scale);
+      if (!p2) return;
+            const dx = p2.x - p0.x, dy = p2.y - p0.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const midx = (p0.x + p2.x) / 2, midy = (p0.y + p2.y) / 2;
+      let nx = -dy / len, ny = dx / len;
+      if (nx * (mx - midx) + ny * (my - midy) < 0) { nx = -nx; ny = -ny; }
+
+      // Thứ tự của mũi tên này trong số các hóa cùng bay về cung `to` (0, 1, 2…)
+      const j = targets.slice(0, i).filter(x => x === to).length;
+
+      const seed = fromChi * 100 + i * 10 + to + 1;
+      
+      let cx, cy, lx, ly;
+      for (let a = 0; a < 6; a++) {
+        const k = 0.08 + rand(seed + a * 17) * 0.30;       // độ cong ngẫu nhiên 0.08–0.38
+        const off = Math.max(18, len * k) + j * 40 + a * 12;
+        cx = clamp(midx + nx * off, box.l + M, box.r - M);
+        cy = clamp(midy + ny * off, box.t + M, box.b - M);
+        const t = 0.35 + rand(seed + a * 31) * 0.30;       // vị trí nhãn trên đường cong 0.35–0.65
+        const u = 1 - t;
+        lx = u * u * p0.x + 2 * u * t * cx + t * t * p2.x;
+        ly = u * u * p0.y + 2 * u * t * cy + t * t * p2.y;
+        if (!overlaps(lx, ly)) break;                      // không đè nhãn nào thì dùng luôn
+      }
+      placed.push({ x: lx, y: ly });
+      body += `<path d="M${p0.x},${p0.y} Q${cx},${cy} ${p2.x},${p2.y}" fill="none"
+        stroke="${h.mau}" stroke-width="1.6" stroke-opacity="0.85" marker-end="url(#th-arrow-${i})"/>
+        <text x="${lx}" y="${ly}" fill="${h.mau}" font-size="11" font-weight="bold"
+        text-anchor="middle" dominant-baseline="middle" class="th-label">${h.ten}</text>`;
+    });
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'tuhoa-svg');
+    svg.innerHTML = `<defs>${defs}</defs>${body}`;
+    gridEl.appendChild(svg);
+    // Nền đen mờ cho nhãn
+    svg.querySelectorAll('.th-label').forEach(t => {
+      const b = t.getBBox(), pad = 3;
+      const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      r.setAttribute('x', b.x - pad);
+      r.setAttribute('y', b.y - pad);
+      r.setAttribute('width', b.width + pad * 2);
+      r.setAttribute('height', b.height + pad * 2);
+      r.setAttribute('rx', 3);
+      r.setAttribute('fill', '#000');
+      r.setAttribute('fill-opacity', '0.6');
+      t.parentNode.insertBefore(r, t);   // chèn trước để nền nằm dưới chữ
+    });
+
+  }
+
+  function setTuHoa(state, gridEl) {
+    _tuHoa = state;
+    if (gridEl) {
+      gridEl.querySelector('.center')?.classList.toggle('dim', !!state);   // ← THÊM
+      renderTuHoa(gridEl);
+    }
+  }
+
   function pillPos(c1, c2, gridEl) {
     const g1 = CHI_GRID_R[c1], g2 = CHI_GRID_R[c2];
     if (!g1 || !g2) return null;
@@ -394,9 +505,10 @@ window.TUVI_RENDER_SHARED.createPillEngine = function createPillEngine(deps) {
       if (luuPills?.tuan) renderLuuTuan(luuPills.tuan, gridEl);
     }
     renderTamHop(gridEl);   // ← THÊM DÒNG NÀY
+    renderTuHoa(gridEl);
   }
 
-  return { render };
+  return { render,setTuHoa };
 };
 
 window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(deps) {
@@ -510,7 +622,7 @@ window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(d
         <tr><td colspan="3" style="padding:1.5px 0;font-size:13px;line-height:1.2;">&nbsp;</td></tr>
         ${row('Chủ Mệnh:', cungMenhSao)}
         ${row('Chủ Thân:', cungThanSao)}
-        ${row('Đại hạn:', thuanChieu ? 'Thuận chiều' : 'Nghịch chiều')}
+        
         <tr><td colspan="3" style="padding:1.5px 0;font-size:13px;line-height:1.2;">&nbsp;</td></tr>
         <tr><td></td><td colspan="2" style="color:${bl};font-size:13px;padding:1.5px 0;font-weight:bold;">${amDuongLy}</td></tr>
         <tr><td></td><td colspan="2" style="color:${bl};font-size:13px;padding:1.5px 0;font-weight:bold;">${quanHeMenhCuc}</td></tr>

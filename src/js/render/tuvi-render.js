@@ -193,14 +193,29 @@ const TUVI_RENDER = (() => {
       // ── Click cung: highlight tam phương tứ chính ───────────
       let _selectedChi = null;
 
+      function tinhTuHoaCung(chi) {
+        const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
+        if (!json) return null;
+        const can = TUVI_DATA.BANG_THIENCAN_CUNGMENH[canIdx(json.meta.canNam)][chi];
+        const targets = TUVI_DATA.TU_HOA[can].map(tenSao => {
+          const c = json.cung.find(c => c.sao.some(s => s.name === tenSao));
+          return c ? chiIdx(c.diaChi) : null;
+        });
+        return { fromChi: chi, targets };
+      }
+      
       function clickCung(chi) {
+        const gridEl = document.getElementById('grid');   // ← phải là dòng ĐẦU TIÊN trong hàm
+
         if (_selectedChi === chi) {
           _selectedChi = null;
           clearHighlight();
+          PILL_ENGINE.setTuHoa?.(null, gridEl);
           return;
         }
         _selectedChi = chi;
         clearHighlight();
+        PILL_ENGINE.setTuHoa?.(tinhTuHoaCung(chi), gridEl);
 
         // Tam phương tứ chính: cung chọn + đối cung + 2 tam hợp → cùng 1 màu
         const doi = doiCung(chi);
@@ -288,6 +303,7 @@ const TUVI_RENDER = (() => {
 
       function render(lasoJson, gridEl) {
         _selectedChi = null;
+        PILL_ENGINE.setTuHoa?.(null);
         _lastMeta = lasoJson.meta;
         const { meta, cung } = lasoJson;
 
