@@ -184,7 +184,7 @@ const TUVI_RENDER = (() => {
 
       // ── Render một ô cung ───────────────────────────────────
       function renderCung(cungData) {
-        const { diaChi, gridRow, gridCol, sao, dvSao = [] } = cungData;
+        const { diaChi, gridRow, gridCol, sao, dvSao = [], fire = '' } = cungData;
         const ci = chiIdx(diaChi);
         return `<div class="cung" data-chi="${ci}"
         style="grid-row:${gridRow};grid-column:${gridCol}"
@@ -192,8 +192,23 @@ const TUVI_RENDER = (() => {
       ${renderHeader(cungData)}
       ${renderMiddle(sao, dvSao, ci)}
       ${renderFooter(cungData)}
+      ${fire ? `<span class="dv-fire" title="${fire}">🔥</span>` : ''}
     </div>`;
       }
+      let _lastKy3 = [];
+
+           // 🔥 nằm ngay dưới số đại vận; nhãn tháng (nếu có) dời xuống dưới 🔥
+           function positionFires(gridEl) {
+            gridEl.querySelectorAll('.dv-fire').forEach(f => {
+              const cell = f.closest('.cung');
+              const dh = cell.querySelector('.top-dh');
+              const th = cell.querySelector('.top-thang');
+              if (!dh) return;
+              f.style.top = (dh.offsetTop + dh.offsetHeight) + 'px';
+              f.style.right = '3px';
+              if (th) th.style.top = `calc(100% + ${f.offsetHeight}px)`;
+            });
+          }
 
       // ── Click cung: highlight tam phương tứ chính ───────────
       let _selectedChi = null;
@@ -368,6 +383,78 @@ const TUVI_RENDER = (() => {
         applyFly(tinhFly(_selectedChi), document.getElementById('grid'));
       }
       
+      // ── Tương tác tứ hóa (theo 忌星棋譜, phi tinh phái) ─────────
+      const LUC_THAN = ['Mệnh', 'Huynh Đệ', 'Phu Thê', 'Tử Tức', 'Nô Bộc', 'Phụ Mẫu'];
+
+      function tinhTuongTac() {
+        const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
+        if (!json) return {};
+        const res = {};
+        const push = (chi, html) => { (res[chi] ||= new Set()).add(html); };
+        const ten = chi => json.cung.find(c => chiIdx(c.diaChi) === chi)?.cungChuc || CHI_STR[chi];
+        const tag = (cls, txt) => `<b class="tg ${cls}">${txt}</b>`;
+
+        const ky = [], loc = [];
+        for (let c = 0; c < 12; c++) { ky[c] = phiHoa(c, 3); loc[c] = phiHoa(c, 0); }
+
+        // 1. Lưu xuất Kỵ: A phi Kỵ vào cung đối diện
+        for (let a = 0; a < 12; a++) {
+          if (ky[a] === doiCung(a)) push(a, `${tag('tg-xuat', 'Xuất Kỵ')} sang ${ten(ky[a])}`);
+        }
+
+        // 2. Tuần hoàn Kỵ: A, B đều lục thân; Kỵ A → B và Kỵ B → A
+        for (let a = 0; a < 12; a++) for (let b = a + 1; b < 12; b++) {
+          if (ky[a] === b && ky[b] === a && LUC_THAN.includes(ten(a)) && LUC_THAN.includes(ten(b))) {
+            push(a, `${tag('tg-tuan', 'Tuần hoàn Kỵ')} với ${ten(b)}`);
+            push(b, `${tag('tg-tuan', 'Tuần hoàn Kỵ')} với ${ten(a)}`);
+          }
+        }
+
+        // 3. Thị phi Kỵ: A, B không đối nhau; Lộc A → B, Kỵ B → A
+        for (let a = 0; a < 12; a++) {
+          const b = loc[a];
+          if (b === null || b === a || b === doiCung(a)) continue;
+          if (ky[b] === a) {
+            push(a, `${tag('tg-thi', 'Thị phi Kỵ')} với ${ten(b)}`);
+            push(b, `${tag('tg-thi', 'Thị phi Kỵ')} với ${ten(a)}`);
+          }
+        }
+
+        // 4. Hỗ xung Kỵ: Kỵ của 2 cung khác nhau rơi vào 2 cung đối diện
+        const kyVao = {};                                    // cung nhận → [cung phát]
+        for (let a = 0; a < 12; a++) if (ky[a] !== null) (kyVao[ky[a]] ||= []).push(a);
+        for (let p = 0; p < 6; p++) {
+          const q = p + 6;
+          (kyVao[p] || []).forEach(a => (kyVao[q] || []).forEach(b => {
+            if (a === b) return;
+            push(a, `${tag('tg-xung', 'Hỗ xung Kỵ')} với ${ten(b)}`);
+            push(b, `${tag('tg-xung', 'Hỗ xung Kỵ')} với ${ten(a)}`);
+          }));
+        }
+
+        Object.keys(res).forEach(k => { res[k] = [...res[k]]; });
+        return res;
+      }
+
+      function showTuongTac(gridEl) {
+        gridEl = gridEl || document.getElementById('grid');
+        if (!gridEl) return;
+        gridEl.querySelectorAll('.tg-box').forEach(e => e.remove());
+        if (!document.getElementById('chkTuongTac')?.checked) return;
+
+        const data = tinhTuongTac();
+        Object.entries(data).forEach(([chi, lines]) => {
+          const cell = gridEl.querySelector(`.cung[data-chi="${chi}"]`);
+          if (!cell || !lines.length) return;
+          const box = document.createElement('div');
+          box.className = 'tg-box';
+          box.innerHTML = lines.map(l => `<div class="tg-line">${l}</div>`).join('');
+          box.style.left = (cell.offsetLeft + cell.offsetWidth / 2) + 'px';
+          box.style.top = (cell.offsetTop + cell.offsetHeight / 2) + 'px';
+          box.style.width = (cell.offsetWidth - 14) + 'px';   // hẹp hơn ô 14px
+          gridEl.appendChild(box);
+        });
+      }
       function clickCung(chi) {
         const gridEl = document.getElementById('grid');   // ← phải là dòng ĐẦU TIÊN trong hàm
 
@@ -608,6 +695,47 @@ const TUVI_RENDER = (() => {
         }
 
         let html = '';
+
+                // ── Kỵ ba tầng: Thiên bàn / Đại vận / Lưu niên ──────────
+                const fireMap = {};                    // chi của ô ĐV.X → chú thích
+                _lastKy3 = [];
+                if (chiDVMenh !== null) {
+                  const canNamI = canIdx(meta.canNam);
+                  const chiMenh = chiIdx(meta.chiCungMenh);
+                  const kyCua = chi => {               // cung `chi` phi Hóa Kỵ (can cung) → chi đích
+                    const tenSao = TUVI_DATA.TU_HOA[TUVI_DATA.BANG_THIENCAN_CUNGMENH[canNamI][chi]]?.[3];
+                    const c = cung.find(c => c.sao.some(s => s.name === tenSao));
+                    return c ? chiIdx(c.diaChi) : null;
+                  };
+        
+                  CUNG_STR.forEach((tenCung, k) => {
+                    const lv = [
+                      ['TB', (chiMenh + k) % 12],
+                      ['ĐV', (chiDVMenh + k) % 12],
+                      ['L', (chiNamXem + k) % 12],
+                    ];
+                    const tenMuc = chi => lv.filter(([, c]) => c === chi).map(([m]) => m + '.' + tenCung).join('/');
+                    let diem = 0;
+                    const ghiChu = [];
+                    const row = { cung: tenCung };
+                    lv.forEach(([muc, chi]) => {
+                      const ky = kyCua(chi);
+                      row[muc] = CHI_STR[chi];
+                      row['Kỵ ' + muc] = ky === null ? '—' : CHI_STR[ky];
+                      if (ky === null) return;
+                      const nhap = lv.some(([, c]) => c === ky);
+                      const xung = lv.some(([, c]) => c === doiCung(ky));
+                      if (nhap) ghiChu.push(`${muc} Kỵ nhập ${tenMuc(ky)}`);
+                      else if (xung) ghiChu.push(`${muc} Kỵ xung ${tenMuc(doiCung(ky))}`);
+                      if (nhap || xung) diem++;
+                    });
+                    row.diem = diem;
+                    _lastKy3.push(row);
+                    if (diem === 3) fireMap[lv[1][1]] = `${tenCung} – 3 điểm: ${ghiChu.join('; ')}`;
+                  });
+                }
+
+
         cung.forEach(c => {
           const ci = chiIdx(c.diaChi);
           const canCung = TUVI_DATA.BANG_THIENCAN_CUNGMENH[canIdx(meta.canNam)][ci];
@@ -624,7 +752,8 @@ const TUVI_RENDER = (() => {
           if (luuMode === 'ln') rawDvSao = rawDvSao.filter(t => t.startsWith('L.'));
           if (luuMode === 'qt') rawDvSao = rawDvSao.filter(t => SAOQT.has(t));
           // luuMode === 'all': giữ nguyên không lọc
-          html += renderCung({ ...c, tenDV: dvMap[ci] || '', tenLN: lnMap[ci] || '', tenThang: thangMap[ci] || '', dvSao: rawDvSao, canCung, isLNDV: ci === chiLNDV, tuHoa });
+          html += renderCung({ ...c, tenDV: dvMap[ci] || '', tenLN: lnMap[ci] || '', tenThang: thangMap[ci] || '', dvSao: rawDvSao, canCung, isLNDV: ci === chiLNDV, tuHoa
+            , fire: fireMap[ci] || ''  });
           
         });
 
@@ -642,6 +771,7 @@ const TUVI_RENDER = (() => {
 
         html += CENTER_RENDERER.renderCenter(meta);
         gridEl.innerHTML = html;
+        requestAnimationFrame(() => { showTuongTac(gridEl); positionFires(gridEl); });
         requestAnimationFrame(() => PILL_ENGINE.render(meta, gridEl, _lastLuuPills));
       }
 
@@ -658,5 +788,6 @@ const TUVI_RENDER = (() => {
         refreshFly,          // ← THÊM
         onCungTitleLeftClick: RULE_ENGINE.onCungTitleLeftClick,
         onChinhTinhClick: RULE_ENGINE.onChinhTinhClick,
+        refreshTuongTac: () => showTuongTac(),
       };
     })();
