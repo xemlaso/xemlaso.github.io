@@ -143,6 +143,20 @@
       opacity: 0.2;
     }
 
+    .tuhoa-svg .tt-line {
+      stroke-dasharray: var(--len);
+      stroke-dashoffset: var(--len);
+      animation: tt-draw .6s ease-out forwards;
+      animation-delay: var(--d);
+    }
+    .tuhoa-svg .tt-fade {
+      opacity: 0;
+      animation: tt-fade .25s ease-out forwards;
+      animation-delay: var(--d);
+    }
+    @keyframes tt-draw { to { stroke-dashoffset: 0; } }
+    @keyframes tt-fade { to { opacity: 1; } }
+
     #grid { position: relative; }
     .tamhop-svg {
       position: absolute; inset: 0;
@@ -773,6 +787,9 @@
       }
 
       body[data-layout="mobile"] #chkXemHanLabel {
+        white-space: nowrap;
+      }
+      body[data-layout="mobile"] #chkTruyTung {
         white-space: nowrap;
       }
     }

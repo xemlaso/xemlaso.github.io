@@ -290,88 +290,166 @@ window.TUVI_RENDER_SHARED.createPillEngine = function createPillEngine(deps) {
     { ten: 'Khoa',  mau: '#2471a3' },
     { ten: 'Kị',    mau: '#222222' },
   ];
-  let _tuHoa = null; // { fromChi, targets: [chiLộc, chiQuyền, chiKhoa, chiKị] }
+  let _fly = null; // { arrows: [{ from, to, hoa, label }] }
 
   function renderTuHoa(gridEl) {
     gridEl.querySelector('.tuhoa-svg')?.remove();
-    if (!_tuHoa) return;
-    const scale = getScale();
-    const { fromChi, targets } = _tuHoa;
-    const p0 = anchorPoint(fromChi, gridEl, scale);
-    if (!p0) return;
-
-    // Khung ô trung tâm (tọa độ đã chia scale)
+    if (!_fly || !_fly.arrows || !_fly.arrows.length) return;
     const cEl = gridEl.querySelector('.center');
     if (!cEl) return;
+
+    const scale = getScale();
     const gr = gridEl.getBoundingClientRect(), cr = cEl.getBoundingClientRect();
     const box = {
       l: (cr.left - gr.left) / scale, t: (cr.top - gr.top) / scale,
       r: (cr.right - gr.left) / scale, b: (cr.bottom - gr.top) / scale,
     };
-    const mx = (box.l + box.r) / 2, my = (box.t + box.b) / 2;   // tâm ô trung tâm
-    const M = 12;                                                // lề an toàn
+    const mx = (box.l + box.r) / 2, my = (box.t + box.b) / 2;
+    const M = 12;
     const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-    
-    const rand = seed => { const x = Math.sin(seed * 9301 + 49297) * 233280; return x - Math.floor(x); };  // 0..1, cố định theo seed
-    const placed = [];   // vị trí các nhãn đã đặt
+    const rand = seed => { const x = Math.sin(seed * 9301 + 49297) * 233280; return x - Math.floor(x); };
+    const placed = [];
     const overlaps = (x, y) => placed.some(p => Math.abs(p.x - x) < 38 && Math.abs(p.y - y) < 18);
+    const label = (x, y, mau, text) =>
+      `<text x="${x}" y="${y}" fill="${mau}" font-size="11" font-weight="bold"
+        text-anchor="middle" dominant-baseline="middle" class="th-label">${text}</text>`;
 
+    // ── Thông số hiệu ứng dòng chảy (truy tung) ──
+    const FLOW = !!_fly.flow;
+    const STEP = 0.7;   // giây giữa 2 mũi tên liên tiếp
+    const DRAW = 0.6;   // giây vẽ 1 mũi tên
+    const MOVE = 0.8;   // giây chấm sáng chạy hết 1 mũi tên
+    const badge = (x, y, mau, n, delay) =>
+      `<g class="tt-fade" style="--d:${delay}s">
+        <circle cx="${x}" cy="${y}" r="8" fill="${mau}" stroke="#fff" stroke-width="1.5"/>
+        <text x="${x}" y="${y}" fill="#fff" font-size="10" font-weight="bold"
+          text-anchor="middle" dominant-baseline="central">${n}</text></g>`;
+    const flowPaths = [];   // [{ idx, mau }] các mũi tên có đường để chấm sáng chạy
 
-    let defs = '', body = '', tuHoaCount = 0;
-    HOA.forEach((h, i) => {
-      defs += `<marker id="th-arrow-${i}" viewBox="0 0 10 10" refX="9" refY="5"
-        markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${h.mau}"/></marker>`;
-      const to = targets[i];
-      if (to == null) return;
+    const defs = HOA.map((h, i) =>
+      `<marker id="th-arrow-${i}" viewBox="0 0 10 10" refX="9" refY="5"
+        markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${h.mau}"/></marker>`).join('');
+    let body = '';
+    const selfCount = {};
 
-      // Tự hóa: không vẽ mũi tên, chỉ ghi chữ cạnh điểm nối
-      if (to === fromChi) {
-        const vx = mx - p0.x, vy = my - p0.y, vl = Math.hypot(vx, vy) || 1;
-        const tx = p0.x + (vx / vl) * 30;
-        const ty = p0.y + (vy / vl) * 30 + (tuHoaCount++) * 16;
-        placed.push({ x: tx, y: ty });
-        body += `<text x="${tx}" y="${ty}" fill="${h.mau}" font-size="11"
-          font-weight="bold" text-anchor="middle" dominant-baseline="middle" class="th-label">Tự hóa ${h.ten}</text>`;
-        return;
-      }
+    _fly.arrows.forEach((ar, idx) => {
+      const h = HOA[ar.hoa];
+      const p0 = anchorPoint(ar.from, gridEl, scale);
+      if (!p0) return;
 
-      const p2 = anchorPoint(to, gridEl, scale);
+            // Tự hóa: vòng cong đi vào phía tâm rồi quay về chính cung đó
+            if (ar.to === ar.from) {
+              const n = selfCount[ar.from] = (selfCount[ar.from] || 0) + 1;
+              let vx = mx - p0.x, vy = my - p0.y;
+              const vl = Math.hypot(vx, vy) || 1; vx /= vl; vy /= vl;   // hướng vào tâm
+              const wx = -vy, wy = vx;                                  // hướng vuông góc
+              const R = 38 + (n - 1) * 18;                              // kích thước vòng, vòng sau to hơn
+              const g = 5;                                              // tách điểm đầu / điểm cuối
+              const sx = p0.x + wx * g, sy = p0.y + wy * g;
+              const ex = p0.x - wx * g, ey = p0.y - wy * g;
+              const c1x = p0.x + vx * R + wx * R * 0.9, c1y = p0.y + vy * R + wy * R * 0.9;
+              const c2x = p0.x + vx * R - wx * R * 0.9, c2y = p0.y + vy * R - wy * R * 0.9;
+              const d = `M${sx},${sy} C${c1x},${c1y} ${c2x},${c2y} ${ex},${ey}`;
+              const lx = p0.x + vx * R * 0.75, ly = p0.y + vy * R * 0.75;   // đỉnh vòng
+              placed.push({ x: lx, y: ly });
+      
+              if (FLOW) {
+                const hx = ex - c2x, hy = ey - c2y, hl = Math.hypot(hx, hy) || 1;
+                const ux = hx / hl, uy = hy / hl, s = 8, w = 0.55;
+                const head = `M${ex},${ey}
+                  L${ex - ux * s - uy * s * w},${ey - uy * s + ux * s * w}
+                  L${ex - ux * s + uy * s * w},${ey - uy * s - ux * s * w} Z`;
+                const delay = idx * STEP;
+                body += `<path id="tt-p${idx}" class="tt-line" style="--d:${delay}s" d="${d}" fill="none"
+                    stroke="${h.mau}" stroke-width="1.8" stroke-opacity="0.9"/>
+                  <path class="tt-fade" style="--d:${delay + DRAW}s" d="${head}" fill="${h.mau}"/>`
+                  + badge(lx, ly, h.mau, ar.step, delay + DRAW);
+                flowPaths.push({ idx, mau: h.mau });
+              } else {
+                body += `<path d="${d}" fill="none" stroke="${h.mau}" stroke-width="1.6"
+                    stroke-opacity="0.85" marker-end="url(#th-arrow-${ar.hoa})"/>`
+                  + (ar.label ? label(lx, ly, h.mau, ar.label) : '');
+              }
+              return;
+            }
+
+      const p2 = anchorPoint(ar.to, gridEl, scale);
       if (!p2) return;
-            const dx = p2.x - p0.x, dy = p2.y - p0.y;
+      const dx = p2.x - p0.x, dy = p2.y - p0.y;
       const len = Math.hypot(dx, dy) || 1;
       const midx = (p0.x + p2.x) / 2, midy = (p0.y + p2.y) / 2;
       let nx = -dy / len, ny = dx / len;
       if (nx * (mx - midx) + ny * (my - midy) < 0) { nx = -nx; ny = -ny; }
 
-      // Thứ tự của mũi tên này trong số các hóa cùng bay về cung `to` (0, 1, 2…)
-      const j = targets.slice(0, i).filter(x => x === to).length;
+      // Số mũi tên trước đó nối cùng cặp cung (kể cả chiều ngược lại)
+      const j = _fly.arrows.slice(0, idx).filter(x =>
+        (x.from === ar.from && x.to === ar.to) || (x.from === ar.to && x.to === ar.from)).length;
 
-      const seed = fromChi * 100 + i * 10 + to + 1;
-      
+      const seed = ar.from * 1000 + ar.to * 10 + ar.hoa + idx * 7 + 1;
       let cx, cy, lx, ly;
       for (let a = 0; a < 6; a++) {
-        const k = 0.08 + rand(seed + a * 17) * 0.30;       // độ cong ngẫu nhiên 0.08–0.38
+        const k = 0.08 + rand(seed + a * 17) * 0.30;            // độ cong
         const off = Math.max(18, len * k) + j * 40 + a * 12;
         cx = clamp(midx + nx * off, box.l + M, box.r - M);
         cy = clamp(midy + ny * off, box.t + M, box.b - M);
-        const t = 0.35 + rand(seed + a * 31) * 0.30;       // vị trí nhãn trên đường cong 0.35–0.65
+        const t = 0.35 + rand(seed + a * 31) * 0.30;
         const u = 1 - t;
         lx = u * u * p0.x + 2 * u * t * cx + t * t * p2.x;
         ly = u * u * p0.y + 2 * u * t * cy + t * t * p2.y;
-        if (!overlaps(lx, ly)) break;                      // không đè nhãn nào thì dùng luôn
+        if (!overlaps(lx, ly)) break;
       }
       placed.push({ x: lx, y: ly });
-      body += `<path d="M${p0.x},${p0.y} Q${cx},${cy} ${p2.x},${p2.y}" fill="none"
-        stroke="${h.mau}" stroke-width="1.6" stroke-opacity="0.85" marker-end="url(#th-arrow-${i})"/>
-        <text x="${lx}" y="${ly}" fill="${h.mau}" font-size="11" font-weight="bold"
-        text-anchor="middle" dominant-baseline="middle" class="th-label">${h.ten}</text>`;
+      const d = `M${p0.x},${p0.y} Q${cx},${cy} ${p2.x},${p2.y}`;
+
+      if (FLOW) {
+        // Đầu mũi tên vẽ tay (hiện sau khi đường vẽ xong), hướng theo tiếp tuyến tại điểm cuối
+        const hx = p2.x - cx, hy = p2.y - cy, hl = Math.hypot(hx, hy) || 1;
+        const ux = hx / hl, uy = hy / hl, s = 8, w = 0.55;
+        const head = `M${p2.x},${p2.y}
+          L${p2.x - ux * s - uy * s * w},${p2.y - uy * s + ux * s * w}
+          L${p2.x - ux * s + uy * s * w},${p2.y - uy * s - ux * s * w} Z`;
+        const delay = idx * STEP;
+        body += `<path id="tt-p${idx}" class="tt-line" style="--d:${delay}s" d="${d}" fill="none"
+            stroke="${h.mau}" stroke-width="1.8" stroke-opacity="0.9"/>
+          <path class="tt-fade" style="--d:${delay + DRAW}s" d="${head}" fill="${h.mau}"/>`
+          + badge(lx, ly, h.mau, ar.step, delay + DRAW);
+        flowPaths.push({ idx, mau: h.mau });
+      } else {
+        body += `<path d="${d}" fill="none"
+          stroke="${h.mau}" stroke-width="1.6" stroke-opacity="0.85" marker-end="url(#th-arrow-${ar.hoa})"/>`
+          + (ar.label ? label(lx, ly, h.mau, ar.label) : '');
+      }
     });
+
+    // Chấm sáng chạy lần lượt qua từng mũi tên, lặp lại liên tục
+    if (FLOW && flowPaths.length) {
+      const startAt = (_fly.arrows.length - 1) * STEP + DRAW;   // bắt đầu khi đã vẽ xong cả chuỗi
+      const last = flowPaths[flowPaths.length - 1].idx;
+      flowPaths.forEach((fp, k) => {
+        const begin = k === 0
+          ? `${startAt}s; fm${last}.end+0.5s`
+          : `fm${flowPaths[k - 1].idx}.end`;
+        body += `<circle r="4.5" fill="#ffd54f" stroke="${fp.mau}" stroke-width="1.5" opacity="0">
+            <set attributeName="opacity" to="1" begin="fm${fp.idx}.begin" end="fm${fp.idx}.end"/>
+            <animateMotion id="fm${fp.idx}" dur="${MOVE}s" begin="${begin}" fill="remove">
+              <mpath href="#tt-p${fp.idx}" xlink:href="#tt-p${fp.idx}"/>
+            </animateMotion>
+          </circle>`;
+      });
+    }
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'tuhoa-svg');
     svg.innerHTML = `<defs>${defs}</defs>${body}`;
     gridEl.appendChild(svg);
-    // Nền đen mờ cho nhãn
+
+    if (FLOW) {
+      // Độ dài từng đường để hiệu ứng "vẽ dần"
+      svg.querySelectorAll('.tt-line').forEach(p => p.style.setProperty('--len', p.getTotalLength()));
+      svg.setCurrentTime?.(0);
+    }
+
+    // Nền đen mờ cho nhãn chữ (chế độ phi tứ hóa)
     svg.querySelectorAll('.th-label').forEach(t => {
       const b = t.getBBox(), pad = 3;
       const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -382,15 +460,14 @@ window.TUVI_RENDER_SHARED.createPillEngine = function createPillEngine(deps) {
       r.setAttribute('rx', 3);
       r.setAttribute('fill', '#000');
       r.setAttribute('fill-opacity', '0.6');
-      t.parentNode.insertBefore(r, t);   // chèn trước để nền nằm dưới chữ
+      t.parentNode.insertBefore(r, t);
     });
-
   }
 
   function setTuHoa(state, gridEl) {
-    _tuHoa = state;
+    _fly = state;
     if (gridEl) {
-      gridEl.querySelector('.center')?.classList.toggle('dim', !!state);   // ← THÊM
+      gridEl.querySelector('.center')?.classList.toggle('dim', !!state);
       renderTuHoa(gridEl);
     }
   }

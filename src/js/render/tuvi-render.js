@@ -193,15 +193,62 @@ const TUVI_RENDER = (() => {
       // ── Click cung: highlight tam phương tứ chính ───────────
       let _selectedChi = null;
 
-      function tinhTuHoaCung(chi) {
+      const HOA_TEN_NGAN = ['Lộc', 'Quyền', 'Khoa', 'Kị'];
+
+      // Cung `chi` phi hóa thứ `hoa` (0=Lộc,1=Quyền,2=Khoa,3=Kị) → chi cung đích, hoặc null
+      function phiHoa(chi, hoa) {
         const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
         if (!json) return null;
         const can = TUVI_DATA.BANG_THIENCAN_CUNGMENH[canIdx(json.meta.canNam)][chi];
-        const targets = TUVI_DATA.TU_HOA[can].map(tenSao => {
-          const c = json.cung.find(c => c.sao.some(s => s.name === tenSao));
-          return c ? chiIdx(c.diaChi) : null;
-        });
-        return { fromChi: chi, targets };
+        const tenSao = TUVI_DATA.TU_HOA[can][hoa];
+        const c = json.cung.find(c => c.sao.some(s => s.name === tenSao));
+        return c ? chiIdx(c.diaChi) : null;
+      }
+
+      // Phi tứ hóa: 4 mũi tên từ cung được chọn
+      function tinhTuHoaCung(chi) {
+        const arrows = [];
+        for (let h = 0; h < 4; h++) {
+          const to = phiHoa(chi, h);
+          if (to === null) continue;
+          arrows.push({ from: chi, to, hoa: h,
+            label: to === chi ? `Tự hóa ${HOA_TEN_NGAN[h]}` : HOA_TEN_NGAN[h] });
+        }
+        return { arrows };
+      }
+
+      // Lộc Kỵ truy tung: cung chọn phi Lộc → A; A phi Kỵ → B; B phi Kỵ → C …
+      // Dừng khi: tự hóa Kỵ, Kỵ nhập cung đã đi qua, không tìm thấy sao, hoặc quá 12 bước
+      function tinhTruyTung(chi) {
+        const arrows = [];
+        let step = 1;
+        const add = (from, to, hoa) => arrows.push({ from, to, hoa, label: '', step: step++ });
+
+        const a = phiHoa(chi, 0);
+        if (a === null) return { arrows };
+        add(chi, a, 0);
+
+        const visited = new Set([chi, a]);
+        let from = a;
+        for (let n = 0; n < 12; n++) {
+          const to = phiHoa(from, 3);
+          if (to === null) break;
+          add(from, to, 3);
+          if (to === from || visited.has(to)) break;
+          visited.add(to);
+          from = to;
+        }
+        return { arrows, flow: true };
+      }
+
+      function tinhFly(chi) {
+        const truyTung = document.getElementById('chkTruyTung')?.checked;
+        return truyTung ? tinhTruyTung(chi) : tinhTuHoaCung(chi);
+      }
+
+      function refreshFly() {
+        if (_selectedChi === null) return;
+        PILL_ENGINE.setTuHoa?.(tinhFly(_selectedChi), document.getElementById('grid'));
       }
       
       function clickCung(chi) {
@@ -215,7 +262,7 @@ const TUVI_RENDER = (() => {
         }
         _selectedChi = chi;
         clearHighlight();
-        PILL_ENGINE.setTuHoa?.(tinhTuHoaCung(chi), gridEl);
+        PILL_ENGINE.setTuHoa?.(tinhFly(chi), gridEl);
 
         // Tam phương tứ chính: cung chọn + đối cung + 2 tam hợp → cùng 1 màu
         const doi = doiCung(chi);
@@ -471,6 +518,7 @@ const TUVI_RENDER = (() => {
         render,
         clickCung,
         reRenderPills,
+        refreshFly,          // ← THÊM
         onCungTitleLeftClick: RULE_ENGINE.onCungTitleLeftClick,
         onChinhTinhClick: RULE_ENGINE.onChinhTinhClick,
       };
