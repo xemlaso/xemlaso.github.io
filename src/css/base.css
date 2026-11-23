@@ -55,13 +55,17 @@
       max-width: 600px;
       flex-shrink: 0;
       height: 100vh;
+      height: 100dvh;
+      min-height: 0;
+      align-self: flex-start;
       position: sticky;
       top: 0;
-      border: 1px solid #c8b88a;
-      border-radius: 6px;
-      overflow-y: auto;
+      border: 1px solid #d7dee7;
+      border-radius: 10px;
       overflow-x: hidden;
-      background: #fff;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      background: #f3f5f8;
     }
 
     .col-chat.visible {
@@ -75,10 +79,15 @@
 
     /* ── Form area trong col-chat (desktop) ─────────────────── */
     #formArea {
-      flex-shrink: 0;
-      border-bottom: 1px solid #c8b88a;
+      flex: 1 1 auto;
+      flex-shrink: 1;
+      min-height: 0;
+      border-bottom: 1px solid #d7dee7;
       overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
       max-height: 58vh;
+      max-height: 58dvh;
     }
 
     /* Desktop khi chatbot đang ẩn: form tabs chiếm full chiều cao còn lại */
@@ -108,7 +117,7 @@
     .separator {
       width: 6px;
       cursor: col-resize;
-      background: #e8dcc8;
+      background: #d7dee7;
       border-radius: 3px;
       flex-shrink: 0;
       align-self: stretch;
@@ -122,7 +131,7 @@
 
     .separator:hover,
     .separator.dragging {
-      background: #c8a870;
+      background: #1f4e79;
     }
 
     .separator::after {
@@ -131,6 +140,6 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: #a08060;
+      color: #5b6b7c;
       font-size: 14px;
     }

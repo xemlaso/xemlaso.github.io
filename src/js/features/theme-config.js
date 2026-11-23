@@ -24,7 +24,10 @@
 
     const LASO_BG_STORAGE_KEY = 'tuviLasoBgChoice';
     const ANSAO_METHOD_STORAGE_KEY = 'tuviAnSaoMethod';
-    const ANSAO_METHODS = new Set(['trungchau', 'thaithulang']);
+    const ANSAO_METHODS = new Set(['lyso', 'trungchau', 'thaithulang']);
+    const DEFAULT_ANSAO_METHOD = 'lyso';
+    /** Khi UI đang lyso.vn, quét tìm lá số local vẫn cần một method tính sao. */
+    const LOCAL_COMPUTE_WHEN_LYSO = 'thaithulang';
     /** Value trong `<select>` cho SVG Âm Dương (không phải tên file) */
     const LASO_BG_YINYANG = '__yinyang__';
     /**
@@ -165,8 +168,6 @@
         '--color-hung': '#e67e22',
         '--color-border': '#a0845c',
       },
-      // Dùng ảnh API từ lyso.vn nên khóa chỉnh màu thủ công
-      lyso: DEFAULT_CONFIG,
     };
 
     function setLysoTemplateLock(isLocked) {
@@ -180,11 +181,11 @@
     }
 
     function isLysoTemplateActive() {
-      const templateSelect = document.getElementById('templateSelect');
-      return templateSelect?.value === 'lyso';
+      return getCurrentAnSaoMethod() === 'lyso';
     }
 
     function toggleLysoApiMode(useApiImage) {
+      document.body?.classList.toggle('laso-lyso-api', !!useApiImage);
       const gridWrap = document.getElementById('gridScalerOuter');
       const apiWrap = document.getElementById('lysoApiWrap');
       const legend = document.querySelector('.legend');
@@ -281,19 +282,10 @@
 
     function applyTemplate(name) {
       const cfg = TEMPLATES[name] || DEFAULT_CONFIG;
-      setLysoTemplateLock(name === 'lyso');
       setCssVar('--mono-mode', '0');
       Object.entries(cfg).forEach(([k, v]) => setCssVar(k, v));
       syncConfigUI(cfg);
-      if (name === 'lyso') {
-        try {
-          renderLysoFromCurrentInputs();
-        } catch (_) {
-          toggleLysoApiMode(true);
-        }
-        return;
-      }
-      toggleLysoApiMode(false);
+      if (isLysoTemplateActive()) return;
       applyLasoBackgroundChoice(document.getElementById('lasoBgSelect')?.value ?? '');
       // Re-render để áp màu mới vì màu ngũ hành là inline style trong DOM
       if (_lastJson) {
@@ -345,11 +337,12 @@
       syncConfigUI(DEFAULT_CONFIG);
       const templateSelect = document.getElementById('templateSelect');
       if (templateSelect) templateSelect.value = 'classic';
-      if (typeof window.setAnSaoMethod === 'function') window.setAnSaoMethod('thaithulang', false);
-      setLysoTemplateLock(false);
-      toggleLysoApiMode(false);
       document.querySelectorAll('#cfgPanel select:not([data-var])').forEach(el => el.selectedIndex = 0);
       try { localStorage.removeItem(LASO_BG_STORAGE_KEY); } catch (_) {}
+      const lyso = isLysoTemplateActive();
+      setLysoTemplateLock(lyso);
+      if (lyso) return;
+      toggleLysoApiMode(false);
       applyLasoBackgroundChoice('');
       if (_lastJson) {
         const gridEl = document.getElementById('grid');
@@ -363,21 +356,105 @@
 
     function normalizeAnSaoMethod(method) {
       const m = String(method || '').trim().toLowerCase();
-      return ANSAO_METHODS.has(m) ? m : 'thaithulang';
+      return ANSAO_METHODS.has(m) ? m : DEFAULT_ANSAO_METHOD;
     }
 
-    window.getCurrentAnSaoMethod = function getCurrentAnSaoMethod() {
-      const sel = document.getElementById('anSaoMethodSelect');
-      return normalizeAnSaoMethod(sel?.value || window._ansaoMethod || 'thaithulang');
+    let _ansaoApplying = false;
+    let _ansaoLockValue = '';
+    let _ansaoLockAt = 0;
+
+    function syncAnSaoMethodSelects(method) {
+      _ansaoApplying = true;
+      try {
+        ['anSaoMethodSelect', 'anSaoMethodSelectSearch'].forEach((id) => {
+          const sel = document.getElementById(id);
+          if (sel && sel.value !== method) sel.value = method;
+        });
+      } finally {
+        _ansaoApplying = false;
+      }
+    }
+
+    function syncCfgTabLock() {
+      const locked = getCurrentAnSaoMethod() === 'lyso';
+      const btn = document.getElementById('tabCFG');
+      if (btn) {
+        btn.disabled = locked;
+        btn.classList.toggle('is-disabled', locked);
+        btn.title = locked ? 'Cấu hình chỉ dùng khi không chọn lyso.vn (API ảnh)' : '';
+      }
+      if (locked && window._currentTab === 'CFG' && typeof switchTab === 'function') {
+        switchTab(window._lastFormTab || 'AL');
+      }
+    }
+
+    function getCurrentAnSaoMethod() {
+      const saved = String(window._ansaoMethod || '').trim().toLowerCase();
+      if (ANSAO_METHODS.has(saved)) return saved;
+      const sel = document.getElementById('anSaoMethodSelect')
+        || document.getElementById('anSaoMethodSelectSearch');
+      return normalizeAnSaoMethod(sel?.value || DEFAULT_ANSAO_METHOD);
+    }
+
+    window.getCurrentAnSaoMethod = getCurrentAnSaoMethod;
+    window.syncAnSaoMethodSelects = syncAnSaoMethodSelects;
+
+    window.getComputeAnSaoMethod = function getComputeAnSaoMethod() {
+      const m = getCurrentAnSaoMethod();
+      return m === 'lyso' ? LOCAL_COMPUTE_WHEN_LYSO : m;
     };
 
+    /** Chỉ vẽ lá số của tab đang mở. Tab khác chỉ nhận giá trị option. */
+    function renderChartForOpenTab() {
+      const tab = window._currentTab || 'AL';
+      if (tab === 'CFG') return;
+      if (tab === 'SEARCH') {
+        const idx = window._currentSearchResultIdx;
+        const rows = window._searchResults;
+        if (Array.isArray(rows) && rows[idx] && typeof window.openSearchResult === 'function') {
+          window.openSearchResult(idx);
+        }
+        return;
+      }
+      if (typeof lapLaSo === 'function') lapLaSo();
+      else if (getCurrentAnSaoMethod() === 'lyso') {
+        try { renderLysoFromCurrentInputs(); } catch (_) { toggleLysoApiMode(true); }
+      }
+    }
+
+    function applyAnSaoMethodSideEffects(method, triggerCompute) {
+      syncAnSaoMethodSelects(method);
+      if (method === 'lyso') setLysoTemplateLock(true);
+      else {
+        setLysoTemplateLock(false);
+        if (triggerCompute && (window._currentTab || 'AL') !== 'SEARCH') toggleLysoApiMode(false);
+      }
+      syncCfgTabLock();
+      if (triggerCompute) renderChartForOpenTab();
+      syncAnSaoMethodSelects(method);
+    }
+
     window.setAnSaoMethod = function setAnSaoMethod(method, triggerCompute = true) {
+      if (_ansaoApplying) return;
       const m = normalizeAnSaoMethod(method);
+      const now = Date.now();
+      // Trình duyệt đôi khi bắn change lần 2 với option cũ ngay sau khi chọn lyso.
+      if (triggerCompute && _ansaoLockValue && m !== _ansaoLockValue && now - _ansaoLockAt < 80) {
+        syncAnSaoMethodSelects(_ansaoLockValue);
+        return;
+      }
       window._ansaoMethod = m;
-      const sel = document.getElementById('anSaoMethodSelect');
-      if (sel && sel.value !== m) sel.value = m;
+      if (triggerCompute) {
+        _ansaoLockValue = m;
+        _ansaoLockAt = now;
+      }
       try { localStorage.setItem(ANSAO_METHOD_STORAGE_KEY, m); } catch (_) {}
-      if (triggerCompute && typeof lapLaSo === 'function') lapLaSo();
+      // Không đổi DOM lá số trong chính sự kiện change, kẻo select bị hoàn tác về option cũ.
+      if (triggerCompute && typeof setTimeout === 'function') {
+        setTimeout(() => applyAnSaoMethodSideEffects(m, true), 0);
+        return;
+      }
+      applyAnSaoMethodSideEffects(m, triggerCompute);
     };
 
     window.isLysoTemplateActive = isLysoTemplateActive;
@@ -426,7 +503,7 @@
     })();
 
     (function initAnSaoMethodFromStorage() {
-      let saved = 'thaithulang';
+      let saved = DEFAULT_ANSAO_METHOD;
       try {
         saved = normalizeAnSaoMethod(localStorage.getItem(ANSAO_METHOD_STORAGE_KEY));
       } catch (_) {}

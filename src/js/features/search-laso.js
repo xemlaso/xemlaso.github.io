@@ -10,6 +10,7 @@
   let _searchCancelled = false;
   let _searchRunning = false;
   let _currentResultIdx = -1;
+  window._currentSearchResultIdx = -1;
   const _starredResultKeys = new Set();
   let _overlayListMode = 'all';
   let _needsMainListRefresh = false;
@@ -261,6 +262,7 @@
   function clearSearchResultsState() {
     window._searchResults = [];
     _currentResultIdx = -1;
+    window._currentSearchResultIdx = -1;
     const list = document.getElementById('searchResultList');
     const nav = document.getElementById('searchResultNav');
     if (list) list.innerHTML = '';
@@ -325,6 +327,7 @@
     if (!results.length) {
       if (nav) nav.style.display = 'none';
       _currentResultIdx = -1;
+      window._currentSearchResultIdx = -1;
       updateResultNavPosition();
       list.innerHTML = `<div style="padding:10px;border:1px dashed #c8b88a;border-radius:6px;color:#7a5c2a;">Không có lá số nào thỏa điều kiện.</div>`;
       return;
@@ -439,7 +442,9 @@
           if (_searchCancelled) break outer;
           let laso;
           try {
-            const method = (typeof getCurrentAnSaoMethod === 'function') ? getCurrentAnSaoMethod() : 'trungchau';
+            const method = (typeof getComputeAnSaoMethod === 'function')
+              ? getComputeAnSaoMethod()
+              : ((typeof getCurrentAnSaoMethod === 'function') ? getCurrentAnSaoMethod() : 'trungchau');
             laso = TUVI_LOGIC.compute({
               hoTen: `Search ${dd}/${mm}/${yy} ${gio}`,
               ngay: lunar.ngay,
@@ -497,6 +502,7 @@
       window._searchResults = hits;
       renderResults(hits);
       _currentResultIdx = hits.length ? 0 : -1;
+      window._currentSearchResultIdx = _currentResultIdx;
       if (_currentResultIdx >= 0) window.openSearchResult(_currentResultIdx);
       const summary = (_searchCancelled
         ? `Đã ngắt tìm kiếm: quét ${checked}/${total} lá số, có ${hits.length} lá số thỏa.`
@@ -521,6 +527,7 @@
     const row = window._searchResults[idxNum];
     if (!row) return;
     _currentResultIdx = idxNum;
+    window._currentSearchResultIdx = idxNum;
     updateResultNavPosition();
     document.getElementById('hoTen').value = row.laso.meta.hoTen || '';
     document.getElementById('ngay').value = row.lunar.ngay;

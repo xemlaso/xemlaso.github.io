@@ -36,6 +36,9 @@
           }
         }
       }
+      if (window._ansaoMethod && typeof window.syncAnSaoMethodSelects === 'function') {
+        window.syncAnSaoMethodSelects(window._ansaoMethod);
+      }
       requestAnimationFrame(scaleGrid);
     }
     window.addEventListener('resize', applyResponsiveLayout);

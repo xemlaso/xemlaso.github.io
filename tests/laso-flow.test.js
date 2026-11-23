@@ -630,8 +630,9 @@ module.exports = [
           return [];
         },
       });
+      el("anSaoMethodSelect", { value: "lyso" });
       el("templateSelect", {
-        value: "lyso",
+        value: "classic",
         dataset: { lysoKeep: "1" },
       });
       el("gridScalerOuter", { style: {} });
@@ -656,7 +657,7 @@ module.exports = [
 
       loadThemeAndTabs(sandbox);
 
-      sandbox.applyTemplate("lyso");
+      sandbox.setAnSaoMethod("lyso", true);
 
       const grid = sandbox.document.getElementById("gridScalerOuter");
       const api = sandbox.document.getElementById("lysoApiWrap");
@@ -697,7 +698,8 @@ module.exports = [
         return [];
       };
 
-      el("templateSelect", { value: "lyso", dataset: { lysoKeep: "1" } });
+      el("anSaoMethodSelect", { value: "lyso" });
+      el("templateSelect", { value: "classic", dataset: { lysoKeep: "1" } });
       el("gridScalerOuter", { style: {} });
       el("lysoApiWrap", { style: {} });
       el("lysoApiImage", { src: "" });
@@ -720,19 +722,19 @@ module.exports = [
       });
 
       loadThemeAndTabs(sandbox);
-      sandbox.applyTemplate("lyso");
+      sandbox.setAnSaoMethod("lyso", true);
 
-      assert.equal(sandbox.document.getElementById("templateSelect").value, "lyso");
+      assert.equal(sandbox.document.getElementById("anSaoMethodSelect").value, "lyso");
 
       sandbox.switchTab("CFG");
-      assert.equal(sandbox.document.getElementById("templateSelect").value, "lyso");
+      assert.equal(sandbox.document.getElementById("anSaoMethodSelect").value, "lyso");
       assert.equal(sandbox.document.getElementById("gridScalerOuter").style.display, "none");
 
       sandbox.switchTab("SEARCH");
-      assert.equal(sandbox.document.getElementById("templateSelect").value, "lyso");
+      assert.equal(sandbox.document.getElementById("anSaoMethodSelect").value, "lyso");
 
       sandbox.switchTab("AL");
-      assert.equal(sandbox.document.getElementById("templateSelect").value, "lyso");
+      assert.equal(sandbox.document.getElementById("anSaoMethodSelect").value, "lyso");
     },
   },
   {
@@ -741,7 +743,8 @@ module.exports = [
       const { sandbox, el } = createSandbox();
 
       el("cfgPanel", { querySelectorAll() { return []; } });
-      el("templateSelect", { value: "lyso", dataset: { lysoKeep: "1" } });
+      el("anSaoMethodSelect", { value: "lyso" });
+      el("templateSelect", { value: "classic", dataset: { lysoKeep: "1" } });
       el("gridScalerOuter", { style: {} });
       el("lysoApiWrap", { style: {} });
       const img = el("lysoApiImage", { src: "" });
@@ -764,7 +767,7 @@ module.exports = [
       });
 
       loadThemeAndTabs(sandbox);
-      sandbox.applyTemplate("lyso");
+      sandbox.setAnSaoMethod("lyso", true);
 
       const srcAfterFirst = img.src;
       assert.ok(srcAfterFirst.includes("/2026/"));

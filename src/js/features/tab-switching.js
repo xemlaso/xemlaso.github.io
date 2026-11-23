@@ -3,8 +3,13 @@
     window._currentTab = _currentTab;
 
     function switchTab(tab) {
+      if (tab === 'CFG' && typeof isLysoTemplateActive === 'function' && isLysoTemplateActive()) return;
       _currentTab = tab;
       window._currentTab = tab;
+      if (tab === 'AL' || tab === 'DL' || tab === 'SEARCH') window._lastFormTab = tab;
+      if (typeof window.syncAnSaoMethodSelects === 'function' && typeof getCurrentAnSaoMethod === 'function') {
+        window.syncAnSaoMethodSelects(getCurrentAnSaoMethod());
+      }
       // Form nhập liệu - ẩn khi tab phụ
       const formWrap = document.getElementById('formWrap');
       if (formWrap) formWrap.style.display = (tab === 'CFG' || tab === 'SEARCH') ? 'none' : '';

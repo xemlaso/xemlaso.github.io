@@ -50,8 +50,8 @@
         <div id="formAreaLaso">
           <!-- Tab chọn loại lịch -->
           <div class="tab-bar">
-            <button id="tabAL" class="tab-btn tab-active" onclick="switchTab('AL')">Âm lịch</button>
             <button id="tabDL" class="tab-btn" onclick="switchTab('DL')">Dương lịch</button>
+            <button id="tabAL" class="tab-btn tab-active" onclick="switchTab('AL')">Âm lịch</button>
             <button id="tabSEARCH" class="tab-btn" onclick="switchTab('SEARCH')">Tìm lá số</button>
             <button id="tabCFG" class="tab-btn" onclick="switchTab('CFG')">⚙ Cấu hình</button>
           </div>
@@ -103,6 +103,14 @@
                 <option value="nu">Nữ</option>
               </select>
             </div>
+            <div class="fg fg-ansao-method">
+              <label for="anSaoMethodSelect">Phương pháp an sao</label>
+              <select id="anSaoMethodSelect" onchange="setAnSaoMethod(this.value, true)">
+                <option value="lyso" selected>lyso.vn (API ảnh)</option>
+                <option value="thaithulang">Thái Thứ Lang</option>
+                <option value="trungchau">Trung châu phái Vương Đình Chi</option>
+              </select>
+            </div>
             <div class="fg fg-lap-laso">
               <button type="button" class="btn" onclick="lapLaSo()">Lập lá số</button>
             </div>
@@ -146,6 +154,14 @@
               </div>
               <div class="search-gio-hint">Giờ sinh: hệ thống tự quét toàn bộ 12 giờ.</div>
 
+              <div class="fg fg-ansao-method">
+                <label for="anSaoMethodSelectSearch">Phương pháp an sao</label>
+                <select id="anSaoMethodSelectSearch" onchange="setAnSaoMethod(this.value, true)">
+                  <option value="lyso" selected>lyso.vn (API ảnh)</option>
+                  <option value="thaithulang">Thái Thứ Lang</option>
+                  <option value="trungchau">Trung châu phái Vương Đình Chi</option>
+                </select>
+              </div>
               <div class="fg fg-search-submit-wrap">
                 <button type="button" class="btn btn-search-submit" onclick="searchLaSo()">Tìm lá số</button>
               </div>
@@ -162,23 +178,13 @@
             style="display:none;background:#fff;border:1px solid #c8b88a;border-radius:6px;padding:14px;margin-bottom:12px;">
             <div class="cfg-panel-grid">
 
-              <!-- Phương pháp an sao -->
-              <div class="fg">
-                <label>Phương pháp an sao</label>
-                <select id="anSaoMethodSelect" data-lyso-keep="1" onchange="setAnSaoMethod(this.value, true)">
-                  <option value="thaithulang">Thái Thứ Lang</option>
-                  <option value="trungchau">Trung châu phái Vương Đình Chi</option>
-                </select>
-              </div>
-
               <!-- Template màu -->
               <div class="fg">
                 <label>Template màu</label>
-                <select id="templateSelect" data-lyso-keep="1" onchange="applyTemplate(this.value)">
+                <select id="templateSelect" onchange="applyTemplate(this.value)">
                   <option value="classic">Cổ điển (hiện tại)</option>
                   <option value="mono">Đơn sắc (không màu)</option>
                   <option value="pastel">Nhạt</option>
-                  <option value="lyso">lyso.vn (API ảnh)</option>
                 </select>
               </div>
 

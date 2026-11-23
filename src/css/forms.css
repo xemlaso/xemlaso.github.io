@@ -39,6 +39,16 @@
       border-color: #8b5e1a;
     }
 
+    /* Nút Lập lá số luôn chiếm một hàng riêng (web + mobile) */
+    #formWrap .fg-ansao-method,
+    #formWrap .fg-lap-laso {
+      grid-column: 1 / -1;
+    }
+
+    #formWrap .fg-lap-laso .btn {
+      width: 100%;
+    }
+
     #cfgPanel.is-lyso-locked .fg input:not([data-lyso-keep]),
     #cfgPanel.is-lyso-locked .fg select:not([data-lyso-keep]),
     #cfgPanel.is-lyso-locked .fg button:not([data-lyso-keep]) {
@@ -172,6 +182,14 @@
 
     /* Wrapper để scale lá số responsive */
     /* Wrapper responsive */
+    body.laso-lyso-api #gridScalerOuter {
+      display: none !important;
+    }
+
+    body.laso-lyso-api #lysoApiWrap {
+      display: block !important;
+    }
+
     .grid-scaler-outer {
       width: 100%;
       overflow: visible;
@@ -238,6 +256,13 @@
       color: #1a1008;
       font-weight: 600;
       box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+    }
+
+    .tab-btn:disabled,
+    .tab-btn.is-disabled {
+      opacity: .4;
+      cursor: not-allowed;
+      pointer-events: none;
     }
 
     /* Desktop/web: khi chatbot ẩn thì tab hiện tại dùng hết chiều cao khả dụng */
@@ -334,8 +359,8 @@
     }
 
     .btn-chip-clear {
-      background: #9b875b !important;
-      border-color: #9b875b !important;
+      background: #5b6b7c !important;
+      border-color: #5b6b7c !important;
     }
 
     .search-chinh-tinh-list {
@@ -377,18 +402,6 @@
     @media (max-width: 768px) {
       body[data-layout="mobile"] .dl-convert-line {
         display: none !important;
-      }
-
-      body[data-layout="mobile"] .fg-lap-laso {
-        grid-column: 1 / -1;
-        display: flex;
-        justify-content: center;
-      }
-
-      body[data-layout="mobile"] .fg-lap-laso .btn {
-        width: auto;
-        min-width: 160px;
-        max-width: 92%;
       }
 
       body[data-layout="mobile"] .cfg-panel-grid {
@@ -474,4 +487,127 @@
 
     body[data-layout="desktop"] .gio-mobile-row {
       display: none !important;
+    }
+
+    /* Theme slate: sidebar desktop và form mobile (Chrome + Safari) */
+    body[data-layout="mobile"] {
+      background: #f3f5f8;
+      color: #1c2834;
+    }
+
+    body[data-layout="mobile"] #formAreaLaso {
+      background: #f3f5f8;
+    }
+
+    body[data-layout="desktop"] .col-chat .tab-bar,
+    body[data-layout="mobile"] #formAreaLaso .tab-bar {
+      background: #e7edf4;
+    }
+
+    body[data-layout="desktop"] .col-chat .tab-btn,
+    body[data-layout="mobile"] #formAreaLaso .tab-btn {
+      color: #3d4d5e;
+    }
+
+    body[data-layout="desktop"] .col-chat .tab-btn:hover,
+    body[data-layout="mobile"] #formAreaLaso .tab-btn:hover {
+      background: #d9e2ec;
+      color: #1c2834;
+    }
+
+    body[data-layout="desktop"] .col-chat .tab-btn.tab-active,
+    body[data-layout="mobile"] #formAreaLaso .tab-btn.tab-active {
+      color: #1f4e79;
+    }
+
+    body[data-layout="desktop"] .col-chat .form-wrap,
+    body[data-layout="desktop"] .col-chat #searchPanel,
+    body[data-layout="desktop"] .col-chat #cfgPanel,
+    body[data-layout="mobile"] #formAreaLaso .form-wrap,
+    body[data-layout="mobile"] #formAreaLaso #searchPanel,
+    body[data-layout="mobile"] #formAreaLaso #cfgPanel {
+      background: #fff !important;
+      border-color: #d7dee7 !important;
+      border-radius: 10px;
+    }
+
+    body[data-layout="desktop"] .col-chat .fg label,
+    body[data-layout="desktop"] .col-chat .search-block-heading,
+    body[data-layout="desktop"] .col-chat .search-hint,
+    body[data-layout="desktop"] .col-chat .search-gio-hint,
+    body[data-layout="mobile"] #formAreaLaso .fg label,
+    body[data-layout="mobile"] #formAreaLaso .search-block-heading,
+    body[data-layout="mobile"] #formAreaLaso .search-hint,
+    body[data-layout="mobile"] #formAreaLaso .search-gio-hint {
+      color: #5b6b7c;
+    }
+
+    body[data-layout="desktop"] .col-chat .fg input,
+    body[data-layout="desktop"] .col-chat .fg select,
+    body[data-layout="desktop"] .col-chat #searchPanel input,
+    body[data-layout="desktop"] .col-chat #searchPanel select,
+    body[data-layout="desktop"] .col-chat #cfgPanel input:not([type="color"]),
+    body[data-layout="desktop"] .col-chat #cfgPanel select,
+    body[data-layout="mobile"] #formAreaLaso .fg input,
+    body[data-layout="mobile"] #formAreaLaso .fg select,
+    body[data-layout="mobile"] #formAreaLaso .form-mobile-select,
+    body[data-layout="mobile"] #formAreaLaso .gio-mobile-row select,
+    body[data-layout="mobile"] #formAreaLaso #searchPanel input,
+    body[data-layout="mobile"] #formAreaLaso #searchPanel select,
+    body[data-layout="mobile"] #formAreaLaso #cfgPanel input:not([type="color"]),
+    body[data-layout="mobile"] #formAreaLaso #cfgPanel select {
+      border: 1px solid #d7dee7;
+      border-radius: 8px;
+      background-color: #f8fafc;
+      color: #1c2834;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    body[data-layout="desktop"] .col-chat select,
+    body[data-layout="mobile"] #formAreaLaso select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235b6b7c' d='M1.4.8 6 5.4 10.6.8 12 2.2 6 8 0 2.2z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 10px 7px;
+      padding-right: 26px;
+    }
+
+    body[data-layout="desktop"] .col-chat .fg input:focus,
+    body[data-layout="desktop"] .col-chat .fg select:focus,
+    body[data-layout="desktop"] .col-chat #searchPanel input:focus,
+    body[data-layout="desktop"] .col-chat #searchPanel select:focus,
+    body[data-layout="desktop"] .col-chat #cfgPanel input:focus,
+    body[data-layout="desktop"] .col-chat #cfgPanel select:focus,
+    body[data-layout="mobile"] #formAreaLaso .fg input:focus,
+    body[data-layout="mobile"] #formAreaLaso .fg select:focus,
+    body[data-layout="mobile"] #formAreaLaso #searchPanel input:focus,
+    body[data-layout="mobile"] #formAreaLaso #searchPanel select:focus,
+    body[data-layout="mobile"] #formAreaLaso #cfgPanel input:focus,
+    body[data-layout="mobile"] #formAreaLaso #cfgPanel select:focus {
+      border-color: #1f4e79;
+      outline: none;
+    }
+
+    body[data-layout="desktop"] .col-chat .btn,
+    body[data-layout="mobile"] #formAreaLaso .btn {
+      background: #1f4e79;
+      border-color: #1f4e79;
+      border-radius: 8px;
+      color: #fff;
+    }
+
+    body[data-layout="desktop"] .col-chat .btn:hover,
+    body[data-layout="mobile"] #formAreaLaso .btn:hover {
+      background: #163a5c;
+      border-color: #163a5c;
+    }
+
+    body[data-layout="desktop"] .col-chat #dlResult,
+    body[data-layout="mobile"] #formAreaLaso #dlResult {
+      color: #3d4d5e;
+    }
+
+    body[data-layout="mobile"] #formAreaLaso .gio-colon {
+      color: #5b6b7c;
     }
