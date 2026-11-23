@@ -126,6 +126,15 @@
       font-size: 11px;
     }
 
+    #grid { position: relative; }
+    .tamhop-svg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 0;
+    }
+
     /* ── MIDDLE: chính tinh (2 hàng) + cát/hung (2 cột) ────── */
     .cung-mid {
       flex: 1;

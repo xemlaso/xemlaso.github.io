@@ -1,6 +1,7 @@
 window.TUVI_RENDER_SHARED = window.TUVI_RENDER_SHARED || {};
 
 window.TUVI_RENDER_SHARED.constants = {
+  
   CHI_MAU: {
     0: '#111118',
     1: '#c8960a',
@@ -245,6 +246,44 @@ window.TUVI_RENDER_SHARED.createPillEngine = function createPillEngine(deps) {
     return m.a || 1;
   }
 
+  const ANCHOR = {
+    5: [1, 1], 8: [0, 1], 11: [0, 0], 2: [1, 0],
+    6: [0.5, 1], 7: [0.5, 1],
+    9: [0, 0.5], 10: [0, 0.5],
+    0: [0.5, 0], 1: [0.5, 0],
+    3: [1, 0.5], 4: [1, 0.5],
+  };
+  const CHI_LIST = ['Tý','Sửu','Dần','Mão','Thìn','Tị','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+
+  function anchorPoint(chi, gridEl, scale) {
+    const el = gridEl.querySelector(`.cung[data-chi="${chi}"]`);
+    if (!el) return null;
+    const r = el.getBoundingClientRect(), g = gridEl.getBoundingClientRect();
+    const [fx, fy] = ANCHOR[chi];
+    return {
+      x: (r.left - g.left + r.width * fx) / scale,
+      y: (r.top - g.top + r.height * fy) / scale,
+    };
+  }
+
+  function renderTamHop(gridEl) {
+    gridEl.querySelector('.tamhop-svg')?.remove();
+    const cung = (typeof _lastJson !== 'undefined' && _lastJson) ? _lastJson.cung : [];
+    const chis = ['Mệnh', 'Tài Bạch', 'Quan Lộc']
+      .map(t => cung.find(c => c.cungChuc === t))
+      .filter(Boolean)
+      .map(c => CHI_LIST.indexOf(c.diaChi));
+    if (chis.length !== 3) return;
+    const scale = getScale();
+    const pts = chis.map(ch => anchorPoint(ch, gridEl, scale));
+    if (pts.some(p => !p)) return;
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'tamhop-svg');
+    svg.innerHTML = `<polygon points="${pts.map(p => `${p.x},${p.y}`).join(' ')}"
+      fill="none" stroke="#888" stroke-opacity="0.35" stroke-width="1.2"/>`;
+    gridEl.appendChild(svg);
+  }
+
   function pillPos(c1, c2, gridEl) {
     const g1 = CHI_GRID_R[c1], g2 = CHI_GRID_R[c2];
     if (!g1 || !g2) return null;
@@ -354,6 +393,7 @@ window.TUVI_RENDER_SHARED.createPillEngine = function createPillEngine(deps) {
       if (luuPills?.triet) renderLuuTriet(luuPills.triet, gridEl);
       if (luuPills?.tuan) renderLuuTuan(luuPills.tuan, gridEl);
     }
+    renderTamHop(gridEl);   // ← THÊM DÒNG NÀY
   }
 
   return { render };
@@ -459,7 +499,7 @@ window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(d
 </div>
       <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:Arial,sans-serif;">
       ${row('Họ tên:', hoTen ? `<span style="color:#c0392b;font-weight:bold;">${hoTen}</span>` : '—')}
-        // ${row('Năm:', `${namAL} - ${canChi}`)}
+        ${row('Năm:', `${namAL} - ${canChi}`)}
         ${row('Ngày DL:', ngayDLText)}
         ${row('Ngày AL:', `${ngayAL}/${thangAL}/${namAL}`)}
         ${row('Giờ:', `${gioSinh} (${tenChiGio})`)}
