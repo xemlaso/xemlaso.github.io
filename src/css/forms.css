@@ -298,7 +298,7 @@
       width: fit-content;
       border: 2px solid var(--color-border);
       background: var(--color-border);
-      gap: 1px;
+      gap: 1.3px;
       position: relative;
     }
 

@@ -171,7 +171,7 @@
       },
       tuvivietnam: {
         ...DEFAULT_CONFIG,
-        '--color-bg-cung': 'rgb(241, 240, 236)',
+        '--color-bg-cung': 'rgb(241, 239, 236)',
         '--fs-sao': '12px',
       },
     };
