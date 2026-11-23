@@ -17,6 +17,7 @@
     'use strict';
   
     const CFG = {
+        margin: 2,                            // ← viền trắng bao quanh lá số (px)
       targetSelector: '#grid',              // phần tử cần chụp (bên trong #gridScaler)
       background: '#ffffff',
       maxPixels: 16 * 1000 * 1000,          // giới hạn canvas an toàn cho iOS
@@ -64,29 +65,53 @@
       return !CFG.excludeClasses.some(c => el.classList.contains(c));
     }
   
-    // ── Chụp ──────────────────────────────────────────────────────
-    async function capture(node) {
-          // Giữ nguyên màu nền thật của #grid (màu này tạo ra vạch kẻ giữa các cung)
-    const bg = getComputedStyle(node).backgroundColor;
-    const isTransparent = !bg || bg === 'transparent' || /rgba\(.*,\s*0\)$/.test(bg);
-    const base = {
-        pixelRatio: pickRatio(node),
-        filter: filterNode,
-        imagePlaceholder: CFG.imagePlaceholder,
-        cacheBust: false,
-      };
-      const run = async (opt) => {
-        if (isSafari || isIOS) await htmlToImage.toBlob(node, opt);   // lần "mồi" cho Safari
-        return htmlToImage.toBlob(node, opt);
-      };
-  
-      try {
-        return await run(base);
-      } catch (e) {
-        console.warn('[laso-download] Chụp có nhúng font lỗi, thử lại không nhúng font:', e);
-        return run({ ...base, skipFonts: true });
-      }
+      // Thêm viền trắng quanh ảnh (margin tính theo px CSS, nhân theo pixelRatio)
+  async function addMargin(blob, marginCss, ratio, color) {
+    if (!blob || !marginCss) return blob;
+    const url = URL.createObjectURL(blob);
+    try {
+      const img = await new Promise((res, rej) => {
+        const i = new Image();
+        i.onload = () => res(i);
+        i.onerror = rej;
+        i.src = url;
+      });
+      const m = Math.round(marginCss * ratio);
+      const c = document.createElement('canvas');
+      c.width = img.naturalWidth + m * 2;
+      c.height = img.naturalHeight + m * 2;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.drawImage(img, m, m);
+      return await new Promise(res => c.toBlob(res, 'image/png'));
+    } finally {
+      URL.revokeObjectURL(url);
     }
+  }
+  async function capture(node) {
+    const ratio = pickRatio(node);
+    const base = {
+      pixelRatio: ratio,
+      filter: filterNode,
+      imagePlaceholder: CFG.imagePlaceholder,
+      cacheBust: false,
+    };
+
+    const run = async (opt) => {
+      if (isSafari || isIOS) await htmlToImage.toBlob(node, opt);   // lần "mồi" cho Safari
+      return htmlToImage.toBlob(node, opt);
+    };
+
+    let blob;
+    try {
+      blob = await run(base);
+    } catch (e) {
+      console.warn('[laso-download] Chụp có nhúng font lỗi, thử lại không nhúng font:', e);
+      blob = await run({ ...base, skipFonts: true });
+    }
+    return addMargin(blob, CFG.margin, ratio, CFG.background);
+  }
   
     // ── Xuất ảnh ──────────────────────────────────────────────────
     function downloadBlob(blob, name) {
