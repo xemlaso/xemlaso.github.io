@@ -89,7 +89,36 @@
       try {
         if (localStorage.getItem('sidebarHidden') === '1') setSidebarHidden(true);
       } catch (e) {}
+    
       
+          // ── Nút copy trong các box Phi hóa / Truy tung / Tương tác tứ hóa ──
+    function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+      const ta = document.createElement('textarea');           // dự phòng khi mở bằng file://
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } finally { ta.remove(); }
+      return Promise.resolve();
+    }
+
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('.box-copy');
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();                                      // không kích hoạt click cung
+      const box = btn.closest('.tt-chain, .tg-box');
+      const lines = [...box.querySelectorAll('.tt-title, .tt-row, .tg-line')]
+        .map(el => el.innerText.replace(/\s+/g, ' ').trim())
+        .filter(Boolean);
+      if (box.dataset.title) lines.unshift(box.dataset.title);
+      copyText(lines.join('\n')).then(() => {
+        btn.textContent = '✓';
+        setTimeout(() => { btn.textContent = '⧉'; }, 1000);
+      });
+    }, true);
       
     function lapLaSo() {
       if ((window._currentTab || 'DL') !== 'SEARCH' && typeof clearSearchResultsState === 'function' && window._searchResults?.length) {

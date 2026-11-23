@@ -329,7 +329,8 @@ const TUVI_RENDER = (() => {
             <span class="ph-tag" style="background:${MAU_HOA[h]}">${HOA_TEN_NGAN[h]}</span>
             ${noiDung}</div>`;
         }).join('');
-        return `<div class="tt-chain ph-box">
+        
+        return `<div class="tt-chain ph-box"><button class="box-copy" title="Sao chép">⧉</button>
           <div class="tt-title">Phi hóa</div>
           <div class="tt-row tt-cung">${tenCung(chi)} <span class="tt-chi">· can ${CAN_STR[can]}</span></div>
           ${rows}</div>`;
@@ -349,7 +350,7 @@ const TUVI_RENDER = (() => {
         });
         rows[rows.map(r => r.cung).lastIndexOf(true)].end = true;
 
-        return `<div class="tt-chain">
+        return `<div class="tt-chain"><button class="box-copy" title="Sao chép">⧉</button>
           <div class="tt-title">Lộc Kỵ truy tung</div>` + rows.map(r =>
           `<div class="tt-row tt-fade${r.cung ? ' tt-cung' : ' tt-link'}${r.end ? ' tt-end' : ''}" style="--d:${r.d}s">
               ${r.html}${r.end ? ` <span class="tt-stop">■ ${state.endReason || 'kết thúc'}</span>` : ''}</div>`).join('') + `</div>`;
@@ -454,7 +455,10 @@ const TUVI_RENDER = (() => {
           if (!cell || !lines.length) return;
           const box = document.createElement('div');
           box.className = 'tg-box';
-          box.innerHTML = lines.map(l => `<div class="tg-line">${l}</div>`).join('');
+          const c = _lastJson?.cung.find(c => chiIdx(c.diaChi) === Number(chi));
+          box.dataset.title = c ? `${c.cungChuc} (${c.diaChi}):` : '';
+          box.innerHTML = `<button class="box-copy" title="Sao chép">⧉</button>`
+            + lines.map(l => `<div class="tg-line">${l}</div>`).join('');
           box.style.left = (cell.offsetLeft + cell.offsetWidth / 2) + 'px';
           box.style.top = (cell.offsetTop + cell.offsetHeight / 2) + 'px';
           box.style.width = (cell.offsetWidth - 14) + 'px';   // hẹp hơn ô 14px
