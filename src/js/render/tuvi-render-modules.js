@@ -24,8 +24,10 @@ window.TUVI_RENDER_SHARED.constants = {
     11: { r: 4, c: 4 }, 0: { r: 4, c: 3 }, 1: { r: 4, c: 2 }, 2: { r: 4, c: 1 },
     3: { r: 3, c: 1 }, 4: { r: 2, c: 1 },
   },
-  TEN_CUNG_DV: ['ĐV.MỆNH', 'ĐV.PHỤ', 'ĐV.PHÚC', 'ĐV.ĐIỀN', 'ĐV.QUAN', 'ĐV.NÔ', 'ĐV.DI', 'ĐV.TẬT', 'ĐV.TÀI', 'ĐV.TỬ', 'ĐV.PHỐI', 'ĐV.BÀO'],
-  TEN_CUNG_LN: ['L.MỆNH', 'L.PHỤ', 'L.PHÚC', 'L.ĐIỀN', 'L.QUAN', 'L.NÔ', 'L.DI', 'L.TẬT', 'L.TÀI', 'L.TỬ', 'L.PHỐI', 'L.BÀO'],
+  // TEN_CUNG_DV: ['ĐV.MỆNH', 'ĐV.PHỤ', 'ĐV.PHÚC', 'ĐV.ĐIỀN', 'ĐV.QUAN', 'ĐV.NÔ', 'ĐV.DI', 'ĐV.TẬT', 'ĐV.TÀI', 'ĐV.TỬ', 'ĐV.PHỐI', 'ĐV.BÀO'],
+  TEN_CUNG_DV: ['ĐV.MỆNH'],
+  TEN_CUNG_LN: ['L.MỆNH'],
+  // TEN_CUNG_LN: ['L.MỆNH', 'L.PHỤ', 'L.PHÚC', 'L.ĐIỀN', 'L.QUAN', 'L.NÔ', 'L.DI', 'L.TẬT', 'L.TÀI', 'L.TỬ', 'L.PHỐI', 'L.BÀO'],
   DV_SAO_THEO_MENH: {
     'ĐV.Thiên Mã': [2, 11, 8, 5, 2, 11, 8, 5, 2, 11, 8, 5],
   },
@@ -41,10 +43,10 @@ window.TUVI_RENDER_SHARED.constants = {
     'ĐV.Đà La': [1, 2, 4, 5, 4, 5, 7, 8, 10, 11],
     'ĐV.Lộc Tồn': [2, 3, 5, 6, 5, 6, 8, 9, 11, 0],
     'ĐV.Kình Dương': [3, 4, 6, 7, 6, 7, 9, 10, 0, 1],
-    'ĐV.Thiên Khôi': [1, 0, 11, 11, 1, 0, 6, 6, 3, 3],
-    'ĐV.Thiên Việt': [7, 8, 9, 9, 7, 8, 2, 2, 5, 5],
-    'ĐV.Văn Xương': [5, 6, 8, 9, 8, 9, 11, 0, 2, 3],
-    'ĐV.Văn Khúc': [9, 8, 6, 5, 6, 5, 3, 2, 0, 11],
+    // 'ĐV.Thiên Khôi': [1, 0, 11, 11, 1, 0, 6, 6, 3, 3],
+    // 'ĐV.Thiên Việt': [7, 8, 9, 9, 7, 8, 2, 2, 5, 5],
+    // 'ĐV.Văn Xương': [5, 6, 8, 9, 8, 9, 11, 0, 2, 3],
+    // 'ĐV.Văn Khúc': [9, 8, 6, 5, 6, 5, 3, 2, 0, 11],
   },
   L_SAO_THEO_CAN: {
     'L.Đà La': [1, 2, 4, 5, 4, 5, 7, 8, 10, 11],
@@ -371,8 +373,27 @@ window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(d
 
     const V = getLastJson() ? getLastJson().cung : null;
     const chiMenhIdx = chiIdx(chiCungMenh);
-    const cungMenhSao = V ? (V.find(c => chiIdx(c.diaChi) === chiMenhIdx)?.sao.filter(s => s.type === 'chinh').map(s => s.name).join(', ') || '—') : '—';
-    const cungThanSao = V ? (V.find(c => c.isThan)?.sao.filter(s => s.type === 'chinh').map(s => s.name).join(', ') || '—') : '—';
+    const MENH_CHU = ['Tham Lang', 'Cự Môn', 'Lộc Tồn', 'Văn Khúc', 'Liêm Trinh', 'Vũ Khúc', 'Phá Quân'];
+    const cungMenhSao = chiMenhIdx >= 0
+      ? MENH_CHU[Math.min(chiMenhIdx, 12 - chiMenhIdx)]
+      : '—';
+    // Index theo CHI_STR: Tý, Sửu, Dần, Mão, Thìn, Tị, Ngọ, Mùi, Thân, Dậu, Tuất, Hợi
+    const THAN_CHU = [
+      'Linh Tinh',   // Tý
+      'Thiên Tướng', // Sửu
+      'Thiên Lương', // Dần
+      'Thiên Đồng',  // Mão
+      'Văn Xương',   // Thìn
+      'Thiên Cơ',    // Tị
+      'Hỏa Tinh',    // Ngọ
+      'Thiên Tướng', // Mùi
+      'Thiên Lương', // Thân
+      'Thiên Đồng',  // Dậu
+      'Văn Xương',   // Tuất
+      'Thiên Cơ'     // Hợi
+    ];
+    const chiNamIdx = chiIdx(chiNam);
+    const cungThanSao = chiNamIdx >= 0 ? THAN_CHU[chiNamIdx] : '—';
 
     const chiMenhAmDuong = chiMenhIdx % 2 === 1 ? 'am' : 'duong';
     const nguoiAmDuong = (amDuong === 'Âm Nam' || amDuong === 'Âm Nữ') ? 'am' : 'duong';
@@ -426,11 +447,19 @@ window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(d
       <div class="center-bg">${bq}<div class="center-mark"><img class="center-slogan" src="resources/sologan-laso/dich_hoc_tinh_hoa3.png" alt=""><img class="center-antin" src="resources/sologan-antin/an_tin_icon3.png" alt=""></div></div>
       <div style="width:67%;position:relative;z-index:1;margin:auto;">
       <div style="text-align:center;width:100%;margin-bottom:6px;">
-        <div style="font-size:13px;font-weight:bold;color:${bl};letter-spacing:1px;">LÁ SỐ TỬ VI</div>
+        <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:900;color:${bl};letter-spacing:2px;">LÁ SỐ TỬ VI</div>
       </div>
+      <div style="text-align:center;width:100%;margin-bottom:6px;">
+        <div style="font-family:'Playfair Display',serif;font-size:12px;font-weight:400;font-style:italic;color:${bl};letter-spacing:2px;">Tận nhân lực, tri thiên mệnh</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;width:100%;margin:2px 0 8px;">
+  <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,${bl});"></div>
+  <span style="color:${bl};font-size:9px;line-height:1;">✦</span>
+  <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,${bl});"></div>
+</div>
       <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:Arial,sans-serif;">
-        ${row('Họ tên:', hoTen || '—')}
-        ${row('Năm:', `${namAL} - ${canChi}`)}
+      ${row('Họ tên:', hoTen ? `<span style="color:#c0392b;font-weight:bold;">${hoTen}</span>` : '—')}
+        // ${row('Năm:', `${namAL} - ${canChi}`)}
         ${row('Ngày DL:', ngayDLText)}
         ${row('Ngày AL:', `${ngayAL}/${thangAL}/${namAL}`)}
         ${row('Giờ:', `${gioSinh} (${tenChiGio})`)}
@@ -447,9 +476,9 @@ window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(d
         <tr><td></td><td colspan="2" style="color:${bl};font-size:13px;padding:1.5px 0;font-weight:bold;">${quanHeMenhCuc}</td></tr>
         <tr><td></td><td colspan="2" style="color:${bl};font-size:13px;padding:1.5px 0;font-weight:bold;">Thân cư ${thanCu}</td></tr>
         <tr><td colspan="3" style="padding:1.5px 0;font-size:13px;line-height:1.2;">&nbsp;</td></tr>
-          ${showNamHan ? `<tr>
+        ${showNamHan ? `<tr>
           <td style="font-weight:bold;color:#111;white-space:nowrap;padding:1.5px 8px 1.5px 0;vertical-align:top;">Năm hạn:</td>
-          <td colspan="2" style="color:${bl};padding:1.5px 0;vertical-align:top;font-weight:700;font-size:14px;">${namXem}</td>
+          <td colspan="2" style="color:#c0392b;padding:1.5px 0;vertical-align:top;font-weight:700;font-size:18px;">${namXem} (${Number(namXem) - Number(namAL) + 1} tuổi)</td>
         </tr>` : ''}
       </table>
       </div>

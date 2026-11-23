@@ -161,7 +161,9 @@ const TUVI_RENDER = (() => {
       }
 
       // ── Render footer (BOTTOM) ──────────────────────────────
-      function renderFooter({ truongSinh, thang, daiHan, tenDV, tenLN }) {
+      function renderFooter({ truongSinh, thang, daiHan, tenDV, tenLN,isLNDV }) {
+        const lndvHtml = isLNDV ? `<div class="bot-ln bot-lndv"><span class="bot-ln-inner">LNĐV</span></div>` : '';
+
         const dvHtml = tenDV
           ? `<span class="bot-dv"><span class="bot-dv-inner">${tenDV}</span></span>`
           : `<span class="bot-dv"></span>`;
@@ -170,7 +172,7 @@ const TUVI_RENDER = (() => {
       <div class="bot-left-col">${dvHtml}</div>
       <span class="bot-ts">${truongSinh}</span>
       <div class="bot-right-col">
-        ${lnHtml}
+        ${lnHtml}${lndvHtml}
       </div>
     </div>`;
       }
@@ -261,6 +263,29 @@ const TUVI_RENDER = (() => {
         return chiDVMenh;
       }
 
+      // ── Lưu Đại Vận (LNĐV) ──────────────────────────────────
+      // k = số năm đã qua trong đại vận (0..9), dir = +1 (Dương Nam/Âm Nữ) hoặc -1 (Âm Nam/Dương Nữ)
+      //   k=0: cung gốc (cung đại vận)
+      //   k=1: cung xung chiếu
+      //   k=2: từ xung chiếu lùi 1 cung (DN/AN) hoặc tiến 1 cung (ÂN/DN)
+      //   k=3: trở lại xung chiếu
+      //   k>=4: từ xung chiếu đi theo chiều dir, mỗi năm 1 cung
+      function tinhCungLuuDaiVan(meta, namXem) {
+        const chiGoc = tinhCungDVHienTai(meta, namXem);
+        if (chiGoc === null) return null;
+        const tuoi = Number(namXem) - Number(meta.namAL) + 1;
+        const k = (tuoi - cucSo(meta.tenCuc)) % 10;
+        const dir = meta.thuanChieu ? 1 : -1;
+        const xung = doiCung(chiGoc);
+        let chi;
+        if (k === 0) chi = chiGoc;
+        else if (k === 1 || k === 3) chi = xung;
+        else if (k === 2) chi = xung - dir;
+        else chi = xung + dir * (k - 3);
+        return ((chi % 12) + 12) % 12;
+      }
+
+
       function render(lasoJson, gridEl) {
         _selectedChi = null;
         _lastMeta = lasoJson.meta;
@@ -287,6 +312,7 @@ const TUVI_RENDER = (() => {
           'L.Đại Hao', 'L.Tiểu Hao',
         ]);
         const chiDVMenh = xemHan ? tinhCungDVHienTai(meta, namXem) : null;
+        const chiLNDV = xemHan ? tinhCungLuuDaiVan(meta, namXem) : null;
 
         // Map chiIndex → tên ĐV dựa trên tên cung chức
         const dvMap = {};
@@ -411,7 +437,8 @@ const TUVI_RENDER = (() => {
           if (luuMode === 'ln') rawDvSao = rawDvSao.filter(t => t.startsWith('L.'));
           if (luuMode === 'qt') rawDvSao = rawDvSao.filter(t => SAOQT.has(t));
           // luuMode === 'all': giữ nguyên không lọc
-          html += renderCung({ ...c, tenDV: dvMap[ci] || '', tenLN: lnMap[ci] || '', tenThang: thangMap[ci] || '', dvSao: rawDvSao, canCung });
+          html += renderCung({ ...c, tenDV: dvMap[ci] || '', tenLN: lnMap[ci] || '', tenThang: thangMap[ci] || '', dvSao: rawDvSao, canCung, isLNDV: ci === chiLNDV });
+          
         });
         html += CENTER_RENDERER.renderCenter(meta);
         gridEl.innerHTML = html;
