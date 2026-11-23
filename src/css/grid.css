@@ -735,7 +735,7 @@
       font-weight: bold;
       text-align: center;
     }
-    
+
     .tt-chain {
      
       min-width: 150px;
@@ -764,6 +764,35 @@
       animation-delay: var(--d);
     }
 
+
+    .cung-top,
+    .top-chi {
+      overflow: visible !important;
+    }
+    .top-chi {
+      position: relative;
+    }
+    .top-chi .tu-hoa {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 1px;
+      z-index: 5;
+      display: flex;
+      gap: 2px;
+    }
+    .top-chi .tu-hoa > span {
+      width: 14px; height: 14px; line-height: 14px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 9px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .top-chi .tu-hoa .th-0 { background: #2e8b57; }  /* A - Lộc   */
+    .top-chi .tu-hoa .th-1 { background: #c0392b; }  /* B - Quyền */
+    .top-chi .tu-hoa .th-2 { background: #7d3c98; }  /* C - Khoa  */
+    .top-chi .tu-hoa .th-3 { background: #000;    }  /* D - Kỵ    */
 
     .truytung-nav-check-label {
       display: flex;

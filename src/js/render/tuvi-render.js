@@ -83,15 +83,20 @@ const TUVI_RENDER = (() => {
       // Chữ cái đầu thiên can
       const CAN_VIET_DAU = SHARED_CONST.CAN_VIET_DAU || ['G', 'Ấ', 'B', 'Đ', 'M', 'K', 'C', 'T', 'N', 'Q'];
 
-      function renderHeader({ cungChuc, diaChi, daiVan, isThan, canCung, tenThang }) {
+      function renderHeader({ cungChuc, diaChi, daiVan, isThan, canCung, tenThang,  tuHoa = []  }) {
         const badge = isThan ? `<span class="badge badge-t">THÂN</span>` : '';
+        const TU_HOA_TEN = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'];
+        const tuKyHtml = tuHoa.length
+          ? `<span class="tu-hoa">${tuHoa.map(h =>
+              `<span class="th-${h}" title="Tự hóa ${TU_HOA_TEN[h]}">${'ABCD'[h]}</span>`).join('')}</span>`
+          : '';
         const isMono = getComputedStyle(document.documentElement).getPropertyValue('--mono-mode').trim() === '1';
         const ci = chiIdx(diaChi);
         const chiColor = (!isMono && CHI_MAU[ci]) ? ` style="color:${CHI_MAU[ci]}"` : '';
         const canStr = canCung !== undefined ? `${CAN_VIET_DAU[canCung]}.` : '';
         const thangBadge = tenThang ? `<span class="top-thang-inner">${tenThang}</span>` : '';
         return `<div class="cung-top">
-      <span class="top-chi"${chiColor}>${canStr}${diaChi}</span>
+      <span class="top-chi"${chiColor}>${canStr}${diaChi}${tuKyHtml}</span>
       <span class="top-ten" title="Click để luận cung"
         onclick="TUVI_RENDER.onCungTitleLeftClick(event, ${ci})">${cungChuc.toUpperCase()}${badge}</span>
       <span class="top-dh">${daiVan !== null ? daiVan : ''}${thangBadge ? `<span class="top-thang">${thangBadge}</span>` : ''}</span>
@@ -582,13 +587,20 @@ const TUVI_RENDER = (() => {
         cung.forEach(c => {
           const ci = chiIdx(c.diaChi);
           const canCung = TUVI_DATA.BANG_THIENCAN_CUNGMENH[canIdx(meta.canNam)][ci];
+          const saoKy = TUVI_DATA.TU_HOA[canCung]?.[3];                       // ← THÊM
+          const isTuKy = !!saoKy && c.sao.some(s => s.name === saoKy);        // ← THÊM
+          // Tự hóa: danh sách loại hóa (0=Lộc,1=Quyền,2=Khoa,3=Kị) có sao nằm ngay trong cung này
+          const tuHoa = (TUVI_DATA.TU_HOA[canCung] || [])
+          .map((tenSao, h) => c.sao.some(s => s.name === tenSao) ? h : -1)
+          .filter(h => h >= 0);
+
           // Lọc sao lưu theo chế độ
           let rawDvSao = dvSaoMap[ci] || [];
           if (luuMode === 'dv') rawDvSao = rawDvSao.filter(t => t.startsWith('ĐV.'));
           if (luuMode === 'ln') rawDvSao = rawDvSao.filter(t => t.startsWith('L.'));
           if (luuMode === 'qt') rawDvSao = rawDvSao.filter(t => SAOQT.has(t));
           // luuMode === 'all': giữ nguyên không lọc
-          html += renderCung({ ...c, tenDV: dvMap[ci] || '', tenLN: lnMap[ci] || '', tenThang: thangMap[ci] || '', dvSao: rawDvSao, canCung, isLNDV: ci === chiLNDV });
+          html += renderCung({ ...c, tenDV: dvMap[ci] || '', tenLN: lnMap[ci] || '', tenThang: thangMap[ci] || '', dvSao: rawDvSao, canCung, isLNDV: ci === chiLNDV, tuHoa });
           
         });
         html += CENTER_RENDERER.renderCenter(meta);
