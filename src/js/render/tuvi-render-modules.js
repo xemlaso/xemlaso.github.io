@@ -286,8 +286,8 @@ window.TUVI_RENDER_SHARED.createPillEngine = function createPillEngine(deps) {
 
   const HOA = [
     { ten: 'Lộc',   mau: '#2e8b57' },
-    { ten: 'Quyền', mau: '#d35400' },
-    { ten: 'Khoa',  mau: '#2471a3' },
+    { ten: 'Quyền', mau: '#c0392b' },
+    { ten: 'Khoa',  mau: '#7d3c98' },
     { ten: 'Kị',    mau: '#222222' },
   ];
   let _fly = null; // { arrows: [{ from, to, hoa, label }] }

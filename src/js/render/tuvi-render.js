@@ -231,8 +231,9 @@ const TUVI_RENDER = (() => {
         for (let h = 0; h < 4; h++) {
           const to = phiHoa(chi, h);
           if (to === null) continue;
-          arrows.push({ from: chi, to, hoa: h,
-            label: to === chi ? `Tự hóa ${HOA_TEN_NGAN[h]}` : HOA_TEN_NGAN[h] });
+          // arrows.push({ from: chi, to, hoa: h,
+            // label: to === chi ? `Tự hóa ${HOA_TEN_NGAN[h]}` : HOA_TEN_NGAN[h] });
+          arrows.push({ from: chi, to, hoa: h, label: '' });
         }
         return { arrows };
       }
@@ -302,7 +303,7 @@ const TUVI_RENDER = (() => {
       }
      
       
-      const MAU_HOA = ['#2e8b57', '#d35400', '#2471a3', '#222222'];
+      const MAU_HOA = ['#2e8b57', '#c0392b', '#7d3c98', '#222222'];
 
       // "Tài Bạch (Ngọ)"
       function tenCung(chi) {
@@ -316,12 +317,17 @@ const TUVI_RENDER = (() => {
         const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
         if (!json) return '';
         const can = TUVI_DATA.BANG_THIENCAN_CUNGMENH[canIdx(json.meta.canNam)][chi];
+        const tenNgan = chi => json.cung.find(c => chiIdx(c.diaChi) === chi)?.cungChuc || CHI_STR[chi];
         const rows = TUVI_DATA.TU_HOA[can].map((tenSao, h) => {
           const to = phiHoa(chi, h);
-          const dich = to === null ? '—' : (to === chi ? '<i>tự hóa</i>' : tenCung(to));
+          const noiDung = to === null
+            ? `Phi hóa ${HOA_TEN_NGAN[h]}: không tìm thấy sao`
+            : to === chi
+              ? `Tự hóa ${HOA_TEN_NGAN[h]}`
+              : `Phi Hóa ${HOA_TEN_NGAN[h]} nhập ${tenNgan(to)}`;
           return `<div class="tt-row ph-row">
             <span class="ph-tag" style="background:${MAU_HOA[h]}">${HOA_TEN_NGAN[h]}</span>
-            ${tenSao} → ${dich}</div>`;
+            ${noiDung}</div>`;
         }).join('');
         return `<div class="tt-chain ph-box">
           <div class="tt-title">Phi hóa</div>

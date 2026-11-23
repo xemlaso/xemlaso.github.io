@@ -804,6 +804,34 @@
     .tg-box .tg-xung { background: #222;    }   /* Hỗ xung Kỵ   */
 
 
+
+    .sidebar-toggle {
+      position: fixed;
+      left: 10px;
+      bottom: 10px;            /* ← lấy đúng giá trị bottom của nút "Hiện chatbot" */
+      z-index: 1000;
+      width: 30px; height: 30px;
+      border: 1px solid #c8b88a;
+      border-radius: 6px;
+      background: #fff;
+      color: #4a2e08;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    /* Chỉ áp dụng trên desktop */
+    @media (min-width: 769px) {
+      body.sidebar-hidden .col-chat {      /* ← đổi thành class/id thật của sidebar */
+        display: none !important;
+      }
+    }
+    
+    /* Ẩn nút trên mobile */
+    @media (max-width: 768px) {
+      .sidebar-toggle { display: none; }
+    }
+
+
     .dv-fire {
       position: absolute;
       right: 3px;

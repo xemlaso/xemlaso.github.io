@@ -9,7 +9,7 @@
   <title>Vận mệnh</title>
     <link rel="stylesheet" href="src/styles.css">
 </head>
-
+<button id="btnToggleSidebar" id="btnToggleSidebar" class="sidebar-toggle" onclick="toggleSidebar()" title="Ẩn/hiện thanh bên">⇤</button>
 <body data-layout="desktop">
   <div class="page">
     <div class="main-layout" id="mainLayout">
@@ -40,7 +40,7 @@
             </button>
           </div>
         </div>
-        <button id="chatToggleBtn" class="chat-toggle-btn" onclick="toggleChatbotVisibility()">Hiện chatbot</button>
+        <!-- <button id="chatToggleBtn" class="chat-toggle-btn" onclick="toggleChatbotVisibility()">Hiện chatbot</button> -->
       </div>
 
       <!-- Separator -->
@@ -216,10 +216,10 @@
               <div class="fg">
                 <label>Template màu</label>
                 <select id="templateSelect" onchange="applyTemplate(this.value)">
+                  <option value="tuvivietnam" selected>Tích hợp Nam Bắc phái</option>
                   <option value="classic">Cổ điển (hiện tại)</option>
                   <option value="mono">Đơn sắc (không màu)</option>
                   <option value="pastel">Nhạt</option>
-                  <option value="tuvivietnam" selected>tuvivietnam</option>
                 </select>
               </div>
 
@@ -315,7 +315,7 @@
                 class="han-nav-check-input">
               Tương tác tứ hóa
             </label>
-            
+
             <label id="chkTruyTungLabel" class="han-nav-check-label">
               <input type="checkbox" id="chkTruyTung" onchange="TUVI_RENDER.refreshFly()"
                 class="han-nav-check-input">

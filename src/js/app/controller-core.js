@@ -39,7 +39,7 @@
           sel.value = new Date().getHours() + ':00';
           if (typeof syncGioToGioXem === 'function') syncGioToGioXem();
         })();
-        
+
     // Giờ sinh mặc định = canh giờ hiện tại
     (function initGioCanhHienTai() {
       const sel = document.getElementById('gio');
@@ -61,6 +61,36 @@
       sel.innerHTML = html;
     })();
 
+      // ── Ẩn/hiện sidebar trên desktop ──────────────────────────
+      function rerenderLaso() {
+        if (typeof scaleGrid === 'function') scaleGrid();
+        if (typeof applyResponsiveLayout === 'function') applyResponsiveLayout();
+        requestAnimationFrame(() => {
+          TUVI_RENDER.reRenderPills?.();     // Tuần/Triệt, tam hợp, hóa xuất
+          TUVI_RENDER.refreshFly?.();        // mũi tên phi hóa / truy tung + box giữa
+          TUVI_RENDER.refreshTuongTac?.();   // box tương tác tứ hóa
+        });
+      }
+  
+      function setSidebarHidden(hidden) {
+        document.body.classList.toggle('sidebar-hidden', hidden);
+        const btn = document.getElementById('btnToggleSidebar');
+        if (btn) btn.textContent = hidden ? '⇥' : '⇤';
+        try { localStorage.setItem('sidebarHidden', hidden ? '1' : '0'); } catch (e) {}
+        // Chờ layout đổi xong (kể cả transition) rồi mới render lại
+        setTimeout(rerenderLaso, 220);
+      }
+  
+      function toggleSidebar() {
+        setSidebarHidden(!document.body.classList.contains('sidebar-hidden'));
+      }
+  
+      // Khôi phục trạng thái khi mở trang
+      try {
+        if (localStorage.getItem('sidebarHidden') === '1') setSidebarHidden(true);
+      } catch (e) {}
+      
+      
     function lapLaSo() {
       if ((window._currentTab || 'DL') !== 'SEARCH' && typeof clearSearchResultsState === 'function' && window._searchResults?.length) {
         clearSearchResultsState();
@@ -144,6 +174,8 @@
         wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
+
+      
       // Scale responsive + layout
       requestAnimationFrame(() => { scaleGrid(); applyResponsiveLayout(); });
     }
