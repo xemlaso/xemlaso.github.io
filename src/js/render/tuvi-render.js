@@ -763,6 +763,68 @@ const TUVI_RENDER = (() => {
           gridEl.appendChild(box);
         });
       }
+
+
+            // ── Hàm nghĩa cung: nội dung lấy từ resources/lap-cuc.json { "<cung chức>": "<hàm nghĩa>" } ──
+            const HN_URL = 'resources/lap-cuc.json';
+            const HN_ALIAS = { 'Tử Tức': 'Tử Nữ' };     // tên trên lá số → tên trong JSON (nếu khác)
+            let _hnData = null;                           // Promise<Map(tên thường → nội dung) | null>
+            let _hnToken = 0;
+      
+            function hnLoad() {
+              if (!_hnData) {
+                _hnData = fetch(HN_URL)
+                  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+                  .then(obj => new Map(Object.entries(obj || {}).map(([k, v]) =>
+                    [String(k).normalize('NFC').trim().toLowerCase(), String(v ?? '')])))
+                  .catch(err => { console.warn(`[Hàm nghĩa] Không tải được ${HN_URL}:`, err); _hnData = null; return null; });
+              }
+              return _hnData;
+            }
+      
+            function showHamNghia(gridEl) {
+              gridEl = gridEl || document.getElementById('grid');
+              if (!gridEl) return;
+              const token = ++_hnToken;
+              gridEl.querySelectorAll('.hn-box').forEach(e => e.remove());
+              if (!document.getElementById('chkHamNghia')?.checked) return;
+      
+              hnLoad().then(map => {
+                if (token !== _hnToken) return;                       // đã tắt / vẽ lại trong lúc tải
+                const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
+                if (!json) return;
+                const key = t => String(t || '').normalize('NFC').trim().toLowerCase();
+                gridEl.querySelectorAll('.cung[data-chi]').forEach(cell => {
+                  const chi = Number(cell.dataset.chi);
+                  const ten = json.cung.find(c => chiIdx(c.diaChi) === chi)?.cungChuc;
+                  if (!ten) return;
+                  const text = map ? (map.get(key(ten)) ?? map.get(key(HN_ALIAS[ten]))) : null;
+                  const box = document.createElement('div');
+                  box.className = 'hn-box';
+                  box.textContent = text ?? (map ? 'Chưa có nội dung.' : `Không tải được ${HN_URL}`);
+                  // Bắt đầu ngay dưới hàng tên cung → không che tên cung; kéo tới đáy ô
+                  // const top = cell.querySelector('.cung-top');
+                  // box.style.top = (top ? top.offsetTop + top.offsetHeight : 0) + 'px';
+                              // Bắt đầu ngay dưới khu chính tinh (2 hàng); không có thì dưới hàng tên cung
+            const anchor = cell.querySelector('.mid-chinh') || cell.querySelector('.cung-top');
+            box.style.top = (anchor ? anchor.offsetTop + anchor.offsetHeight + 2 : 0) + 'px';
+                  cell.appendChild(box);                              // bấm vào box → nổi lên ô → chọn cung
+                });
+              });
+            }
+      
+            // Hàm nghĩa cung và Tương tác tứ hóa: chỉ bật 1 trong 2
+            function onHamNghiaToggle(el) {
+              const tt = document.getElementById('chkTuongTac');
+              if (el?.checked && tt?.checked) { tt.checked = false; showTuongTac(); }
+              showHamNghia();
+            }
+            function onTuongTacToggle(el) {
+              const hn = document.getElementById('chkHamNghia');
+              if (el?.checked && hn?.checked) { hn.checked = false; showHamNghia(); }
+              showTuongTac();
+            }
+
       function clickCung(chi) {
         const gridEl = document.getElementById('grid');   // ← phải là dòng ĐẦU TIÊN trong hàm
 
@@ -1079,7 +1141,7 @@ const TUVI_RENDER = (() => {
 
         html += CENTER_RENDERER.renderCenter(meta);
         gridEl.innerHTML = html;
-        requestAnimationFrame(() => { showTuongTac(gridEl); positionFires(gridEl); });
+        requestAnimationFrame(() => { showTuongTac(gridEl); showHamNghia(gridEl); positionFires(gridEl); });
         requestAnimationFrame(() => PILL_ENGINE.render(meta, gridEl, _lastLuuPills));
       }
 
@@ -1097,5 +1159,8 @@ const TUVI_RENDER = (() => {
         onCungTitleLeftClick: RULE_ENGINE.onCungTitleLeftClick,
         onChinhTinhClick: RULE_ENGINE.onChinhTinhClick,
         refreshTuongTac: () => showTuongTac(),
+        refreshHamNghia: () => showHamNghia(),
+        onHamNghiaToggle,
+        onTuongTacToggle,
       };
     })();

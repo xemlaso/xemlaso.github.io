@@ -312,7 +312,7 @@
               Xem hạn
             </label>
             <label id="chkTuongTacLabel" class="han-nav-check-label">
-              <input type="checkbox" id="chkTuongTac" onchange="TUVI_RENDER.refreshTuongTac()"
+              <input type="checkbox" id="chkTuongTac" onchange="TUVI_RENDER.onTuongTacToggle(this)"
                 class="han-nav-check-input">
               Tương tác tứ hóa
             </label>
@@ -327,7 +327,11 @@
                 class="han-nav-check-input">
               Phi hóa
             </label>
-            
+            <label id="chkHamNghiaLabel" class="han-nav-check-label">
+              <input type="checkbox" id="chkHamNghia" onchange="TUVI_RENDER.onHamNghiaToggle(this)"
+                class="han-nav-check-input">
+              Hàm nghĩa cung
+            </label>
             <!-- <span class="han-nav-divider">|</span> -->
             <div id="namNavControls" class="han-nav-controls">
               <button id="btnNamXemPrev" class="han-nav-arrow-btn">‹</button>

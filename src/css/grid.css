@@ -833,7 +833,7 @@ src/css/grid.css
       font-weight: normal;
       font-size: 10px;
     }
-    
+
     .phd-tab.active {
       background: var(--c);
       color: #fff;
@@ -895,6 +895,30 @@ src/css/grid.css
       /* Ảnh tải về: hiện trọn nội dung tab đang xem */
       .capturing .phd-panel { overflow: hidden !important; }
   
+          /* ── Hàm nghĩa cung: box mờ trong từng ô, dưới hàng tên cung ── */
+    .hn-box {
+      position: absolute;
+      left: 2.5%;
+      width: 95%;                    /* = 3/4 ô */
+      bottom: 24px;                   /* top do JS đặt = ngay dưới hàng tên cung */
+      z-index: 9;
+      box-sizing: border-box;
+      padding: 4px 6px;
+      background: rgba(255, 255, 255, 0.82);
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+      font: 11px/1.4 Arial, sans-serif;
+      color: #222;
+      text-align: left;
+      white-space: normal;
+      word-break: break-word;
+      overflow-y: auto;              /* dài hơn ô thì cuộn */
+      overscroll-behavior: contain;
+    }
+
 .tg-box   { padding-right: 18px; }
 
 .box-copy {
