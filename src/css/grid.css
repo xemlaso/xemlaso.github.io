@@ -821,6 +821,19 @@ src/css/grid.css
       font: bold 11px/1.3 Arial, sans-serif;
       cursor: pointer;
     }
+
+    .phd-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 8px;
+      line-height: 1.25;
+    }
+    .phd-tab-cung {
+      font-weight: normal;
+      font-size: 10px;
+    }
+    
     .phd-tab.active {
       background: var(--c);
       color: #fff;
@@ -857,7 +870,12 @@ src/css/grid.css
       color: #888;
       font-style: italic;
     }
-    .phd-content h1, .phd-content h2, .phd-content h3 { font-size: 12px; margin: 4px 0; }
+    .phd-content h1, .phd-content h2, .phd-content h3,
+    .phd-content h4, .phd-content h5, .phd-content h6 { font-size: 12px; margin: 4px 0; }
+    /* Bảng dán từ nơi khác: xếp dọc thay vì chia cột */
+    .phd-content table, .phd-content thead, .phd-content tbody, .phd-content tfoot,
+    .phd-content tr, .phd-content th, .phd-content td { display: block; padding: 0; text-align: left; }
+
     .phd-content ul, .phd-content ol { margin: 0; padding-left: 16px; }
     .phd-content li { margin: 0 0 4px; }
     .phd-content p { margin: 0 0 4px; }

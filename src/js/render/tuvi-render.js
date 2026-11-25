@@ -400,6 +400,22 @@ const TUVI_RENDER = (() => {
         return [...new Set([...names, ...names.map(n => n.normalize('NFD'))])];
       }
 
+            // Làm sạch HTML nội dung: Anki hay dán kèm style (cỡ chữ, đậm, flex/cột…) làm vỡ bố cục box.
+      // Bỏ thẻ style/script…, bỏ thuộc tính style/class/id/kích thước/on*; giữ nguyên cấu trúc ul/li/b…
+      const PHD_DROP_ATTR = new Set(['style', 'class', 'id', 'width', 'height', 'align', 'size', 'face', 'color', 'bgcolor']);
+      function phdCleanHtml(html) {
+        const tpl = document.createElement('template');
+        tpl.innerHTML = String(html ?? '');
+        tpl.content.querySelectorAll('style, script, link, meta, iframe, object, embed').forEach(e => e.remove());
+        tpl.content.querySelectorAll('*').forEach(el => {
+          [...el.attributes].forEach(a => {
+            const n = a.name.toLowerCase();
+            if (PHD_DROP_ATTR.has(n) || n.startsWith('on')) el.removeAttribute(a.name);
+          });
+        });
+        return tpl.innerHTML;
+      }
+
       function phdBuildIndex(data, fileName) {
         const idx = new Map();
         (Array.isArray(data?.notes) ? data.notes : []).forEach(n => {
@@ -408,7 +424,7 @@ const TUVI_RENDER = (() => {
           const k = phdNormKey(f[0]);
           if (!k) return;
           if (idx.has(k)) { console.warn(`[Phi hóa] Key trùng trong ${fileName}: "${k}" (giữ mục đầu)`); return; }
-          idx.set(k, String(f[1] ?? ''));
+          idx.set(k, phdCleanHtml(f[1]));
         });
         return idx;
       }
@@ -447,13 +463,28 @@ const TUVI_RENDER = (() => {
           : `${fromTen} phi hoá ${HOA_TEN_NGAN[h]} nhập ${toTen}`;
       }
 
+    // Tên cung rút gọn hiện trên tab
+    const PHD_CUNG_NGAN = {
+      'Mệnh': 'Mệnh', 'Phụ Mẫu': 'Phụ', 'Phúc Đức': 'Phúc', 'Điền Trạch': 'Điền',
+      'Quan Lộc': 'Quan', 'Nô Bộc': 'Nô', 'Thiên Di': 'Di', 'Tật Ách': 'Tật',
+      'Tài Bạch': 'Tài', 'Tử Tức': 'Tử', 'Phu Thê': 'Phối', 'Huynh Đệ': 'Bào',
+    };
+
       // Khung box: 4 tab + 4 panel (nội dung nạp sau)
       function buildPhiHoaDetailBox(chi) {
         const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
         if (!json) return '';
         const tab = _phdTabChi === chi ? _phdTab : 0;
-        const tabs = HOA_TEN_NGAN.map((t, h) =>
-          `<button type="button" class="phd-tab${h === tab ? ' active' : ''}" data-h="${h}" style="--c:${MAU_HOA[h]}">${t}</button>`).join('');
+        const tenNganOf = ch => {
+          const ten = json.cung.find(c => chiIdx(c.diaChi) === ch)?.cungChuc;
+          return PHD_CUNG_NGAN[ten] || ten || CHI_STR[ch];
+        };
+        const tabs = HOA_TEN_NGAN.map((t, h) => {
+          const to = phiHoa(chi, h);
+          const dich = to === null ? '—' : to === chi ? 'Tự hoá' : tenNganOf(to);
+          return `<button type="button" class="phd-tab${h === tab ? ' active' : ''}" data-h="${h}" style="--c:${MAU_HOA[h]}">`
+            + `<span class="phd-tab-hoa">${t}</span><span class="phd-tab-cung">${dich}</span></button>`;
+        }).join('');
         const panels = HOA_TEN_NGAN.map((_, h) =>
           `<div class="phd-panel" data-h="${h}"><div class="phd-msg">Đang tải…</div></div>`).join('');
         return `<div class="phd-box" data-chi="${chi}" data-tab="${tab}">
@@ -573,7 +604,7 @@ const TUVI_RENDER = (() => {
           if (!vp) return;
           box.style.width = (hasChain ? Math.max(shortW, 220) : center.offsetWidth - 36) + 'px';
           const extra = box.offsetHeight - vp.offsetHeight;          // tiêu đề, dòng cung, tab, lề
-          const h = Math.max(60, Math.round(center.offsetHeight * 3 / 5) - extra);   // cả box = 2/5 ô giữa
+          const h = Math.max(60, Math.round(center.offsetHeight * 5 / 7) - extra);   // cả box = 2/5 ô giữa
           vp.style.height = h + 'px';
           phd.style.setProperty('--phd-max', h + 'px');              // panel dài hơn thì cuộn dọc
         }
