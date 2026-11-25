@@ -85,7 +85,7 @@ const TUVI_RENDER = (() => {
       const CAN_VIET_DAU = SHARED_CONST.CAN_VIET_DAU || ['G', 'Ấ', 'B', 'Đ', 'M', 'K', 'C', 'T', 'N', 'Q'];
       // Tạm tắt click vào tên cung (mở luận cung). Đổi thành true để bật lại.
       const TEN_CUNG_CLICK = false;
-      
+
       function renderHeader({ cungChuc, diaChi, daiVan, isThan, canCung, tenThang,  tuHoa = []  }) {
         const badge = isThan ? `<span class="badge badge-t">THÂN</span>` : '';
         const TU_HOA_TEN = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'];
@@ -100,7 +100,9 @@ const TUVI_RENDER = (() => {
         const thangBadge = tenThang ? `<span class="top-thang-inner">${tenThang}</span>` : '';
         return `<div class="cung-top">
       <span class="top-chi"${chiColor}>${canStr}${diaChi}${tuKyHtml}</span>
-            <span class="top-ten"${TEN_CUNG_CLICK ? ` title="Click để luận cung" onclick="TUVI_RENDER.onCungTitleLeftClick(event, ${ci})"` : ''}>${cungChuc.toUpperCase()}${badge}</span>
+            <span class="top-ten"${TEN_CUNG_CLICK
+        ? ` title="Click để luận cung" onclick="TUVI_RENDER.onCungTitleLeftClick(event, ${ci})"`
+        : ` onclick="TUVI_RENDER.onTenCungClick(event, ${ci})"`}>${cungChuc.toUpperCase()}${badge}</span>
       <span class="top-dh">${daiVan !== null ? daiVan : ''}${thangBadge ? `<span class="top-thang">${thangBadge}</span>` : ''}</span>
     </div>`;
       }
@@ -780,6 +782,7 @@ const TUVI_RENDER = (() => {
       let _hnData = null;                           // Promise<Map(tên thường → nội dung) | null>
       let _hn12Data = null;                         // Promise<Map(tên thường → { chuThe, cac: Map }) | null>
       let _hnToken = 0;
+      let _hnChi = null;                            // cung đang làm thái cực (null = hàm nghĩa gốc)
 
       const hnKey = t => String(t || '').normalize('NFC').trim().toLowerCase();
       // Tra theo tên trên lá số, không có thì thử tên bí danh (Tử Tức → Tử Nữ)
@@ -835,9 +838,11 @@ const TUVI_RENDER = (() => {
         if (!gridEl) return;
         const token = ++_hnToken;
         gridEl.querySelectorAll('.hn-box').forEach(e => e.remove());
+        gridEl.querySelectorAll('.top-ten.hn-active').forEach(e => e.classList.remove('hn-active'));
         if (!document.getElementById('chkHamNghia')?.checked) return;
 
-        const sel = _selectedChi;                               // cung đang chọn = thái cực
+        const sel = _hnChi;                                     // cung thái cực (click tên cung)
+        if (sel !== null) gridEl.querySelector(`.cung[data-chi="${sel}"] .top-ten`)?.classList.add('hn-active');
         Promise.all([hnLoad(), sel !== null ? hn12Load() : null]).then(([map, map12]) => {
           if (token !== _hnToken) return;                       // đã tắt / vẽ lại trong lúc tải
           const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
@@ -878,6 +883,24 @@ const TUVI_RENDER = (() => {
           });
         });
       }
+
+            // Click tên cung: hiệu ứng 1.5s; nếu đang bật Hàm nghĩa cung thì đổi hiển thị
+      //   hàm nghĩa gốc ⇄ lập cực theo cung này (không chọn cung)
+      function onTenCungClick(event, chi) {
+        const el = event?.currentTarget;
+        if (el) {
+          el.classList.remove('hn-flash');
+          void el.offsetWidth;                                  // chạy lại hiệu ứng khi click liên tiếp
+          el.classList.add('hn-flash');
+          clearTimeout(el._hnFlashT);
+          el._hnFlashT = setTimeout(() => el.classList.remove('hn-flash'), 1500);
+        }
+        if (!document.getElementById('chkHamNghia')?.checked) return;   // tắt Hàm nghĩa: chọn cung như cũ
+        event?.stopPropagation();
+        _hnChi = _hnChi === chi ? null : chi;
+        showHamNghia();
+      }
+
             // Hàm nghĩa cung và Tương tác tứ hóa: chỉ bật 1 trong 2
             function onHamNghiaToggle(el) {
               const tt = document.getElementById('chkTuongTac');
@@ -897,7 +920,6 @@ const TUVI_RENDER = (() => {
           _selectedChi = null;
           clearHighlight();
           applyFly(null, gridEl);
-          showHamNghia(gridEl);                              // về hàm nghĩa gốc
           return;
         }
         _selectedChi = chi;
@@ -910,7 +932,6 @@ const TUVI_RENDER = (() => {
         setCungClass(chi, 'hl-selected');
         setCungClass(doi, 'hl-selected');
         tamH.forEach(c => { if (c !== chi) setCungClass(c, 'hl-selected'); });
-        showHamNghia(gridEl);                                // lập cực theo cung vừa chọn
       }
 
       function clearHighlight() {
@@ -1228,6 +1249,7 @@ const TUVI_RENDER = (() => {
         refreshTuongTac: () => showTuongTac(),
         refreshHamNghia: () => showHamNghia(),
         onHamNghiaToggle,
+        onTenCungClick,
         onTuongTacToggle,
       };
     })();
