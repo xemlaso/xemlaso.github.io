@@ -83,7 +83,9 @@ const TUVI_RENDER = (() => {
       // ── Render header (TOP) ─────────────────────────────────
       // Chữ cái đầu thiên can
       const CAN_VIET_DAU = SHARED_CONST.CAN_VIET_DAU || ['G', 'Ấ', 'B', 'Đ', 'M', 'K', 'C', 'T', 'N', 'Q'];
-
+      // Tạm tắt click vào tên cung (mở luận cung). Đổi thành true để bật lại.
+      const TEN_CUNG_CLICK = false;
+      
       function renderHeader({ cungChuc, diaChi, daiVan, isThan, canCung, tenThang,  tuHoa = []  }) {
         const badge = isThan ? `<span class="badge badge-t">THÂN</span>` : '';
         const TU_HOA_TEN = ['Lộc', 'Quyền', 'Khoa', 'Kỵ'];
@@ -98,8 +100,7 @@ const TUVI_RENDER = (() => {
         const thangBadge = tenThang ? `<span class="top-thang-inner">${tenThang}</span>` : '';
         return `<div class="cung-top">
       <span class="top-chi"${chiColor}>${canStr}${diaChi}${tuKyHtml}</span>
-      <span class="top-ten" title="Click để luận cung"
-        onclick="TUVI_RENDER.onCungTitleLeftClick(event, ${ci})">${cungChuc.toUpperCase()}${badge}</span>
+            <span class="top-ten"${TEN_CUNG_CLICK ? ` title="Click để luận cung" onclick="TUVI_RENDER.onCungTitleLeftClick(event, ${ci})"` : ''}>${cungChuc.toUpperCase()}${badge}</span>
       <span class="top-dh">${daiVan !== null ? daiVan : ''}${thangBadge ? `<span class="top-thang">${thangBadge}</span>` : ''}</span>
     </div>`;
       }
@@ -108,6 +109,8 @@ const TUVI_RENDER = (() => {
       const CAT_BOLD = new Set(SHARED_CONST.CAT_BOLD || []);
       const HUNG_BOLD = new Set(SHARED_CONST.HUNG_BOLD || []);
 
+      // Tạm tắt click vào tên chính tinh (mở luận theo chính tinh). Đổi thành true để bật lại.
+      const CHINH_TINH_CLICK = false;
       // ── Render MIDDLE ────────────────────────────────────────
       function renderMiddle(saoCung, dvSao = [], chi) {
         const chinh = saoCung.filter(s => s.type === 'chinh');
@@ -120,8 +123,10 @@ const TUVI_RENDER = (() => {
           if (i < 2) {
             const _ms = hanhStyle(s.nguHanh);
             const safeStar = String(s.name || '').replace(/"/g, '&quot;');
-            chinhLines[i] = `<div class="sao-chinh" title="Click để luận theo chính tinh"
-            onclick="TUVI_RENDER.onChinhTinhClick(event, ${chi}, &quot;${safeStar}&quot;)"${_ms ? ` style="${_ms}"` : ''}>${s.name.toUpperCase()}${smTag(s)}</div>`;
+            const clickAttr = CHINH_TINH_CLICK
+            ? ` title="Click để luận theo chính tinh" onclick="TUVI_RENDER.onChinhTinhClick(event, ${chi}, &quot;${safeStar}&quot;)"`
+            : '';
+          chinhLines[i] = `<div class="sao-chinh"${clickAttr}${_ms ? ` style="${_ms}"` : ''}>${s.name.toUpperCase()}${smTag(s)}</div>`;
           }
         });
         const chinhHtml = `<div class="mid-chinh">
@@ -704,14 +709,14 @@ const TUVI_RENDER = (() => {
 
         // 1. Lưu xuất Kỵ: A phi Kỵ vào cung đối diện
         for (let a = 0; a < 12; a++) {
-          if (ky[a] === doiCung(a)) push(a, `${tag('tg-xuat', 'Xuất Kỵ')} sang ${ten(ky[a])}`);
+          if (ky[a] === doiCung(a)) push(a, `${tag('tg-xuat', 'Xuất Kị')} sang ${ten(ky[a])}`);
         }
 
         // 2. Tuần hoàn Kỵ: A, B đều lục thân; Kỵ A → B và Kỵ B → A
         for (let a = 0; a < 12; a++) for (let b = a + 1; b < 12; b++) {
           if (ky[a] === b && ky[b] === a && LUC_THAN.includes(ten(a)) && LUC_THAN.includes(ten(b))) {
-            push(a, `${tag('tg-tuan', 'Tuần hoàn Kỵ')} với ${ten(b)}`);
-            push(b, `${tag('tg-tuan', 'Tuần hoàn Kỵ')} với ${ten(a)}`);
+            push(a, `${tag('tg-tuan', 'Tuần hoàn Kị')} với ${ten(b)}`);
+            push(b, `${tag('tg-tuan', 'Tuần hoàn Kị')} với ${ten(a)}`);
           }
         }
 
@@ -719,9 +724,9 @@ const TUVI_RENDER = (() => {
         for (let a = 0; a < 12; a++) {
           const b = loc[a];
           if (b === null || b === a || b === doiCung(a)) continue;
-          if (ky[b] === a) {
-            push(a, `${tag('tg-thi', 'Thị phi Kỵ')} với ${ten(b)}`);
-            push(b, `${tag('tg-thi', 'Thị phi Kỵ')} với ${ten(a)}`);
+          if (ky[b] === a && LUC_THAN.includes(ten(a)) && LUC_THAN.includes(ten(b))) {   // chỉ xét lục thân
+            push(a, `${tag('tg-thi', 'Thị phi Kị')} với ${ten(b)}`);
+            push(b, `${tag('tg-thi', 'Thị phi Kị')} với ${ten(a)}`);
           }
         }
 
@@ -732,8 +737,9 @@ const TUVI_RENDER = (() => {
           const q = p + 6;
           (kyVao[p] || []).forEach(a => (kyVao[q] || []).forEach(b => {
             if (a === b) return;
-            push(a, `${tag('tg-xung', 'Hỗ xung Kỵ')} với ${ten(b)}`);
-            push(b, `${tag('tg-xung', 'Hỗ xung Kỵ')} với ${ten(a)}`);
+            if (!LUC_THAN.includes(ten(a)) || !LUC_THAN.includes(ten(b))) return;   // chỉ xét lục thân
+            push(a, `${tag('tg-xung', 'Hỗ xung Kị')} với ${ten(b)}`);
+            push(b, `${tag('tg-xung', 'Hỗ xung Kị')} với ${ten(a)}`);
           }));
         }
 
@@ -765,54 +771,113 @@ const TUVI_RENDER = (() => {
       }
 
 
-            // ── Hàm nghĩa cung: nội dung lấy từ resources/lap-cuc.json { "<cung chức>": "<hàm nghĩa>" } ──
-            const HN_URL = 'resources/lap-cuc.json';
-            const HN_ALIAS = { 'Tử Tức': 'Tử Nữ' };     // tên trên lá số → tên trong JSON (nếu khác)
-            let _hnData = null;                           // Promise<Map(tên thường → nội dung) | null>
-            let _hnToken = 0;
-      
-            function hnLoad() {
-              if (!_hnData) {
-                _hnData = fetch(HN_URL)
-                  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-                  .then(obj => new Map(Object.entries(obj || {}).map(([k, v]) =>
-                    [String(k).normalize('NFC').trim().toLowerCase(), String(v ?? '')])))
-                  .catch(err => { console.warn(`[Hàm nghĩa] Không tải được ${HN_URL}:`, err); _hnData = null; return null; });
-              }
-              return _hnData;
+          // ── Hàm nghĩa cung ──
+      //   Chưa chọn cung: resources/lap-cuc/lap-cuc.json        { "<cung>": "<hàm nghĩa>" }
+      //   Đã chọn cung X: resources/lap-cuc/lap-cuc-12cung.json  { "<X>": { chu_the, cac_cung: { "<Y>": { vai_tro, y_nghia } } } }
+      const HN_URL = 'resources/lap-cuc/lap-cuc.json';
+      const HN12_URL = 'resources/lap-cuc/lap-cuc-12cung.json';
+      const HN_ALIAS = { 'Tử Tức': 'Tử Nữ' };     // tên trên lá số → tên trong JSON (nếu khác)
+      let _hnData = null;                           // Promise<Map(tên thường → nội dung) | null>
+      let _hn12Data = null;                         // Promise<Map(tên thường → { chuThe, cac: Map }) | null>
+      let _hnToken = 0;
+
+      const hnKey = t => String(t || '').normalize('NFC').trim().toLowerCase();
+      // Tra theo tên trên lá số, không có thì thử tên bí danh (Tử Tức → Tử Nữ)
+      const hnGet = (map, ten) => map?.get(hnKey(ten)) ?? map?.get(hnKey(HN_ALIAS[ten]));
+
+      function hnFetchJson(url, tag) {
+        return fetch(url)
+          .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+          .catch(err => { console.warn(`[${tag}] Không tải được ${url}:`, err); return null; });
+      }
+
+      function hnLoad() {
+        if (!_hnData) {
+          _hnData = hnFetchJson(HN_URL, 'Hàm nghĩa').then(obj => {
+            if (!obj) { _hnData = null; return null; }          // lỗi → lần sau tải lại
+            return new Map(Object.entries(obj).map(([k, v]) => [hnKey(k), String(v ?? '')]));
+          });
+        }
+        return _hnData;
+      }
+
+      function hn12Load() {
+        if (!_hn12Data) {
+          _hn12Data = hnFetchJson(HN12_URL, 'Lập cực').then(obj => {
+            if (!obj) { _hn12Data = null; return null; }
+            return new Map(Object.entries(obj).map(([k, v]) => [hnKey(k), {
+              chuThe: String(v?.chu_the ?? ''),
+              cac: new Map(Object.entries(v?.cac_cung || {}).map(([k2, v2]) => [hnKey(k2), {
+                vaiTro: String(v2?.vai_tro ?? ''),
+                yNghia: String(v2?.y_nghia ?? ''),
+              }])),
+            }]));
+          });
+        }
+        return _hn12Data;
+      }
+
+      // Nội dung 1 box (dựng bằng DOM, không dùng innerHTML → an toàn với ký tự đặc biệt)
+      function hnFill(box, title, body) {
+        if (title) {
+          const t = document.createElement('div');
+          t.className = 'hn-title';
+          t.textContent = title;
+          box.appendChild(t);
+        }
+        const d = document.createElement('div');
+        d.textContent = body;
+        box.appendChild(d);
+      }
+
+      function showHamNghia(gridEl) {
+        gridEl = gridEl || document.getElementById('grid');
+        if (!gridEl) return;
+        const token = ++_hnToken;
+        gridEl.querySelectorAll('.hn-box').forEach(e => e.remove());
+        if (!document.getElementById('chkHamNghia')?.checked) return;
+
+        const sel = _selectedChi;                               // cung đang chọn = thái cực
+        Promise.all([hnLoad(), sel !== null ? hn12Load() : null]).then(([map, map12]) => {
+          if (token !== _hnToken) return;                       // đã tắt / vẽ lại trong lúc tải
+          const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
+          if (!json) return;
+          const tenOf = ch => json.cung.find(c => chiIdx(c.diaChi) === ch)?.cungChuc;
+          const tenX = sel !== null ? tenOf(sel) : null;
+          const lapCuc = sel !== null ? hnGet(map12, tenX) : null;
+
+          gridEl.querySelectorAll('.cung[data-chi]').forEach(cell => {
+            const chi = Number(cell.dataset.chi);
+            const ten = tenOf(chi);
+            if (!ten) return;
+            const box = document.createElement('div');
+            box.className = 'hn-box';
+
+            if (sel === null) {                                 // chưa chọn cung: hàm nghĩa gốc
+              const text = hnGet(map, ten);
+              hnFill(box, '', text ?? (map ? 'Chưa có nội dung.' : `Không tải được ${HN_URL}`));
+            } else if (!map12) {
+              hnFill(box, '', `Không tải được ${HN12_URL}`);
+            } else if (!lapCuc) {
+              hnFill(box, '', `Chưa có lập cực cho cung ${tenX}.`);
+            } else if (chi === sel) {                           // chính cung thái cực
+              box.classList.add('hn-self');
+              hnFill(box, `Thái cực: ${tenX}`, lapCuc.chuThe ? `Chủ thể: ${lapCuc.chuThe}` : '');
+            } else {
+              const e = hnGet(lapCuc.cac, ten);
+              if (e) hnFill(box, e.vaiTro, e.yNghia);
+              else hnFill(box, '', 'Chưa có nội dung.');
             }
-      
-            function showHamNghia(gridEl) {
-              gridEl = gridEl || document.getElementById('grid');
-              if (!gridEl) return;
-              const token = ++_hnToken;
-              gridEl.querySelectorAll('.hn-box').forEach(e => e.remove());
-              if (!document.getElementById('chkHamNghia')?.checked) return;
-      
-              hnLoad().then(map => {
-                if (token !== _hnToken) return;                       // đã tắt / vẽ lại trong lúc tải
-                const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
-                if (!json) return;
-                const key = t => String(t || '').normalize('NFC').trim().toLowerCase();
-                gridEl.querySelectorAll('.cung[data-chi]').forEach(cell => {
-                  const chi = Number(cell.dataset.chi);
-                  const ten = json.cung.find(c => chiIdx(c.diaChi) === chi)?.cungChuc;
-                  if (!ten) return;
-                  const text = map ? (map.get(key(ten)) ?? map.get(key(HN_ALIAS[ten]))) : null;
-                  const box = document.createElement('div');
-                  box.className = 'hn-box';
-                  box.textContent = text ?? (map ? 'Chưa có nội dung.' : `Không tải được ${HN_URL}`);
-                  // Bắt đầu ngay dưới hàng tên cung → không che tên cung; kéo tới đáy ô
-                  // const top = cell.querySelector('.cung-top');
-                  // box.style.top = (top ? top.offsetTop + top.offsetHeight : 0) + 'px';
-                              // Bắt đầu ngay dưới khu chính tinh (2 hàng); không có thì dưới hàng tên cung
+
+            // Bắt đầu ngay dưới khu chính tinh (2 hàng); không có thì dưới hàng tên cung
             const anchor = cell.querySelector('.mid-chinh') || cell.querySelector('.cung-top');
             box.style.top = (anchor ? anchor.offsetTop + anchor.offsetHeight + 2 : 0) + 'px';
-                  cell.appendChild(box);                              // bấm vào box → nổi lên ô → chọn cung
-                });
-              });
-            }
-      
+            // Bấm/cuộn/bôi đen trong box không chọn cung
+            box.addEventListener('click', e => e.stopPropagation());
+            cell.appendChild(box);
+          });
+        });
+      }
             // Hàm nghĩa cung và Tương tác tứ hóa: chỉ bật 1 trong 2
             function onHamNghiaToggle(el) {
               const tt = document.getElementById('chkTuongTac');
@@ -832,6 +897,7 @@ const TUVI_RENDER = (() => {
           _selectedChi = null;
           clearHighlight();
           applyFly(null, gridEl);
+          showHamNghia(gridEl);                              // về hàm nghĩa gốc
           return;
         }
         _selectedChi = chi;
@@ -844,6 +910,7 @@ const TUVI_RENDER = (() => {
         setCungClass(chi, 'hl-selected');
         setCungClass(doi, 'hl-selected');
         tamH.forEach(c => { if (c !== chi) setCungClass(c, 'hl-selected'); });
+        showHamNghia(gridEl);                                // lập cực theo cung vừa chọn
       }
 
       function clearHighlight() {

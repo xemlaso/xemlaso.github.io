@@ -895,6 +895,8 @@ src/css/grid.css
       /* Ảnh tải về: hiện trọn nội dung tab đang xem */
       .capturing .phd-panel { overflow: hidden !important; }
   
+      .hn-box .hn-title { font-weight: bold; margin-bottom: 2px; }
+      .hn-box.hn-self { border-color: #8b5e1a; }
           /* ── Hàm nghĩa cung: box mờ trong từng ô, dưới hàng tên cung ── */
     .hn-box {
       position: absolute;

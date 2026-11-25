@@ -1,0 +1,590 @@
+{
+    "Mệnh": {
+      "chu_the": "bản thân",
+      "cac_cung": {
+        "Huynh Đệ": {
+          "vai_tro": "Huynh Đệ của Mệnh",
+          "y_nghia": "Anh chị em, người ngang hàng thân cận; mẹ; thành tựu vị, tài khố (tiền mặt) của bản thân."
+        },
+        "Phu Thê": {
+          "vai_tro": "Phu Thê của Mệnh",
+          "y_nghia": "Phối ngẫu, tình cảm, hôn nhân."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Tử Nữ của Mệnh",
+          "y_nghia": "Con cái, học trò, cấp dưới; đào hoa; hợp tác."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Tài Bạch của Mệnh",
+          "y_nghia": "Tiền bạc, cách kiếm và tiêu tiền, giá trị quan."
+        },
+        "Tật Ách": {
+          "vai_tro": "Tật Ách của Mệnh",
+          "y_nghia": "Thân thể, sức khỏe, tâm tình, tính khí thật bên trong."
+        },
+        "Thiên Di": {
+          "vai_tro": "Thiên Di của Mệnh",
+          "y_nghia": "Xã hội bên ngoài, biểu hiện ra ngoài, xuất hành, cơ duyên, ứng xử."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Nô Bộc của Mệnh",
+          "y_nghia": "Bạn bè, đồng nghiệp, khách hàng, đối thủ, chúng sinh."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Quan Lộc của Mệnh",
+          "y_nghia": "Sự nghiệp, học nghiệp, cách hành sự, vận trình."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Điền Trạch của Mệnh",
+          "y_nghia": "Nhà cửa, gia đình, bất động sản, tài khố, nơi thu tàng."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Phúc Đức của Mệnh",
+          "y_nghia": "Tinh thần, sở thích, hưởng thụ, nhân quả, tổ đức."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Phụ Mẫu của Mệnh",
+          "y_nghia": "Cha mẹ, cấp trên, trưởng bối; văn thư, giấy tờ, học vấn; tướng mạo."
+        }
+      }
+    },
+    "Huynh Đệ": {
+      "chu_the": "anh chị em",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Phụ Mẫu của Huynh Đệ",
+          "y_nghia": "Bản thân mình ở vị trí Phụ Mẫu của anh chị em: mình là bề trên, người che chở, quản lý của anh chị em."
+        },
+        "Phu Thê": {
+          "vai_tro": "Huynh Đệ của Huynh Đệ",
+          "y_nghia": "Anh chị em của anh chị em; thành tựu, tiền mặt tích lũy của anh chị em."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Phu Thê của Huynh Đệ",
+          "y_nghia": "Phối ngẫu của anh chị em."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Tử Nữ của Huynh Đệ",
+          "y_nghia": "Con cái của anh chị em; sự hợp tác, đào hoa của anh chị em."
+        },
+        "Tật Ách": {
+          "vai_tro": "Tài Bạch của Huynh Đệ",
+          "y_nghia": "Tiền bạc, tài lực của anh chị em."
+        },
+        "Thiên Di": {
+          "vai_tro": "Tật Ách của Huynh Đệ",
+          "y_nghia": "Sức khỏe, thân thể, tâm tình của anh chị em."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Thiên Di của Huynh Đệ",
+          "y_nghia": "Biểu hiện bên ngoài, hoạt động xã hội của anh chị em."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Nô Bộc của Huynh Đệ",
+          "y_nghia": "Bạn bè, quan hệ xã hội của anh chị em."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Quan Lộc của Huynh Đệ",
+          "y_nghia": "Công việc, sự nghiệp, cách hành sự của anh chị em."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Điền Trạch của Huynh Đệ",
+          "y_nghia": "Nhà cửa, gia đình, tài sản của anh chị em."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Phúc Đức của Huynh Đệ",
+          "y_nghia": "Tinh thần, hưởng thụ, phúc phần của anh chị em."
+        }
+      }
+    },
+    "Phu Thê": {
+      "chu_the": "phối ngẫu",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Phúc Đức của Phu Thê",
+          "y_nghia": "Bản thân là niềm hưởng thụ của phối ngẫu."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Phụ Mẫu của Phu Thê",
+          "y_nghia": "Cha mẹ, cấp trên của phối ngẫu; giấy tờ, tướng mạo của phối ngẫu."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Huynh Đệ của Phu Thê",
+          "y_nghia": "Anh chị em của phối ngẫu; thành tựu, tiền mặt tích lũy của phối ngẫu."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Phu Thê của Phu Thê",
+          "y_nghia": "Phối ngẫu của phối ngẫu."
+        },
+        "Tật Ách": {
+          "vai_tro": "Tử Nữ của Phu Thê",
+          "y_nghia": "Con cái của phối ngẫu; sự hợp tác, đào hoa của phối ngẫu."
+        },
+        "Thiên Di": {
+          "vai_tro": "Tài Bạch của Phu Thê",
+          "y_nghia": "Tiền bạc, tài lực của phối ngẫu."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Tật Ách của Phu Thê",
+          "y_nghia": "Sức khỏe, thân thể, tâm tình của phối ngẫu."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Thiên Di của Phu Thê",
+          "y_nghia": "Biểu hiện bên ngoài, hoạt động xã hội của phối ngẫu."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Nô Bộc của Phu Thê",
+          "y_nghia": "Bạn bè, quan hệ xã hội của phối ngẫu."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Quan Lộc của Phu Thê",
+          "y_nghia": "Sự nghiệp của phối ngẫu."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Điền Trạch của Phu Thê",
+          "y_nghia": "Nhà cửa, gia đình, tài sản của phối ngẫu."
+        }
+      }
+    },
+    "Tử Nữ": {
+      "chu_the": "con cái",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Điền Trạch của Tử Nữ",
+          "y_nghia": "Bản thân là chỗ dựa, gia đình của con cái."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Phúc Đức của Tử Nữ",
+          "y_nghia": "Tinh thần, hưởng thụ, phúc phần của con cái."
+        },
+        "Phu Thê": {
+          "vai_tro": "Phụ Mẫu của Tử Nữ",
+          "y_nghia": "Cha mẹ, cấp trên của con cái; giấy tờ, tướng mạo của con cái."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Huynh Đệ của Tử Nữ",
+          "y_nghia": "Anh chị em của con cái; thành tựu, tiền mặt tích lũy của con cái."
+        },
+        "Tật Ách": {
+          "vai_tro": "Phu Thê của Tử Nữ",
+          "y_nghia": "Phối ngẫu của con cái."
+        },
+        "Thiên Di": {
+          "vai_tro": "Tử Nữ của Tử Nữ",
+          "y_nghia": "Con cái của con cái; sự hợp tác, đào hoa của con cái."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Tài Bạch của Tử Nữ",
+          "y_nghia": "Tiền bạc, tài lực của con cái."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Tật Ách của Tử Nữ",
+          "y_nghia": "Sức khỏe, thân thể, tâm tình của con cái."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Thiên Di của Tử Nữ",
+          "y_nghia": "Biểu hiện bên ngoài, hoạt động xã hội của con cái."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Nô Bộc của Tử Nữ",
+          "y_nghia": "Bạn bè, quan hệ xã hội của con cái."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Quan Lộc của Tử Nữ",
+          "y_nghia": "Công việc, sự nghiệp, cách hành sự của con cái."
+        }
+      }
+    },
+    "Tài Bạch": {
+      "chu_the": "tiền bạc",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Quan Lộc của Tài Bạch",
+          "y_nghia": "Bản thân là người vận hành đồng tiền."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Điền Trạch của Tài Bạch",
+          "y_nghia": "Tài khố của tiền: tiền mặt, thành tựu vị."
+        },
+        "Phu Thê": {
+          "vai_tro": "Phúc Đức của Tài Bạch",
+          "y_nghia": "Phần tinh thần, hưởng thụ, nguyên nhân sâu xa (nhân quả) của tiền bạc."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Phụ Mẫu của Tài Bạch",
+          "y_nghia": "Văn thư, giấy tờ, cơ quan quản lý của tiền bạc; hình tướng biểu hiện ra (= Thiên Di của Tật Ách, tính từ cung này)."
+        },
+        "Tật Ách": {
+          "vai_tro": "Huynh Đệ của Tài Bạch",
+          "y_nghia": "Thành tựu, phần tích lũy được của tiền bạc (= Điền Trạch của Tài Bạch, tính từ cung này)."
+        },
+        "Thiên Di": {
+          "vai_tro": "Phu Thê của Tài Bạch",
+          "y_nghia": "Khí số, biểu hiện bên ngoài của việc vận hành tiền bạc (= Thiên Di của Quan Lộc, tính từ cung này)."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Tử Nữ của Tài Bạch",
+          "y_nghia": "Sự phát triển, mở rộng ra ngoài, hợp tác của tiền bạc (= Thiên Di của Điền Trạch, tính từ cung này)."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Tài Bạch của Tài Bạch",
+          "y_nghia": "Lợi ích, giá trị, nguồn tiền thu được từ tiền bạc."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Tật Ách của Tài Bạch",
+          "y_nghia": "Thể của tiền: tiền thực sự giữ lại được."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Thiên Di của Tài Bạch",
+          "y_nghia": "Cách tiêu tiền, hưởng thụ bằng tiền biểu hiện ra ngoài."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Nô Bộc của Tài Bạch",
+          "y_nghia": "Các đối tượng xung quanh tiền bạc (đối thủ, khách hàng, chúng sinh); đối cung Huynh Đệ của tiền bạc nên chủ hao tán thành tựu của tiền bạc."
+        }
+      }
+    },
+    "Tật Ách": {
+      "chu_the": "thân thể",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Nô Bộc của Tật Ách",
+          "y_nghia": "Mệnh và Tật Ách là nhất lục cộng tông: Mệnh là ý, Tật Ách là thể; suy nghĩ của bản thân chi phối thân thể."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Quan Lộc của Tật Ách",
+          "y_nghia": "Thể chất, thể lực vận hành."
+        },
+        "Phu Thê": {
+          "vai_tro": "Điền Trạch của Tật Ách",
+          "y_nghia": "Nền tảng, nơi chứa đựng, tài khố của thân thể."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Phúc Đức của Tật Ách",
+          "y_nghia": "Phần tinh thần, hưởng thụ, nguyên nhân sâu xa (nhân quả) của thân thể."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Phụ Mẫu của Tật Ách",
+          "y_nghia": "Văn thư, giấy tờ, cơ quan quản lý của thân thể; hình tướng biểu hiện ra (= Thiên Di của Tật Ách, tính từ cung này)."
+        },
+        "Thiên Di": {
+          "vai_tro": "Huynh Đệ của Tật Ách",
+          "y_nghia": "Thành tựu, phần tích lũy được của thân thể (= Điền Trạch của Tài Bạch, tính từ cung này)."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Phu Thê của Tật Ách",
+          "y_nghia": "Khí số, biểu hiện bên ngoài của việc vận hành thân thể (= Thiên Di của Quan Lộc, tính từ cung này)."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Tử Nữ của Tật Ách",
+          "y_nghia": "Sự phát triển, mở rộng ra ngoài, hợp tác của thân thể (= Thiên Di của Điền Trạch, tính từ cung này)."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Tài Bạch của Tật Ách",
+          "y_nghia": "Lợi ích, giá trị, nguồn tiền thu được từ thân thể."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Tật Ách của Tật Ách",
+          "y_nghia": "Thể, trạng thái thực tế bên trong của thân thể."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Thiên Di của Tật Ách",
+          "y_nghia": "Hình ư biểu: tướng mạo, sắc mặt."
+        }
+      }
+    },
+    "Thiên Di": {
+      "chu_the": "hoạt động bên ngoài",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Thiên Di của Thiên Di",
+          "y_nghia": "Mệnh và Thiên Di đối nhau: bên trong và bên ngoài của cùng một con người."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Nô Bộc của Thiên Di",
+          "y_nghia": "Các đối tượng xung quanh hoạt động bên ngoài (đối thủ, khách hàng, chúng sinh); đối cung Huynh Đệ của hoạt động bên ngoài nên chủ hao tán thành tựu của hoạt động bên ngoài."
+        },
+        "Phu Thê": {
+          "vai_tro": "Quan Lộc của Thiên Di",
+          "y_nghia": "Cách vận hành, hành vi, vận trình của hoạt động bên ngoài."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Điền Trạch của Thiên Di",
+          "y_nghia": "Nền tảng, nơi chứa đựng, tài khố của hoạt động bên ngoài."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Phúc Đức của Thiên Di",
+          "y_nghia": "Phần tinh thần, hưởng thụ, nguyên nhân sâu xa (nhân quả) của hoạt động bên ngoài."
+        },
+        "Tật Ách": {
+          "vai_tro": "Phụ Mẫu của Thiên Di",
+          "y_nghia": "Văn thư, giấy tờ, cơ quan quản lý của hoạt động bên ngoài; hình tướng biểu hiện ra (= Thiên Di của Tật Ách, tính từ cung này)."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Huynh Đệ của Thiên Di",
+          "y_nghia": "Thành tựu, phần tích lũy được của hoạt động bên ngoài (= Điền Trạch của Tài Bạch, tính từ cung này)."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Phu Thê của Thiên Di",
+          "y_nghia": "Khí số, biểu hiện bên ngoài của việc vận hành hoạt động bên ngoài (= Thiên Di của Quan Lộc, tính từ cung này)."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Tử Nữ của Thiên Di",
+          "y_nghia": "Sự phát triển, mở rộng ra ngoài, hợp tác của hoạt động bên ngoài (= Thiên Di của Điền Trạch, tính từ cung này)."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Tài Bạch của Thiên Di",
+          "y_nghia": "Lợi ích, giá trị, nguồn tiền thu được từ hoạt động bên ngoài."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Tật Ách của Thiên Di",
+          "y_nghia": "Thể, trạng thái thực tế bên trong của hoạt động bên ngoài."
+        }
+      }
+    },
+    "Nô Bộc": {
+      "chu_the": "bạn bè, đồng nghiệp",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Tật Ách của Nô Bộc",
+          "y_nghia": "Bản thân mình ở vị trí Tật Ách của bạn bè, đồng nghiệp: mình là chỗ dựa thực tế, cái thể của bạn bè, đồng nghiệp."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Thiên Di của Nô Bộc",
+          "y_nghia": "Biểu hiện bên ngoài, hoạt động xã hội của bạn bè, đồng nghiệp."
+        },
+        "Phu Thê": {
+          "vai_tro": "Nô Bộc của Nô Bộc",
+          "y_nghia": "Bạn bè, quan hệ xã hội của bạn bè, đồng nghiệp."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Quan Lộc của Nô Bộc",
+          "y_nghia": "Công việc, sự nghiệp, cách hành sự của bạn bè, đồng nghiệp."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Điền Trạch của Nô Bộc",
+          "y_nghia": "Nhà cửa, gia đình, tài sản của bạn bè, đồng nghiệp."
+        },
+        "Tật Ách": {
+          "vai_tro": "Phúc Đức của Nô Bộc",
+          "y_nghia": "Tinh thần, hưởng thụ, phúc phần của bạn bè, đồng nghiệp."
+        },
+        "Thiên Di": {
+          "vai_tro": "Phụ Mẫu của Nô Bộc",
+          "y_nghia": "Cha mẹ, cấp trên của bạn bè, đồng nghiệp; giấy tờ, tướng mạo của bạn bè, đồng nghiệp."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Huynh Đệ của Nô Bộc",
+          "y_nghia": "Anh chị em của bạn bè, đồng nghiệp; thành tựu, tiền mặt tích lũy của bạn bè, đồng nghiệp."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Phu Thê của Nô Bộc",
+          "y_nghia": "Phối ngẫu của bạn bè, đồng nghiệp."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Tử Nữ của Nô Bộc",
+          "y_nghia": "Con cái của bạn bè, đồng nghiệp; sự hợp tác, đào hoa của bạn bè, đồng nghiệp."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Tài Bạch của Nô Bộc",
+          "y_nghia": "Tiền bạc, tài lực của bạn bè, đồng nghiệp."
+        }
+      }
+    },
+    "Quan Lộc": {
+      "chu_the": "sự nghiệp",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Tài Bạch của Quan Lộc",
+          "y_nghia": "Tiền do chính năng lực bản thân làm ra."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Tật Ách của Quan Lộc",
+          "y_nghia": "Thể của sự nghiệp: tình hình thực tế của công việc, kinh doanh."
+        },
+        "Phu Thê": {
+          "vai_tro": "Thiên Di của Quan Lộc",
+          "y_nghia": "Khí số, cơ hội, biểu hiện bên ngoài của sự nghiệp."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Nô Bộc của Quan Lộc",
+          "y_nghia": "Các đối tượng xung quanh sự nghiệp (đối thủ, khách hàng, chúng sinh); đối cung Huynh Đệ của sự nghiệp nên chủ hao tán thành tựu của sự nghiệp."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Quan Lộc của Quan Lộc",
+          "y_nghia": "Sự vận hành của sự nghiệp; tiền bạc là thước đo hiệu quả công việc."
+        },
+        "Tật Ách": {
+          "vai_tro": "Điền Trạch của Quan Lộc",
+          "y_nghia": "Nơi làm việc, môi trường công tác."
+        },
+        "Thiên Di": {
+          "vai_tro": "Phúc Đức của Quan Lộc",
+          "y_nghia": "Hưởng thụ, niềm vui từ công việc."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Phụ Mẫu của Quan Lộc",
+          "y_nghia": "Cấp trên, tổ chức, văn thư của công việc."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Huynh Đệ của Quan Lộc",
+          "y_nghia": "Thành tựu của sự nghiệp."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Phu Thê của Quan Lộc",
+          "y_nghia": "Khí số, biểu hiện bên ngoài của việc vận hành sự nghiệp (= Thiên Di của Quan Lộc, tính từ cung này)."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Tử Nữ của Quan Lộc",
+          "y_nghia": "Sự phát triển, mở rộng ra ngoài, hợp tác của sự nghiệp (= Thiên Di của Điền Trạch, tính từ cung này)."
+        }
+      }
+    },
+    "Điền Trạch": {
+      "chu_the": "gia đình, nhà cửa",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Tử Nữ của Điền Trạch",
+          "y_nghia": "Bản thân mình ở vị trí Tử Nữ của gia đình, nhà cửa: mình là sự tiếp nối, phần phát triển của gia đình, nhà cửa."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Tài Bạch của Điền Trạch",
+          "y_nghia": "Nguồn thu của gia đình."
+        },
+        "Phu Thê": {
+          "vai_tro": "Tật Ách của Điền Trạch",
+          "y_nghia": "Thể, trạng thái thực tế bên trong của gia đình, nhà cửa."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Thiên Di của Điền Trạch",
+          "y_nghia": "Ra khỏi nhà, xuất ngoại; hợp tác, hùn hạp."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Nô Bộc của Điền Trạch",
+          "y_nghia": "Các đối tượng xung quanh gia đình, nhà cửa (đối thủ, khách hàng, chúng sinh); đối cung Huynh Đệ của gia đình, nhà cửa nên chủ hao tán thành tựu của gia đình, nhà cửa."
+        },
+        "Tật Ách": {
+          "vai_tro": "Quan Lộc của Điền Trạch",
+          "y_nghia": "Gia vận."
+        },
+        "Thiên Di": {
+          "vai_tro": "Điền Trạch của Điền Trạch",
+          "y_nghia": "Nền tảng, nơi chứa đựng, tài khố của gia đình, nhà cửa."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Phúc Đức của Điền Trạch",
+          "y_nghia": "Phần tinh thần, hưởng thụ, nguyên nhân sâu xa (nhân quả) của gia đình, nhà cửa."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Phụ Mẫu của Điền Trạch",
+          "y_nghia": "Văn thư, giấy tờ, cơ quan quản lý của gia đình, nhà cửa; hình tướng biểu hiện ra (= Thiên Di của Tật Ách, tính từ cung này)."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Huynh Đệ của Điền Trạch",
+          "y_nghia": "Thành tựu, phần tích lũy được của gia đình, nhà cửa (= Điền Trạch của Tài Bạch, tính từ cung này)."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Phu Thê của Điền Trạch",
+          "y_nghia": "Khí số, biểu hiện bên ngoài của việc vận hành gia đình, nhà cửa (= Thiên Di của Quan Lộc, tính từ cung này)."
+        }
+      }
+    },
+    "Phúc Đức": {
+      "chu_the": "tinh thần, hưởng thụ",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Phu Thê của Phúc Đức",
+          "y_nghia": "Bản thân là người thụ hưởng phúc phần, tinh thần do Phúc Đức mang lại."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Tử Nữ của Phúc Đức",
+          "y_nghia": "Sự phát triển, mở rộng ra ngoài, hợp tác của tinh thần, hưởng thụ (= Thiên Di của Điền Trạch, tính từ cung này)."
+        },
+        "Phu Thê": {
+          "vai_tro": "Tài Bạch của Phúc Đức",
+          "y_nghia": "Lợi ích, giá trị, nguồn tiền thu được từ tinh thần, hưởng thụ."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Tật Ách của Phúc Đức",
+          "y_nghia": "Thể, trạng thái thực tế bên trong của tinh thần, hưởng thụ."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Thiên Di của Phúc Đức",
+          "y_nghia": "Phúc phần biểu hiện ra bằng tiền."
+        },
+        "Tật Ách": {
+          "vai_tro": "Nô Bộc của Phúc Đức",
+          "y_nghia": "Các đối tượng xung quanh tinh thần, hưởng thụ (đối thủ, khách hàng, chúng sinh); đối cung Huynh Đệ của tinh thần, hưởng thụ nên chủ hao tán thành tựu của tinh thần, hưởng thụ."
+        },
+        "Thiên Di": {
+          "vai_tro": "Quan Lộc của Phúc Đức",
+          "y_nghia": "Cách vận hành, hành vi, vận trình của tinh thần, hưởng thụ."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Điền Trạch của Phúc Đức",
+          "y_nghia": "Nền tảng, nơi chứa đựng, tài khố của tinh thần, hưởng thụ."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Phúc Đức của Phúc Đức",
+          "y_nghia": "Phần tinh thần, hưởng thụ, nguyên nhân sâu xa (nhân quả) của tinh thần, hưởng thụ."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Phụ Mẫu của Phúc Đức",
+          "y_nghia": "Văn thư, giấy tờ, cơ quan quản lý của tinh thần, hưởng thụ; hình tướng biểu hiện ra (= Thiên Di của Tật Ách, tính từ cung này)."
+        },
+        "Phụ Mẫu": {
+          "vai_tro": "Huynh Đệ của Phúc Đức",
+          "y_nghia": "Thành tựu, phần tích lũy được của tinh thần, hưởng thụ (= Điền Trạch của Tài Bạch, tính từ cung này)."
+        }
+      }
+    },
+    "Phụ Mẫu": {
+      "chu_the": "cha mẹ, cấp trên",
+      "cac_cung": {
+        "Mệnh": {
+          "vai_tro": "Huynh Đệ của Phụ Mẫu",
+          "y_nghia": "Bản thân là thành tựu của cha mẹ."
+        },
+        "Huynh Đệ": {
+          "vai_tro": "Phu Thê của Phụ Mẫu",
+          "y_nghia": "Phối ngẫu của cha: mẹ."
+        },
+        "Phu Thê": {
+          "vai_tro": "Tử Nữ của Phụ Mẫu",
+          "y_nghia": "Con cái của cha mẹ, cấp trên; sự hợp tác, đào hoa của cha mẹ, cấp trên."
+        },
+        "Tử Nữ": {
+          "vai_tro": "Tài Bạch của Phụ Mẫu",
+          "y_nghia": "Tiền bạc, tài lực của cha mẹ, cấp trên."
+        },
+        "Tài Bạch": {
+          "vai_tro": "Tật Ách của Phụ Mẫu",
+          "y_nghia": "Sức khỏe, thân thể, tâm tình của cha mẹ, cấp trên."
+        },
+        "Tật Ách": {
+          "vai_tro": "Thiên Di của Phụ Mẫu",
+          "y_nghia": "Biểu hiện bên ngoài, hoạt động xã hội của cha mẹ, cấp trên."
+        },
+        "Thiên Di": {
+          "vai_tro": "Nô Bộc của Phụ Mẫu",
+          "y_nghia": "Bạn bè, quan hệ xã hội của cha mẹ, cấp trên."
+        },
+        "Nô Bộc": {
+          "vai_tro": "Quan Lộc của Phụ Mẫu",
+          "y_nghia": "Công việc, sự nghiệp, cách hành sự của cha mẹ, cấp trên."
+        },
+        "Quan Lộc": {
+          "vai_tro": "Điền Trạch của Phụ Mẫu",
+          "y_nghia": "Nhà cửa, gia đình, tài sản của cha mẹ, cấp trên."
+        },
+        "Điền Trạch": {
+          "vai_tro": "Phúc Đức của Phụ Mẫu",
+          "y_nghia": "Tinh thần, hưởng thụ, phúc phần của cha mẹ, cấp trên."
+        },
+        "Phúc Đức": {
+          "vai_tro": "Phụ Mẫu của Phụ Mẫu",
+          "y_nghia": "Ông bà (cha mẹ của cha mẹ)."
+        }
+      }
+    }
+  }
