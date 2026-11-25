@@ -541,7 +541,7 @@ const TUVI_RENDER = (() => {
           box.dataset.tab = i;
           _phdTab = i;
           _phdTabChi = Number(box.dataset.chi);
-          let _phdShow = (() => { try { return localStorage.getItem('phdShow') !== '0'; } catch (e) { return true; } })();
+          // let _phdShow = (() => { try { return localStorage.getItem('phdShow') !== '0'; } catch (e) { return true; } })();
           track.style.transition = '';
           track.style.transform = `translateX(${-i * 100}%)`;
           box.querySelectorAll('.phd-tab').forEach(b => b.classList.toggle('active', Number(b.dataset.h) === i));
