@@ -1,3 +1,4 @@
+// src/js/laso-download.js
 /* ══════════════════════════════════════════════════════════════════
  *  Tải ảnh lá số (PNG) — desktop + mobile
  *  Phụ thuộc: html-to-image (global `htmlToImage`)

@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -109,14 +110,14 @@
               <div id="dlResult" style="font-size:11px;color:#5c3d10;padding:4px 0;min-height:18px;"></div>
             </div>
 
-            <div class="fg"><label>Giờ sinh (HH:MM)</label>
-              <div class="gio-mobile-row" role="group" aria-label="Giờ sinh">
+            <div class="fg"><label>Giờ sinh</label>
+              <!-- Cụm Giờ:Phút cũ của mobile: giữ lại để form-mobile-pickers.js không lỗi, nhưng luôn ẩn -->
+              <div class="gio-mobile-row" role="group" aria-label="Giờ sinh" style="display:none">
                 <select id="gioHourMob" aria-label="Giờ"></select>
                 <span class="gio-colon" aria-hidden="true">:</span>
                 <select id="gioMinuteMob" aria-label="Phút"></select>
               </div>
-              <select id="gio" class="form-desktop-number-input" aria-label="Giờ sinh"
-              onchange="syncGioToGioXem()">
+              <select id="gio" aria-label="Giờ sinh" onchange="syncGioToGioXem()">
               <option value="00:00">Giờ Tý (23h-1h)</option>
               <option value="02:00">Giờ Sửu (1h-3h)</option>
               <option value="04:00" selected>Giờ Dần (3h-5h)</option>

@@ -1,0 +1,431 @@
+{
+    "__type__": "Deck",
+    "children": [],
+    "crowdanki_uuid": "68d0b4e6-e87c-11f1-9218-66f9e5365b19",
+    "deck_config_uuid": "c6ff0296-e879-11f1-9218-66f9e5365b19",
+    "deck_configurations": [
+        {
+            "__type__": "DeckConfig",
+            "answerAction": 0,
+            "autoplay": true,
+            "buryInterdayLearning": false,
+            "crowdanki_uuid": "c6ff0296-e879-11f1-9218-66f9e5365b19",
+            "desiredRetention": 0.9,
+            "dyn": false,
+            "easyDaysPercentages": [
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "fsrsParams5": [],
+            "fsrsParams6": [],
+            "fsrsWeights": [],
+            "ignoreRevlogsBeforeDate": "",
+            "interdayLearningMix": 0,
+            "lapse": {
+                "delays": [
+                    10.0
+                ],
+                "leechAction": 1,
+                "leechFails": 8,
+                "minInt": 1,
+                "mult": 0.0
+            },
+            "maxTaken": 60,
+            "name": "Mặc định",
+            "new": {
+                "bury": false,
+                "delays": [
+                    1.0,
+                    10.0
+                ],
+                "initialFactor": 2500,
+                "ints": [
+                    1,
+                    4,
+                    0
+                ],
+                "order": 1,
+                "perDay": 20
+            },
+            "newGatherPriority": 0,
+            "newMix": 0,
+            "newPerDayMinimum": 0,
+            "newSortOrder": 0,
+            "questionAction": 0,
+            "replayq": true,
+            "rev": {
+                "bury": false,
+                "ease4": 1.3,
+                "hardFactor": 1.2,
+                "ivlFct": 1.0,
+                "maxIvl": 36500,
+                "perDay": 200
+            },
+            "reviewOrder": 0,
+            "secondsToShowAnswer": 0.0,
+            "secondsToShowQuestion": 0.0,
+            "sm2Retention": 0.9,
+            "stopTimerOnAnswer": false,
+            "timer": 0,
+            "waitForAudio": true,
+            "weightSearch": ""
+        }
+    ],
+    "desc": "",
+    "desiredRetention": null,
+    "dyn": 0,
+    "extendNew": 0,
+    "extendRev": 0,
+    "media_files": [],
+    "name": "Tài phi hoá",
+    "newLimit": null,
+    "newLimitToday": null,
+    "note_models": [
+        {
+            "__type__": "NoteModel",
+            "crowdanki_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+            "flds": [
+                {
+                    "collapsed": false,
+                    "description": "",
+                    "excludeFromSearch": false,
+                    "font": "Arial",
+                    "id": -8965566038313356771,
+                    "name": "Mặt trước",
+                    "ord": 0,
+                    "plainText": false,
+                    "preventDeletion": false,
+                    "rtl": false,
+                    "size": 20,
+                    "sticky": false,
+                    "tag": null
+                },
+                {
+                    "collapsed": false,
+                    "description": "",
+                    "excludeFromSearch": false,
+                    "font": "Arial",
+                    "id": -1780534557995654744,
+                    "name": "Mặt sau",
+                    "ord": 1,
+                    "plainText": false,
+                    "preventDeletion": false,
+                    "rtl": false,
+                    "size": 20,
+                    "sticky": false,
+                    "tag": null
+                }
+            ],
+            "latexPost": "\\end{document}",
+            "latexPre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
+            "latexsvg": false,
+            "name": "Cơ bản",
+            "originalStockKind": 1,
+            "req": [
+                [
+                    0,
+                    "any",
+                    [
+                        0
+                    ]
+                ]
+            ],
+            "sortf": 0,
+            "tmpls": [
+                {
+                    "afmt": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Mặt sau}}",
+                    "bafmt": "",
+                    "bfont": "",
+                    "bqfmt": "",
+                    "bsize": 0,
+                    "did": null,
+                    "id": -352150489873481160,
+                    "name": "Thẻ 1",
+                    "ord": 0,
+                    "qfmt": "{{Mặt trước}}"
+                }
+            ],
+            "type": 0
+        }
+    ],
+    "notes": [
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Mệnh</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Mệnh là bản thân; so với Tài, Mệnh là Quan Lộc của Tài, tức cách tiền vận hành. Mệnh là ngã cung. Lộc chiếu sang Thiên Di.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền có duyên với bản thân. Chính mình là người làm ra tiền và quyết định cách dùng tiền. Người này coi trọng tiền và có cảm quan tốt về tiền. Lộc chiếu Di nên ra ngoài cũng gặp cơ hội kiếm tiền.</li><li><strong>Mặt trái:</strong>&nbsp;Tiền phục vụ nhu cầu cá nhân là chính, dễ chi cho bản thân.</li></ul>"
+            ],
+            "guid": "rXYkj^GOyz",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Huynh Đệ</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Huynh Đệ là anh chị em, mẹ, người ngang vế; so với Tài, Huynh là Điền Trạch của Tài, tức kho tiền. Về tên gọi là tha cung, nhưng về chức năng là tài khố. Lộc chiếu sang Nô Bộc.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền có duyên với tiền mặt, dòng tiền vào tài khoản thuận. Chiếu Nô nên làm ăn với bạn bè, đối tác cũng thuận.</li><li><strong>Tích lũy hay không:</strong>&nbsp;Lộc nhập kho chỉ có nghĩa là tiền dễ vào kho. Có Kỵ nhập kho mới là thu tàng, tức giữ được tiền.</li><li><strong>Mặt trái:</strong>&nbsp;Khi câu hỏi về người, nghĩa này chuyển thành chi tiền cho anh em hoặc mẹ.</li></ul>"
+            ],
+            "guid": "f:yb@,MUVy",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Phu Thê</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Phu Thê là vợ/chồng; so với Tài, Phu là Phúc Đức của Tài, tức gốc rễ và độ bền của tiền. Phu là tha cung. Lộc chiếu sang Quan Lộc.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền có duyên với hôn nhân: được nhờ vợ/chồng, hoặc chi cho vợ/chồng. Người phối ngẫu là nguồn phúc của tiền. Chiếu Quan nên duyên tiền này có lợi cho công việc.</li><li><strong>Mặt trái:</strong>&nbsp;Tha cung nên duyên tiền hướng ra người khác: chi nhiều cho vợ/chồng, hoặc tài chính phụ thuộc người phối ngẫu.</li></ul>"
+            ],
+            "guid": "k]rY=`N>!Z",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<strong>Tượng Hóa Lộc</strong>",
+                "<div>&nbsp;Lộc là duyên, là nguồn khởi, là \"cho\". Cung A hóa Lộc nhập cung B nghĩa là tài nguyên của A có duyên với B, A hướng về B và đối đãi tốt với B. Lộc nói về nhân, không nói về kết quả.</div>"
+            ],
+            "guid": "x<<JgEdzyP",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Tử Tức</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tử Tức là con cái, học trò, hợp tác, đầu tư ra ngoài; so với Tài, Tử là Phụ Mẫu của Tài, tức văn thư, giấy tờ, tín dụng của tiền. Tử là tha cung. Lộc chiếu sang Điền Trạch.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền chảy qua hợp đồng, ngân hàng, hùn vốn. Chiếu Điền nên duyên tiền này có lợi cho gia đạo. Về người: chiều con, chi nhiều cho con.</li><li><strong>Mặt trái:</strong>&nbsp;Vốn nằm ở bên ngoài, phụ thuộc đối tác.</li></ul>"
+            ],
+            "guid": "G)n]zy1Ee.",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3>Tài bạch tự hoá lộc</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Thiên can của Tài hóa Lộc vào chính sao trong cung Tài, gọi là Lộc xuất. Tự hóa mang tượng tự phát, đến rồi đi, không tích tụ. Tự hóa không nhập cung nào, nên không có cung được chiếu; lực xuất chỉ hướng ra ngoài.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền đến dễ và đi cũng dễ. Người này tiêu tiền thoáng, rộng rãi, không tính toán chặt.</li><li><strong>Mặt trái:</strong>&nbsp;Có xu hướng khó tích lũy, trừ khi có Kỵ nhập kho (Điền Trạch hoặc Huynh Đệ).</li></ul><div>Chú ý:</div><div>- Hai quy ước của phái Phi tinh:&nbsp;<strong>tự hóa là lực đẩy ra ngoài</strong>, và&nbsp;<strong>muốn tụ tài thì cần có một cung khác nhận và giữ tiền</strong>.<br>-&nbsp;<strong>Tự hóa không có cung nhận.</strong>&nbsp;Hóa nhập là cung A phát hóa vào cung B, nên có B đứng ra nhận và giữ. Tự hóa là thiên can của cung Tài hóa ngay vào sao trong chính cung Tài. Hóa sinh ra rồi không đi tới đâu, không có cung nào nhận</div><div>-&nbsp;<strong>Quy ước: tự hóa là \"xuất\".</strong>&nbsp;Phái Phi tinh coi tự hóa là lực ly tâm. Cái mà cung đó có thì nó tự buông ra, không giữ lại.</div><div><strong>- Ghép với tượng Lộc.</strong>&nbsp;Lộc là \"có, được\". Cộng thêm \"xuất\" thì thành có rồi lại đi: tiền đến dễ, đi cũng dễ.</div><div>=&gt; Kết luận đúng là&nbsp;<strong>xu hướng không tụ tài</strong>, chứ không phải chắc chắn không có tiền. Người có Tài tự hóa Lộc vẫn có duyên với tiền, tiêu thoáng và không tham.&nbsp;</div>"
+            ],
+            "guid": "n#dRcJHq;>",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Tật Ách</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tật Ách là thân thể, trạng thái, và cũng là Điền Trạch của Quan, tức nơi làm việc; so với Tài, Tật là Huynh Đệ của Tài. Tật là ngã cung. Lộc chiếu sang Phụ Mẫu.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Kiếm tiền bằng sức lực và công sức trực tiếp. Có tiền thì tâm thân an. Tiền chi cho việc chăm sóc bản thân, hoặc tiền sinh ra từ nơi làm việc.</li><li><strong>Mặt trái:</strong>&nbsp;Thu nhập phụ thuộc vào sức khỏe và công lao động.</li></ul>"
+            ],
+            "guid": "y`ql`k1azL",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Thiên Di</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Thiên Di là bên ngoài, xã hội, nơi xa; so với Tài, Di là Phu Thê của Tài. Di là tha cung. Lộc chiếu sang Mệnh.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền kiếm được khi ra ngoài, đi xa, hoặc qua giao tiếp xã hội. Chiếu Mệnh nên duyên tiền bên ngoài có lợi cho bản thân.</li><li><strong>Mặt trái:</strong>&nbsp;Tốn nhiều tiền cho giao tế và đi lại.</li></ul>"
+            ],
+            "guid": "mDT{P[?*e]",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Nô Bộc</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Nô Bộc là bạn bè, đồng nghiệp, khách hàng, đám đông; so với Tài, Nô là Tử Tức của Tài. Nô là tha cung. Lộc chiếu sang Huynh Đệ (kho tiền).</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền đến từ khách hàng và đám đông, hợp với buôn bán và dịch vụ. Chiếu Huynh nên có lợi cho dòng tiền mặt; tiền có vào kho thật hay không phải xem Kỵ.</li><li><strong>Mặt trái:</strong>&nbsp;Hay chi cho bạn bè, dễ cho vay.</li></ul>"
+            ],
+            "guid": "u~*eYD1>#<",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Quan Lộc</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Quan Lộc là sự nghiệp, công việc; so với Tài, Quan là Tài Bạch của Tài, tức tiền của tiền. Quan là ngã cung, nằm trong tam hợp Mệnh–Tài–Quan. Lộc chiếu sang Phu Thê.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền được tái đầu tư vào công việc, tiền đẻ ra tiền. Tài và Quan hỗ trợ nhau, hợp kinh doanh.</li><li><strong>Mặt trái:</strong>&nbsp;Thu nhập gắn chặt với công việc; công việc chững thì tiền chững.</li></ul>"
+            ],
+            "guid": "Ow,[t#r%=e",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Điền Trạch</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Điền Trạch là nhà đất, gia đình, nơi ở; so với Tài, Điền là Tật Ách của Tài, tức thể của tiền (tiền mang hình dạng gì). Điền là ngã cung. Lộc chiếu sang Tử Tức.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền có duyên với điền trạch. Nguồn tiền đến từ gia đình hỗ trợ, từ nhà đất (môi giới, mua bán, cho thuê), hoặc từ công việc làm tại nhà. Theo chiều \"cho\" của Lộc, tiền cũng được chi cho nhà cửa và gia đình. Vì Điền là ngã cung nên duyên tiền này nằm trong tầm tay mình.</li><li><strong>Tích lũy hay không:</strong>&nbsp;Lộc chỉ nói về duyên. Muốn kết luận tiền đọng lại thành điền sản thì cần có Kỵ thu tàng. Đó là khi Tài hóa Kỵ nhập Điền, hoặc khi Điền hóa Kỵ về ngã cung (Lộc tùy Kỵ).</li><li><strong>Mặt trái:</strong>&nbsp;Thu nhập phụ thuộc gia đình hoặc thị trường nhà đất; chi tiêu cho nhà cửa nhiều.</li></ul>"
+            ],
+            "guid": "e:#d);=&7&",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Phúc Đức</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Phúc Đức là tinh thần, hưởng thụ, phúc ấm; so với Tài, Phúc là Thiên Di của Tài và là cung đối của Tài. Phúc là ngã cung. Lộc chiếu ngược lại Tài.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền dành cho sở thích và hưởng thụ. Kiếm tiền từ đam mê. Lộc chiếu Tài nên có nền tài lộc và có lộc ăn.</li><li><strong>Mặt trái:</strong>&nbsp;Tiền ra ngoài theo cảm xúc, chi tiêu cảm tính.</li></ul>"
+            ],
+            "guid": "MY9VrE/iS#",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Phụ Mẫu</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Phụ Mẫu là cha mẹ, cấp trên, nhà nước, văn thư, danh tiếng; so với Tài, Phụ là Nô Bộc của Tài. Phụ là tha cung. Lộc chiếu sang Tật Ách.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Có duyên tài từ cấp trên và tổ chức: lương, hợp đồng, tài trợ. Tiền đi qua thủ tục và giấy tờ chính thức. Về người: chi tiền cho cha mẹ.</li><li><strong>Mặt trái:</strong>&nbsp;Thu nhập phụ thuộc vào tổ chức hoặc cấp trên.</li></ul>"
+            ],
+            "guid": "og&k~)%R$0",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "Lộc-Kỵ",
+                "<div>Hệ của Lương Nhược Du coi Kỵ chuyển là \"phương tiện vận chuyển\". Nó đưa sức của Lộc sang cung kế tiếp và không được luận như một Kỵ. Mục đích là truy đến gốc để biết hai điều: sự việc phát triển theo hướng nào, và nặng nhẹ ra sao.</div><div>=&gt; Như vậy, Tài Lộc nhập cung B, rồi xem can cung B hóa Kỵ đi đâu. Kết quả cho biết&nbsp;<strong>riêng duyên tiền đó</strong>&nbsp;phát triển về đâu và lớn hay nhỏ. Nó không phải kết cục của toàn bộ tiền bạc.</div><div><br></div><div><strong>Trong hệ Lương Nhược Du, Kỵ của chính cung cũng là \"nhân\", không phải \"quả\".</strong>&nbsp;Đây là lý do mấu chốt. Hóa Kỵ được gọi là \"nhân của sự bỏ ra\" (付出之因), và Kỵ chuyển theo sau nó mới là quả. Tài Kỵ cho biết tiền bị bỏ công và chấp vào đâu. Bản thân nó không phải kết cục của Tài Lộc.</div>"
+            ],
+            "guid": "s0kq<8PzS&",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<strong>Tượng Hóa Kỵ</strong>",
+                "<div><ul><li><strong>Kỵ</strong>&nbsp;mang nghĩa chấp, bỏ công, nợ, thu tàng. Vì vậy các kết luận \"giữ được tiền\" giờ thuộc về tab này. Rõ nhất là Kỵ nhập Điền Trạch hoặc Huynh Đệ (kho tiền).</li><li>\"Chấp\" là chữ 執 trong \"chấp trước\" (執著): nắm chặt, bám vào, không buông được. Khi nói Kỵ mang nghĩa chấp, tức là cung nhận Kỵ trở thành chỗ mà người đó&nbsp;<strong>để tâm nhiều nhất, thấy thiếu nhiều nhất, và cứ dồn sức vào đó</strong>.</li><li><div>Trong phi hóa, \"chấp\" hiện ra ở bốn lớp, từ trong ra ngoài:</div><ol><li><strong>Tâm lý:</strong>&nbsp;để tâm, lo nghĩ, không buông được. Ví dụ Tài Kỵ nhập Mệnh là người luôn nghĩ về tiền.</li><li><strong>Hành vi:</strong>&nbsp;bỏ công sức, thời gian, tiền bạc vào đó. Ví dụ Tài Kỵ nhập Quan là dồn tiền và sức vào công việc.</li><li><strong>Quan hệ:</strong>&nbsp;mắc nợ, có trách nhiệm phải lo. Ví dụ Tài Kỵ nhập Phụ Mẫu là tiền gắn với nghĩa vụ với cha mẹ, hoặc nợ ngân hàng, thuế.</li><li><strong>Vật chất:</strong>&nbsp;giữ lại, cất đi, không cho ra. Đây là nghĩa thu tàng. Ví dụ Tài Kỵ nhập Điền Trạch là tiền đọng lại thành nhà đất.</li></ol></li><li><strong>Kỵ xung cung đối</strong>&nbsp;làm cung đó bị tổn, trái với Lộc chiếu làm cung đối được lợi. Nặng nhất là Kỵ nhập tha cung mà xung ngã cung, gồm nhập Thiên Di, Phu Thê, Tử Tức, Nô Bộc, Phụ Mẫu. Kỵ nhập Phúc Đức thì xung thẳng cung Tài.</li></ul></div>"
+            ],
+            "guid": "w&tS_l1isW",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Mệnh</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Mệnh là bản thân, và là Quan Lộc của Tài. Ngã cung. Xung Thiên Di.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền chấp vào bản thân. Người này luôn nghĩ về tiền và tự gánh việc lo tài chính. Ngã cung nên tiền thu về mình, có xu hướng giữ tiền chặt. Xung Di nên ra ngoài ít chi cho giao tế.</li><li><strong>Điều kiện:</strong>&nbsp;Nặng hơn thì thành áp lực tiền bạc đè lên tâm trí.</li></ul>"
+            ],
+            "guid": "qx!hJhO(62",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3>Tài bạch phi Hoá Kị nhập Huynh Đệ</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Huynh là Điền Trạch của Tài, tức kho tiền. Về tên là tha cung, về chức năng là tài khố. Xung Nô Bộc.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Kỵ nhập kho là thu tàng: tiền được cất vào kho, giữ được tiền mặt. Xung Nô nên không hợp hùn hạp hay cho bạn bè vay.</li><li><strong>Điều kiện:</strong>&nbsp;Khi câu hỏi về người, nghĩa này chuyển thành tiền ràng buộc với anh em hoặc mẹ: phải lo cho họ, hoặc nợ họ.</li></ul>"
+            ],
+            "guid": "u~TqO6tTKs",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Phu Thê</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Phu là vợ/chồng, và là Phúc Đức của Tài. Tha cung. Xung Quan Lộc.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền ràng buộc với hôn nhân: bỏ tiền cho vợ/chồng, hoặc vợ chồng bất đồng về tiền. Tha cung xung ngã cung (Quan) nên tiền không dành được cho sự nghiệp, vốn kinh doanh dễ thiếu.</li><li><strong>Điều kiện:</strong>&nbsp;Đây là một trong các cách Kỵ nặng, vì nó là Kỵ vào tha cung xung ngã cung.</li></ul>"
+            ],
+            "guid": "pICNDrii$U",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Tử Tức</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tử là con cái, hợp tác, đầu tư ra ngoài, và là Phụ Mẫu của Tài (giấy tờ, tín dụng). Tha cung. Xung Điền Trạch.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền bị kéo ra ngoài qua đầu tư, hùn vốn, hoặc chi cho con. Xung Điền, tức xung kho lớn, nên khó giữ tài sản và tiền trong nhà bị rút ra.</li><li><strong>Điều kiện:</strong>&nbsp;Kỵ vào tha cung xung ngã cung, thuộc nhóm nặng.</li></ul>"
+            ],
+            "guid": "k9O5(:yuu/",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3>Tài bạch tự hoá kị</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Can của Tài hóa Kỵ vào chính sao trong cung Tài, gọi là Kỵ xuất. Tự hóa không nhập cung nào nên không xung cung nào.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Cái chấp về tiền tự buông ra. Tiền tự hao, đến rồi đi, quản lý tiền lỏng. Có lúc đột ngột túng tiền.</li><li><strong>Điều kiện:</strong>&nbsp;Nhẹ hơn nếu có cung khác hóa Kỵ nhập kho (Điền hoặc Huynh).</li></ul>"
+            ],
+            "guid": "n:_cjy%r8M",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Tật Ách</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tật là thân thể và nơi làm việc (Điền của Quan). Ngã cung. Xung Phụ Mẫu.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Kiếm tiền bằng sức lực, vất vả. Ngã cung nên tiền thu về thân, giữ được, nhưng phải trả bằng công sức. Xung Phụ nên dễ vướng giấy tờ, cấp trên trong chuyện tiền.</li><li><strong>Điều kiện:</strong>&nbsp;Nặng hơn thì lo tiền ảnh hưởng sức khỏe.</li></ul>"
+            ],
+            "guid": "eC7p2GEDgi",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Thiên Di</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Di là bên ngoài, xã hội, và là Phu Thê của Tài. Tha cung. Xung Mệnh.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền thoát ra ngoài: tiêu cho giao tế, đi lại, thể diện. Phải bôn ba vì tiền. Xung Mệnh nên áp lực tiền dồn về bản thân.</li><li><strong>Điều kiện:</strong>&nbsp;Kỵ vào tha cung xung Mệnh là cách nặng nhất trong nhóm này.</li></ul>"
+            ],
+            "guid": "Gb%v*3sa.R",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Nô Bộc</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Nô là bạn bè, đồng nghiệp, khách hàng, và là Tử Tức của Tài. Tha cung. Xung Huynh Đệ, tức kho tiền.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền hao qua bạn bè, khách hàng, đối tác: cho vay khó đòi, khách nợ. Xung kho nên tiền mặt khó giữ.</li><li><strong>Điều kiện:</strong>&nbsp;Nặng hơn nếu kho (Huynh) có Kỵ sinh niên.</li></ul>"
+            ],
+            "guid": "As<X3aXtst",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Quan Lộc</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Quan là sự nghiệp, và là Tài Bạch của Tài. Ngã cung, nằm trong tam hợp Mệnh–Tài–Quan. Xung Phu Thê.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền dồn vào công việc: tái đầu tư, ôm việc để kiếm tiền. Ngã cung nên tiền nằm trong tay mình. Xung Phu nên vì tiền và việc mà hôn nhân bị ảnh hưởng.</li><li><strong>Điều kiện:</strong>&nbsp;Thu nhập gắn chặt với công việc; công việc chững thì tiền cũng chững.</li></ul>"
+            ],
+            "guid": "x4]K+/(=8z",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Điền Trạch</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Điền là nhà đất, gia đình, kho lớn, và là Tật Ách của Tài (thể của tiền). Ngã cung. Xung Tử Tức.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Đây là thu tàng rõ nhất: tiền đọng lại thành nhà đất và tài sản gia đình. Đây là mặt thu của Tài, khác với Tài Lộc nhập Điền (chỉ là duyên). Xung Tử nên không hợp đầu tư ra ngoài hay hùn vốn.</li><li><strong>Điều kiện:</strong>&nbsp;Mặt trái là tiền bị chôn vào tài sản, kém thanh khoản.</li></ul>"
+            ],
+            "guid": "g&^5CA:O,Z",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Phúc Đức</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Phúc là tinh thần, hưởng thụ, và là Thiên Di của Tài, tức cung đối của Tài. Ngã cung. Xung thẳng Tài Bạch.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Kỵ xung bản cung nên tiền bất ổn. Người này lo nghĩ về tiền, chi tiêu theo cảm xúc hoặc vì sở thích mà hao tiền. Phúc là ngã cung nên tiền chi cho hưởng thụ của chính mình.</li><li><strong>Điều kiện:</strong>&nbsp;Kỵ xung bản cung là cách kỵ nhất cho việc tụ tài.</li></ul>"
+            ],
+            "guid": "C*PMyuoK$*",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Tài bạch phi Hoá Kị nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Phụ Mẫu</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Phụ là cha mẹ, cấp trên, nhà nước, văn thư, và là Nô Bộc của Tài. Tha cung. Xung Tật Ách.</li><li><strong>Nghĩa suy ra:</strong>&nbsp;Tiền ràng buộc với cha mẹ hoặc cấp trên, hoặc với nợ ngân hàng, thuế, hợp đồng. Xung Tật nên áp lực tiền ảnh hưởng đến thân thể.</li><li><strong>Điều kiện:</strong>&nbsp;Nặng hơn thì thành rắc rối giấy tờ tài chính, hoặc các khoản phải nộp.</li></ul>"
+            ],
+            "guid": "N=={n>VR,C",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        }
+    ],
+    "reviewLimit": null,
+    "reviewLimitToday": null
+}

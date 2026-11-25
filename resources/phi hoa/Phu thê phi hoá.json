@@ -1,0 +1,411 @@
+{
+    "__type__": "Deck",
+    "children": [],
+    "crowdanki_uuid": "c6fefd78-e879-11f1-9218-66f9e5365b19",
+    "deck_config_uuid": "c6ff0296-e879-11f1-9218-66f9e5365b19",
+    "deck_configurations": [
+        {
+            "__type__": "DeckConfig",
+            "answerAction": 0,
+            "autoplay": true,
+            "buryInterdayLearning": false,
+            "crowdanki_uuid": "c6ff0296-e879-11f1-9218-66f9e5365b19",
+            "desiredRetention": 0.9,
+            "dyn": false,
+            "easyDaysPercentages": [
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "fsrsParams5": [],
+            "fsrsParams6": [],
+            "fsrsWeights": [],
+            "ignoreRevlogsBeforeDate": "",
+            "interdayLearningMix": 0,
+            "lapse": {
+                "delays": [
+                    10.0
+                ],
+                "leechAction": 1,
+                "leechFails": 8,
+                "minInt": 1,
+                "mult": 0.0
+            },
+            "maxTaken": 60,
+            "name": "Mặc định",
+            "new": {
+                "bury": false,
+                "delays": [
+                    1.0,
+                    10.0
+                ],
+                "initialFactor": 2500,
+                "ints": [
+                    1,
+                    4,
+                    0
+                ],
+                "order": 1,
+                "perDay": 20
+            },
+            "newGatherPriority": 0,
+            "newMix": 0,
+            "newPerDayMinimum": 0,
+            "newSortOrder": 0,
+            "questionAction": 0,
+            "replayq": true,
+            "rev": {
+                "bury": false,
+                "ease4": 1.3,
+                "hardFactor": 1.2,
+                "ivlFct": 1.0,
+                "maxIvl": 36500,
+                "perDay": 200
+            },
+            "reviewOrder": 0,
+            "secondsToShowAnswer": 0.0,
+            "secondsToShowQuestion": 0.0,
+            "sm2Retention": 0.9,
+            "stopTimerOnAnswer": false,
+            "timer": 0,
+            "waitForAudio": true,
+            "weightSearch": ""
+        }
+    ],
+    "desc": "",
+    "desiredRetention": null,
+    "dyn": 0,
+    "extendNew": 0,
+    "extendRev": 0,
+    "media_files": [],
+    "name": "Phu thê phi hoá",
+    "newLimit": null,
+    "newLimitToday": null,
+    "note_models": [
+        {
+            "__type__": "NoteModel",
+            "crowdanki_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "css": ".card {\n    font-family: arial;\n    font-size: 20px;\n    line-height: 1.5;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+            "flds": [
+                {
+                    "collapsed": false,
+                    "description": "",
+                    "excludeFromSearch": false,
+                    "font": "Arial",
+                    "id": -8965566038313356771,
+                    "name": "Mặt trước",
+                    "ord": 0,
+                    "plainText": false,
+                    "preventDeletion": false,
+                    "rtl": false,
+                    "size": 20,
+                    "sticky": false,
+                    "tag": null
+                },
+                {
+                    "collapsed": false,
+                    "description": "",
+                    "excludeFromSearch": false,
+                    "font": "Arial",
+                    "id": -1780534557995654744,
+                    "name": "Mặt sau",
+                    "ord": 1,
+                    "plainText": false,
+                    "preventDeletion": false,
+                    "rtl": false,
+                    "size": 20,
+                    "sticky": false,
+                    "tag": null
+                }
+            ],
+            "latexPost": "\\end{document}",
+            "latexPre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
+            "latexsvg": false,
+            "name": "Cơ bản",
+            "originalStockKind": 1,
+            "req": [
+                [
+                    0,
+                    "any",
+                    [
+                        0
+                    ]
+                ]
+            ],
+            "sortf": 0,
+            "tmpls": [
+                {
+                    "afmt": "{{FrontSide}}\n\n<hr id=answer>\n\n{{Mặt sau}}",
+                    "bafmt": "",
+                    "bfont": "",
+                    "bqfmt": "",
+                    "bsize": 0,
+                    "did": null,
+                    "id": -352150489873481160,
+                    "name": "Thẻ 1",
+                    "ord": 0,
+                    "qfmt": "{{Mặt trước}}"
+                }
+            ],
+            "type": 0
+        }
+    ],
+    "notes": [
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Mệnh</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Mệnh là bản thân tôi, và là Phúc Đức của Phu. Ngã cung. Chiếu Thiên Di.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu có duyên với tôi, đối tốt và chiều tôi. Chiếu Di nên mặt bên ngoài của tôi (giao tiếp, đi xa) cũng hưởng lợi từ duyên này.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu có phúc, sống vui, biết hưởng.</li></ul>"
+            ],
+            "guid": "J^LK^)nwb-",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Huynh Đệ</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Huynh là anh chị em, mẹ, bạn thân của tôi, là kho tiền của tôi, và là Phụ Mẫu của Phu. Tha cung. Chiếu Nô Bộc.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu tốt với anh chị em và mẹ của tôi. Nếu câu hỏi về tiền thì đọc Huynh là kho tiền của tôi: phối ngẫu có duyên đóng góp tiền mặt cho tôi.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu có duyên với cha mẹ của họ và với cấp trên.</li><li><strong>Không suy ra:</strong>&nbsp;Đóng góp vào kho không có nghĩa là giữ được tiền. Giữ được hay không phải xem Kỵ.</li></ul>"
+            ],
+            "guid": "c_7sBU_tn+",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê</span>&nbsp;tự hóa Lộc</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Can của Phu hóa Lộc vào chính sao trong Phu, gọi là Lộc xuất: có duyên rồi tự buông. Tự hóa không nhập cung nào. Một số tài liệu cho rằng tượng tự hóa hiện ra ở cung đối, ở đây là Quan Lộc.</li><li><strong>Góc A:</strong>&nbsp;Có duyên tình cảm, vì trong cung Phu có sao hóa Lộc. Nhưng đó là Lộc xuất nên duyên không đọng lại: dễ tính, rộng rãi, không cố chấp trong tình cảm, có xu hướng dễ đến dễ nhạt. Theo cách đọc cung đối: tôi được hôn nhân trợ lực cho công việc.</li><li><strong>Góc B:</strong>&nbsp;Lấy Phu làm thái cực thì cung Phu là Mệnh của phối ngẫu, nên đây là Mệnh tự hóa Lộc của họ: tính lạc quan, rộng rãi, không so đo.</li><li><strong>Không suy ra:</strong>&nbsp;Không kết luận được về chung thủy hay độ bền. Đó là việc của Kỵ và của toàn bộ lá số.</li></ul>"
+            ],
+            "guid": "pM?kY.Hbt_",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Tử Tức</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tử là con cái, hợp tác. So với Phu, Tử là Huynh Đệ của Phu, cũng là kho tiền của phối ngẫu. Tha cung. Chiếu Điền Trạch.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu thương con và chi cho con. Duyên của phối ngẫu hướng về con cái và việc hợp tác của tôi. Tử là tha cung nên duyên này hướng ra người khác, không về thẳng tôi. Chiếu Điền nên có lợi cho gia đạo.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu có duyên với anh chị em của họ, và có duyên với tiền mặt.</li></ul>"
+            ],
+            "guid": "o>eK&EV*,<",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Tài Bạch</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tài là tiền của tôi. So với Phu, Tài là Phu Thê của Phu, tức chính tôi trong vai người bạn đời. Ngã cung. Chiếu Phúc Đức.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu có duyên với tiền của tôi: giúp đỡ tài chính, hoặc tôi có tiền nhờ hôn nhân. Chiếu Phúc nên có lợi cho đời sống tinh thần của tôi.</li><li><strong>Góc B:</strong>&nbsp;Tình cảm của phối ngẫu hướng về người bạn đời của họ, tức là tôi.</li></ul>"
+            ],
+            "guid": "upZP|p3gn]",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Tật Ách</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tật là thân thể, sinh hoạt của tôi, và là Tử Tức của Phu. Ngã cung. Chiếu Phụ Mẫu.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu quan tâm thân thể và sinh hoạt của tôi. Tật là ngã cung nên sự quan tâm này hướng thẳng về tôi.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu có duyên với con cái và với việc hợp tác.</li></ul>"
+            ],
+            "guid": "J0*:oA=L%=",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Thiên Di</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Di là bên ngoài và xã hội, và là Tài Bạch của Phu. Tha cung. Chiếu Mệnh.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu hướng về mặt bên ngoài của tôi: hỗ trợ tôi trong giao tiếp xã hội và khi đi xa. Chiếu Mệnh nên có lợi cho bản thân tôi.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu có duyên tiền bạc.</li><li><strong>Không suy ra:</strong>&nbsp;Lộc vào tha cung chỉ nói duyên của phối ngẫu hướng ra ngoài, không đủ để kết luận có người thứ ba.</li></ul>"
+            ],
+            "guid": "ytm>4r!gFH",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Nô Bộc</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Nô là bạn bè, đồng nghiệp của tôi, và là Tật Ách của Phu. Tha cung. Chiếu Huynh Đệ.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu tốt với bạn bè, đồng nghiệp của tôi, hòa đồng với giới của tôi.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu thân tâm thoải mái, tính tình dễ chịu.</li><li><strong>Không suy ra:</strong>&nbsp;Tương tự mục 7, không tự động suy ra người thứ ba.</li></ul>"
+            ],
+            "guid": "e3Y:L^.}8v",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Quan Lộc</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Quan là sự nghiệp của tôi, và là Thiên Di của Phu, tức cung đối của Phu. Ngã cung. Lộc chiếu ngược lại chính Phu Thê.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu ủng hộ sự nghiệp của tôi. Hôn nhân và công việc của tôi hỗ trợ nhau. Lộc chiếu lại Phu nên có lợi cho chính hôn nhân.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu ra ngoài có duyên, được người khác quý.</li></ul>"
+            ],
+            "guid": "KCJp00Xd$u",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Điền Trạch</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Điền là nhà cửa, gia đình của tôi, và là Nô Bộc của Phu. Ngã cung. Chiếu Tử Tức.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu có duyên với gia đình: chăm lo nhà cửa, đóng góp cho tổ ấm. Chiếu Tử nên có lợi cho con cái.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu có duyên bạn bè.</li></ul>"
+            ],
+            "guid": "Kp/r-WWFO[",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Phúc Đức</h3>",
+                "<li>Tiền đề:&nbsp;Phúc là tinh thần, sở thích, quan niệm sống của tôi, và là Quan Lộc của Phu. Ngã cung. Chiếu Tài Bạch.</li><li>Góc A:&nbsp;Phối ngẫu mang lại niềm vui tinh thần; phối ngẫu chiều theo sở thích và quan niệm sống của tôi. Chiếu Tài nên có lợi cho tiền của tôi.</li><li>Góc B:&nbsp;Sự nghiệp của phối ngẫu thuận.</li>"
+            ],
+            "guid": "f~ULw.g8C?",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá lộc nhập</span><span style=\"font-size: 20px;\">&nbsp;</span>Phụ Mẫu</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Phụ là cha mẹ, cấp trên, văn thư của tôi. So với Phu, Phụ là Điền Trạch của Phu, tức nền nhà của hôn nhân. Tha cung. Chiếu Tật Ách.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu tốt với cha mẹ và cấp trên của tôi. Chiếu Tật nên có lợi cho thân thể tôi.</li><li><strong>Góc B:</strong>&nbsp;Nền nhà của hôn nhân có duyên; phối ngẫu có duyên với nhà cửa và gia đình của họ.</li></ul>"
+            ],
+            "guid": "N0/xW5y?t4",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3>Phu thê<b style=\"font-size: 20px;\">&nbsp;phi hoá lộc</b></h3>",
+                "<ol><li><strong>Góc A — Mệnh làm thái cực, Phu Thê là cung phát.</strong>&nbsp;Trả lời câu \"vợ/chồng (hoặc hôn nhân) đối với tôi và các mặt đời tôi thế nào\". Đọc X theo bản nghĩa. Ví dụ Phu Lộc nhập Mệnh là phối ngẫu đối tốt với tôi.</li><li><strong>Góc B — Phu Thê làm thái cực.</strong>&nbsp;Trả lời câu \"bản thân phối ngẫu là người thế nào\". Lấy Phu Thê làm Mệnh rồi đọc X theo vị trí tương đối. Ví dụ Mệnh của tôi là Phúc Đức của phối ngẫu, nên Phu Lộc nhập Mệnh còn nghĩa là phối ngẫu có phúc và biết hưởng.</li></ol>"
+            ],
+            "guid": "s+nurfmn]X",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Mệnh</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Mệnh là bản thân tôi, và là Phúc Đức của Phu. Ngã cung. Xung Thiên Di.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào tôi: đặt nặng tôi, quản chặt, đòi hỏi nhiều. Ngã cung nên gánh nặng hôn nhân dồn về tôi. Xung Di nên mặt bên ngoài của tôi (giao tế, đi xa) bị hạn chế.</li><li><strong>Góc B:</strong>&nbsp;Kỵ vào Phúc Đức của phối ngẫu, tức chỗ tâm tư của họ: hay lo nghĩ, cố chấp.</li><li><strong>Căn cứ:</strong>&nbsp;Một nguồn đọc Phu Kỵ nhập Mệnh là vợ chồng dễ cãi nhau (góc A) và phối ngẫu cố chấp (góc B). Trong một ví dụ của Lương Nhược Du, Phu hóa Kỵ (Liêm Trinh) nhập Mệnh được đọc là một món nợ nghiệp với phối ngẫu, còn từ phía phối ngẫu là hay ghen. Tính ghen ra từ sao Liêm Trinh, Không phải nghĩa chung của mọi Phu Kỵ nhập Mệnh.</li></ul>"
+            ],
+            "guid": "wa_I,1M;Q3",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3>Phu thê phi hoá kị nhập Huynh Đệ</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Huynh là anh chị em, mẹ của tôi, là kho tiền của tôi, và là Phụ Mẫu của Phu. Tha cung. Xung Nô Bộc.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào anh chị em, mẹ của tôi: phải lo cho họ, hoặc vướng mắc với họ. Nếu câu hỏi về tiền thì đọc Huynh là kho tiền mặt (Điền của Tài, khác với cung Điền Trạch là kho bất động sản). Phối ngẫu để tâm vào kho tiền mặt của tôi: can dự, quản chuyện chi tiêu. Kỵ nhập kho mang tượng thu tàng nên tiền có xu hướng đọng lại, nhưng tiền mặt đó bị ràng buộc với hôn nhân, tôi không tự do dùng. Chỉ đọc là hao hụt khi Kỵ xung kho hoặc khi Kỵ chuyển tiếp ra ngoài. Xung Nô nên bạn bè của tôi bị ảnh hưởng.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu chấp vào cha mẹ của họ và cấp trên: nặng nghĩa vụ với cha mẹ, chịu áp lực từ cấp trên. Kỵ xung Nô, mà Nô là Tật của Phu, nên thân tâm phối ngẫu chịu áp lực.</li></ul>"
+            ],
+            "guid": "M7Ut8r7y?]",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3>Phu thê tự hóa Kị</h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Can của Phu hóa Kỵ vào chính sao trong Phu, gọi là Kỵ xuất: cái chấp tự buông ra. Tự hóa không nhập cung nào. Một số tài liệu xét tượng ở cung đối, ở đây là Quan Lộc.</li><li><strong>Góc A:</strong>&nbsp;Sự gắn bó trong hôn nhân có lúc tự buông: lạnh nhạt, có khoảng trống. Theo cách đọc cung đối: chuyện hôn nhân tác động đến công việc của tôi.</li><li><strong>Góc B:</strong>&nbsp;Lấy Phu làm thái cực thì đây là Mệnh tự hóa Kỵ của phối ngẫu: dễ thay đổi, tự gây trục trặc cho mình.</li><li><strong>Không suy ra:</strong>&nbsp;Một mình tự hóa Kỵ không đủ để kết luận ly hôn hay ngoại tình.</li></ul>"
+            ],
+            "guid": "v7(?(^XI:I",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Tử Tức</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tử là con cái, hợp tác của tôi, và là Huynh Đệ của Phu. Tha cung. Xung Điền Trạch, một ngã cung.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào con cái và việc hợp tác: lo nhiều, quản chặt. Kỵ vào tha cung mà xung Điền, nên gia đạo và nhà cửa bị xáo trộn vì những chuyện này.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu chấp vào anh chị em của họ. Tử cũng là kho tiền mặt của phối ngẫu, nên Kỵ vào đây còn có nghĩa là họ để tâm vào kho tiền của mình, tiền có xu hướng đọng lại. Kỵ xung Điền, mà Điền là Nô của Phu, nên bạn bè của phối ngẫu bị ảnh hưởng.</li></ul>"
+            ],
+            "guid": "xEFQtbb6LS",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Tài Bạch</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tài là tiền của tôi, và là Phu Thê của Phu, tức chính tôi trong vai bạn đời. Ngã cung. Xung Phúc Đức, một ngã cung.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào tiền của tôi: quản tiền, đòi hỏi tiền, hoặc tôi phải bỏ tiền cho hôn nhân. Xung Phúc nên tinh thần của tôi không yên.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu chấp vào bạn đời của họ, tức tôi: rất để tâm, ràng buộc nặng. Kỵ xung Phúc, mà Phúc là Quan của Phu, nên công việc của phối ngẫu bị ảnh hưởng.</li><li><strong>Căn cứ:</strong>&nbsp;Một nguồn đọc Phu Kỵ nhập Tài là tượng vợ chồng bất hòa, vì Tài là Phu của Phu và Kỵ xung Phúc Đức.</li></ul>"
+            ],
+            "guid": "kXZ*EZdXZ!",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Tật Ách</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Tật là thân thể, sinh hoạt của tôi, và là Tử Tức của Phu. Ngã cung. Xung Phụ Mẫu, tức Điền Trạch của hôn nhân.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào thân thể và sinh hoạt của tôi: quản chuyện ăn ở, đòi hỏi. Ngã cung nên tôi trực tiếp chịu áp lực.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu chấp vào con cái và việc hợp tác của họ.</li><li><strong>Điểm cần chú ý:</strong>&nbsp;Kỵ xung vào Điền Trạch của hôn nhân, tức nền nhà của hôn nhân bị tổn. Theo Lương Nhược Du, Phụ Mẫu bị phá là một trong ba điều kiện của cách ly hôn, nhưng chỉ là một, không đủ một mình.</li></ul>"
+            ],
+            "guid": "idNBWdEI0<",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Thiên Di</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Di là bên ngoài, xã hội, và là Tài Bạch của Phu. Tha cung. Xung Mệnh.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào mặt bên ngoài của tôi: để ý, can dự chuyện tôi đi lại, giao tế. Kỵ vào tha cung xung thẳng Mệnh, nên áp lực từ hôn nhân dồn về bản thân tôi.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu chấp vào tiền, vất vả vì tiền. Kỵ xung Mệnh, mà Mệnh là Phúc của Phu, nên tinh thần phối ngẫu không yên.</li><li><strong>Không suy ra:</strong>&nbsp;Phu Kỵ nhập Di không đủ để kết luận có người thứ ba.</li></ul>"
+            ],
+            "guid": "D6oxREen*u",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Nô Bộc</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Nô là bạn bè, đồng nghiệp của tôi, và là Tật Ách của Phu. Tha cung. Xung Huynh Đệ, tức kho tiền của tôi.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào bạn bè, đồng nghiệp của tôi: can thiệp hoặc nghi ngại chuyện giao du của tôi. Xung kho nên tiền mặt hao, anh em và mẹ tôi cũng bị ảnh hưởng.</li><li><strong>Góc B:</strong>&nbsp;Kỵ vào Tật Ách của phối ngẫu: họ dễ căng thẳng, thân tâm nặng nề. Kỵ xung Huynh, mà Huynh là Phụ của Phu, nên cha mẹ phối ngẫu bị ảnh hưởng.</li><li><strong>Không suy ra:</strong>&nbsp;Không tự động suy ra người thứ ba.</li></ul>"
+            ],
+            "guid": "ev7}lWFL.O",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Quan Lộc</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Quan là sự nghiệp của tôi, và là Thiên Di của Phu, tức cung đối của Phu. Ngã cung. Kỵ xung ngược lại chính Phu Thê.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào sự nghiệp của tôi: đặt kỳ vọng, can thiệp. Đồng thời Kỵ xung bản cung Phu, nên chính hôn nhân kém ổn định.</li><li><strong>Góc B:</strong>&nbsp;Kỵ vào Thiên Di của phối ngẫu và xung Mệnh của họ: phối ngẫu bôn ba bên ngoài, áp lực đè lên chính họ.</li></ul>"
+            ],
+            "guid": "m7`02wX73c",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Điền Trạch</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Điền là nhà cửa, gia đình, kho lớn của tôi, và là Nô Bộc của Phu. Ngã cung. Xung Tử Tức, một tha cung.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào gia đình: gắn bó với nhà, giữ nhà. Điền là kho bất động sản; Kỵ nhập kho mang tượng thu tàng, nên tài sản nhà cửa gắn chặt với hôn nhân và có xu hướng được giữ lại. Xung Tử nên con cái và việc hợp tác bị ảnh hưởng.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu chấp vào bạn bè của họ. Kỵ xung Tử, mà Tử là Huynh của Phu, nên anh chị em và kho tiền mặt của phối ngẫu bị ảnh hưởng.</li><li><strong>Ghi chú:</strong>&nbsp;Hai góc chỉ hai mặt khác nhau. Chọn góc theo câu hỏi, không trộn hai nghĩa với nhau.</li></ul>"
+            ],
+            "guid": "nUC.CWE(E(",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Phúc Đức</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Phúc là tinh thần, quan niệm sống của tôi, và là Quan Lộc của Phu. Ngã cung. Xung Tài Bạch, một ngã cung.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào quan niệm và sở thích của tôi: áp đặt, khiến tôi phiền lòng. Xung Tài nên tiền của tôi bất ổn vì chuyện hôn nhân.</li><li><strong>Góc B:</strong>&nbsp;Phối ngẫu chấp vào sự nghiệp của họ, ôm việc. Kỵ còn xung Tài, mà Tài là Phu của Phu (tức tôi), nên họ vì việc mà va chạm với bạn đời.</li></ul>"
+            ],
+            "guid": "n,#C{`co|V",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        },
+        {
+            "__type__": "Note",
+            "fields": [
+                "<h3><span style=\"font-size: 20px;\">Phu thê phi hoá kị</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">nhập</span><span style=\"font-size: 20px;\">&nbsp;</span><span style=\"font-size: 20px;\">Phụ Mẫu</span></h3>",
+                "<ul><li><strong>Tiền đề:</strong>&nbsp;Phụ là cha mẹ, cấp trên của tôi, và là Điền Trạch của Phu, tức nền nhà của hôn nhân. Tha cung. Xung Tật Ách, một ngã cung.</li><li><strong>Góc A:</strong>&nbsp;Phối ngẫu chấp vào cha mẹ và cấp trên của tôi: phải lo cho họ, hoặc vướng mắc với họ. Kỵ vào tha cung xung Tật nên thân thể tôi chịu áp lực.</li><li><strong>Góc B:</strong>&nbsp;Kỵ nhập Điền Trạch của hôn nhân là thu tàng: phối ngẫu gắn bó với nền nhà hôn nhân và với gia đình. Kỵ xung Tật, mà Tật là Tử của Phu, nên con cái và việc hợp tác của phối ngẫu bị ảnh hưởng.</li><li><strong>Ghi chú:</strong>&nbsp;Với tôi là gánh nặng (góc A), với nền nhà hôn nhân là giữ gìn (góc B). Hai nghĩa này không mâu thuẫn vì nói về hai đối tượng khác nhau.</li></ul>"
+            ],
+            "guid": "b<:c6.AcCi",
+            "note_model_uuid": "c6ff0c14-e879-11f1-9218-66f9e5365b19",
+            "tags": []
+        }
+    ],
+    "reviewLimit": null,
+    "reviewLimitToday": null
+}

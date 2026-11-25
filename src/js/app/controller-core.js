@@ -1,3 +1,4 @@
+// src/js/app/controller-core.js
 // ── Controller: kết nối form → logic → render ────────────
     let _lastJson = null;
 

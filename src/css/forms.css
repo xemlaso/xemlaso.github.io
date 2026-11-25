@@ -1,3 +1,4 @@
+/* src/css/forms.css */
     /* ── Form ───────────────────────────────────────────────── */
     .form-wrap {
       background: #fff;
@@ -473,14 +474,14 @@
     }
 
     body[data-layout="mobile"] .gio-mobile-row {
-      display: flex;
+      display: none;
     }
 
     body[data-layout="mobile"] #formWrap .fg {
       position: relative;
     }
 
-    body[data-layout="mobile"] .form-desktop-number-input {
+    body[data-layout="mobile"] .form-desktop-number-input:not(#gio) {
       position: absolute !important;
       width: 1px !important;
       height: 1px !important;

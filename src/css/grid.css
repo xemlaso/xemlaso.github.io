@@ -1,3 +1,4 @@
+src/css/grid.css
 /* Nút */
 .laso-download-btn {
   padding: 4px 10px;
@@ -794,7 +795,88 @@
       text-align: center;
     }
 
-    
+    /* ── Box luận phi hóa (dưới box Phi hóa) ─────────────────── */
+       /* Box Phi hóa dạng chi tiết: ẩn các dòng ngắn gọn, phần luận nằm trong cùng box */
+       .fly-boxes .ph-box.is-detail { box-sizing: border-box; }
+       .fly-boxes .ph-box.is-detail .ph-row { display: none; }
+       .phd-box {
+         margin-top: 4px;
+         font: 12px/1.4 Arial, sans-serif;
+         color: #222;
+         text-align: left;
+         pointer-events: auto;          /* .fly-boxes đang none */
+       }
+    .phd-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    .phd-tab {
+      flex: 1;
+      padding: 2px 0;
+      border: 1px solid var(--c);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--c);
+      font: bold 11px/1.3 Arial, sans-serif;
+      cursor: pointer;
+    }
+    .phd-tab.active {
+      background: var(--c);
+      color: #fff;
+    }
+    .phd-viewport {
+      overflow: hidden;
+      touch-action: pan-y;           /* dọc: trình duyệt cuộn; ngang: JS đổi tab */
+      transition: height .2s ease;
+    }
+    .phd-track {
+      display: flex;
+      align-items: flex-start;       /* mỗi panel cao theo nội dung */
+      transition: transform .25s ease;
+      will-change: transform;
+    }
+    .phd-panel {
+      flex: 0 0 100%;
+      min-width: 0;
+      max-height: var(--phd-max, 280px);
+      box-sizing: border-box;
+      padding-right: 4px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .phd-key {
+      font-weight: bold;
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    .phd-msg {
+      color: #888;
+      font-style: italic;
+    }
+    .phd-content h1, .phd-content h2, .phd-content h3 { font-size: 12px; margin: 4px 0; }
+    .phd-content ul, .phd-content ol { margin: 0; padding-left: 16px; }
+    .phd-content li { margin: 0 0 4px; }
+    .phd-content p { margin: 0 0 4px; }
+  
+      .ph-box .ph-toggle {
+        position: absolute; bottom: 4px; right: 4px;
+        pointer-events: auto;          /* box cha đang none */
+        border: 1px solid #ccc; border-radius: 4px;
+        background: #fff; color: #666;
+        font: 10px/1.2 Arial, sans-serif;
+        padding: 1px 4px; cursor: pointer;
+      }
+      .ph-box .ph-toggle:hover { color: #000; border-color: #999; }
+      .fly-boxes .ph-box { padding-bottom: 22px; }
+      .capturing .ph-toggle { display: none !important; }
+
+      /* Ảnh tải về: hiện trọn nội dung tab đang xem */
+      .capturing .phd-panel { overflow: hidden !important; }
+  
 .tg-box   { padding-right: 18px; }
 
 .box-copy {

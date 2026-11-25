@@ -1,3 +1,4 @@
+// src/js/render/tuvi-render.js
 const TUVI_RENDER = (() => {
       const SHARED = window.TUVI_RENDER_SHARED || {};
       const SHARED_CONST = SHARED.constants || {};
@@ -331,6 +332,7 @@ const TUVI_RENDER = (() => {
         }).join('');
         
         return `<div class="tt-chain ph-box"><button class="box-copy" title="Sao chép">⧉</button>
+                            <button type="button" class="ph-toggle" title="Chuyển dạng ngắn gọn / chi tiết">${_phdShow ? 'Ngắn gọn' : 'Chi tiết'}</button>
           <div class="tt-title">Phi hóa</div>
           <div class="tt-row tt-cung">${tenCung(chi)} <span class="tt-chi">· can ${CAN_STR[can]}</span></div>
           ${rows}</div>`;
@@ -356,16 +358,276 @@ const TUVI_RENDER = (() => {
               ${r.html}${r.end ? ` <span class="tt-stop">■ ${state.endReason || 'kết thúc'}</span>` : ''}</div>`).join('') + `</div>`;
       }
 
+            // ── Luận phi hóa: nội dung lấy từ resources/phi hoa/<cung chức> phi hoá.json ──
+      //   Mỗi tệp = 1 cung chức, chứa cả 4 loại phi hóa (Lộc, Quyền, Khoa, Kị)
+      //   Key (fields[0]): "<Cung> phi hoá <tứ hóa> nhập <Cung>" hoặc "<Cung> tự hoá <tứ hóa>"
+      //   So khớp: bỏ thẻ HTML + &nbsp;, gộp khoảng trắng, không phân biệt hoa/thường,
+      //            coi "hóa" = "hoá", "kỵ" = "kị"; so bằng toàn bộ key.
+      const PHD_DIR = 'resources/phi hoa';
+      const _phdCache = new Map();    // tên cung (thường) → Promise<{ file, idx: Map(key → html) } | null>
+      let _phdToken = 0;              // tăng mỗi lần dựng lại box → bỏ kết quả tải cũ
+      let _phdTab = 0;                // tab đang xem (giữ khi vẽ lại cùng cung)
+      let _phdTabChi = null;
+      let _phdShow = (() => { try { return localStorage.getItem('phdShow') !== '0'; } catch (e) { return true; } })();
+
+      function phdEscape(s) {
+        return String(s ?? '').replace(/[&<>"']/g, ch =>
+          ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+      }
+
+      // <template> để parse HTML mà không chạy script / không tải ảnh
+      function phdNormKey(html) {
+        const tpl = document.createElement('template');
+        tpl.innerHTML = String(html ?? '');
+        return (tpl.content.textContent || '')
+          .normalize('NFC')
+          .replace(/[\s\u00a0]+/g, ' ')
+          .trim()
+          .toLowerCase()
+          .replace(/hóa/g, 'hoá')
+          .replace(/kỵ/g, 'kị');
+      }
+
+      // Tên tệp "<cung chức> phi hoá.json", không phân biệt hoa/thường.
+      // Máy chủ tĩnh (GitHub Pages) lại phân biệt, nên thử lần lượt các cách viết thường gặp.
+      function phdFileCandidates(cungChuc) {
+        const ten = String(cungChuc).normalize('NFC').trim();
+        const lower = ten.toLowerCase();
+        const sentence = lower.charAt(0).toUpperCase() + lower.slice(1);   // "Phu thê"
+        const bases = [sentence, ten, lower];                               // "Phu thê", "Phu Thê", "phu thê"
+        const names = bases.flatMap(t => [`${t} phi hoá.json`, `${t} phi hóa.json`]);
+        // Thêm dạng Unicode tổ hợp (NFD): Unikey "Unicode tổ hợp"/macOS có thể lưu tên tệp kiểu này
+        return [...new Set([...names, ...names.map(n => n.normalize('NFD'))])];
+      }
+
+      function phdBuildIndex(data, fileName) {
+        const idx = new Map();
+        (Array.isArray(data?.notes) ? data.notes : []).forEach(n => {
+          const f = n?.fields;
+          if (!Array.isArray(f) || f.length < 2) return;
+          const k = phdNormKey(f[0]);
+          if (!k) return;
+          if (idx.has(k)) { console.warn(`[Phi hóa] Key trùng trong ${fileName}: "${k}" (giữ mục đầu)`); return; }
+          idx.set(k, String(f[1] ?? ''));
+        });
+        return idx;
+      }
+
+      function phdLoad(cungChuc) {
+        const cacheKey = String(cungChuc).normalize('NFC').toLowerCase();
+        if (!_phdCache.has(cacheKey)) {
+          _phdCache.set(cacheKey, (async () => {
+            const dir = PHD_DIR.split('/').map(encodeURIComponent).join('/');
+            const tried = [];
+            for (const name of phdFileCandidates(cungChuc)) {
+              let r;
+              try { r = await fetch(`${dir}/${encodeURIComponent(name)}`); }
+              catch (err) { tried.push(`${name} → lỗi mạng (${err.message})`); continue; }
+              if (!r.ok) { tried.push(`${name} → HTTP ${r.status}`); continue; }
+              try { return { file: name, idx: phdBuildIndex(JSON.parse(await r.text()), name) }; }
+              catch (err) {
+                console.warn(`[Phi hóa] JSON lỗi trong ${name}:`, err);
+                return { error: `Tệp "${name}" không phải JSON hợp lệ: ${err.message}` };
+              }
+            }
+            console.warn(`[Phi hóa] Không tìm thấy tệp cho cung "${cungChuc}". Đã thử:\n` + tried.join('\n'));
+            return {
+              error: location.protocol === 'file:'
+                ? 'Trang đang mở bằng file:// nên trình duyệt chặn đọc JSON. Bật server.'
+                : `Chưa có dữ liệu`,
+            };
+          })());
+        }
+        return _phdCache.get(cacheKey);
+      }
+
+      function phdKeyText(fromTen, h, toTen, self) {
+        return self
+          ? `${fromTen} tự hoá ${HOA_TEN_NGAN[h]}`
+          : `${fromTen} phi hoá ${HOA_TEN_NGAN[h]} nhập ${toTen}`;
+      }
+
+      // Khung box: 4 tab + 4 panel (nội dung nạp sau)
+      function buildPhiHoaDetailBox(chi) {
+        const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
+        if (!json) return '';
+        const tab = _phdTabChi === chi ? _phdTab : 0;
+        const tabs = HOA_TEN_NGAN.map((t, h) =>
+          `<button type="button" class="phd-tab${h === tab ? ' active' : ''}" data-h="${h}" style="--c:${MAU_HOA[h]}">${t}</button>`).join('');
+        const panels = HOA_TEN_NGAN.map((_, h) =>
+          `<div class="phd-panel" data-h="${h}"><div class="phd-msg">Đang tải…</div></div>`).join('');
+        return `<div class="phd-box" data-chi="${chi}" data-tab="${tab}">
+            <div class="phd-tabs">${tabs}</div>
+            <div class="phd-viewport"><div class="phd-track" style="transform:translateX(${-tab * 100}%)">${panels}</div></div>
+          </div>`;
+      }
+
+          // Nạp nội dung cho 4 panel (1 tệp cho cả 4 tứ hóa)
+          function fillPhiHoaDetail(box, chi, token) {
+            const json = (typeof _lastJson !== 'undefined') ? _lastJson : null;
+            const cungPhat = json?.cung.find(c => chiIdx(c.diaChi) === chi);
+            if (!cungPhat) return;
+            const tenOf = ch => json.cung.find(c => chiIdx(c.diaChi) === ch)?.cungChuc || CHI_STR[ch];
+            const msg = t => `<div class="phd-msg">${phdEscape(t)}</div>`;
+    
+            phdLoad(cungPhat.cungChuc).then(res => {
+              if (token !== _phdToken || !box.isConnected) return;   // box đã bị thay
+              HOA_TEN_NGAN.forEach((tenHoa, h) => {
+                const panel = box.querySelector(`.phd-panel[data-h="${h}"]`);
+                if (!panel) return;
+                const to = phiHoa(chi, h);
+                if (to === null) { panel.innerHTML = msg(`Phi hóa ${tenHoa}: không tìm thấy sao trên lá số.`); return; }
+                const key = phdKeyText(cungPhat.cungChuc, h, tenOf(to), to === chi);
+                const head = `<div class="phd-key">${phdEscape(key)}</div>`;
+                if (!res || res.error) {
+                  panel.innerHTML = head + msg(res?.error || 'Không tải được dữ liệu.');
+                  return;
+                }
+                const content = res.idx.get(phdNormKey(key));
+                panel.innerHTML = head + (content != null
+                  ? `<div class="phd-content">${content}</div>`
+                  : msg('Chưa có nội dung cho mục này.'));
+                panel.scrollTop = 0;
+              });
+            });
+          }
+      // Vuốt ngang / bấm tab để đổi tứ hóa; vuốt dọc trong panel để cuộn
+      function bindPhiHoaDetail(box) {
+        const vp = box.querySelector('.phd-viewport');
+        const track = box.querySelector('.phd-track');
+        if (!vp || !track) return;
+        const N = HOA_TEN_NGAN.length;
+        const cur = () => Number(box.dataset.tab) || 0;
+        const setTab = i => {
+          i = Math.max(0, Math.min(N - 1, i));
+          box.dataset.tab = i;
+          _phdTab = i;
+          _phdTabChi = Number(box.dataset.chi);
+          let _phdShow = (() => { try { return localStorage.getItem('phdShow') !== '0'; } catch (e) { return true; } })();
+          track.style.transition = '';
+          track.style.transform = `translateX(${-i * 100}%)`;
+          box.querySelectorAll('.phd-tab').forEach(b => b.classList.toggle('active', Number(b.dataset.h) === i));
+        };
+
+        box.querySelectorAll('.phd-tab').forEach(b => b.addEventListener('click', e => {
+          e.stopPropagation();
+          setTab(Number(b.dataset.h));
+        }));
+
+        let id = null, sx = 0, sy = 0, mode = null, scale = 1;
+        vp.addEventListener('pointerdown', e => {
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
+          id = e.pointerId; sx = e.clientX; sy = e.clientY; mode = null;
+          // Lá số bị scale bằng transform → đổi px màn hình sang px layout
+          scale = (vp.getBoundingClientRect().width / (vp.offsetWidth || 1)) || 1;
+        });
+        vp.addEventListener('pointermove', e => {
+          if (e.pointerId !== id) return;
+          const dx = e.clientX - sx, dy = e.clientY - sy;
+          if (!mode) {
+            if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+            mode = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+            if (mode === 'h') {
+              try { vp.setPointerCapture(id); } catch (err) {}
+              track.style.transition = 'none';
+            }
+          }
+          if (mode !== 'h') return;
+          e.preventDefault();
+          const i = cur();
+          let off = dx / scale;
+          if ((i === 0 && off > 0) || (i === N - 1 && off < 0)) off /= 3;   // kéo quá đầu/cuối: dính lại
+          track.style.transform = `translateX(calc(${-i * 100}% + ${off}px))`;
+        });
+        vp.addEventListener('pointerup', e => {
+          if (e.pointerId !== id) return;
+          if (mode === 'h') {
+            const dx = (e.clientX - sx) / scale;
+            const thr = Math.min(60, vp.offsetWidth * 0.2);
+            setTab(dx < -thr ? cur() + 1 : dx > thr ? cur() - 1 : cur());
+            window.getSelection?.()?.removeAllRanges();
+          }
+          id = null; mode = null;
+        });
+        vp.addEventListener('pointercancel', e => {
+          if (e.pointerId !== id) return;
+          if (mode === 'h') setTab(cur());
+          id = null; mode = null;
+        });
+
+        // Trackpad: vuốt ngang 2 ngón
+        let wheelLock = 0;
+        vp.addEventListener('wheel', e => {
+          if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 20) return;
+          e.preventDefault();
+          const now = Date.now();
+          if (now < wheelLock) return;
+          wheelLock = now + 450;
+          setTab(cur() + (e.deltaX > 0 ? 1 : -1));
+        }, { passive: false });
+      }
+
+         // Kích thước khi ở dạng chi tiết: rộng theo dạng rút gọn (hoặc cả ô giữa nếu chỉ có Phi hóa)
+         function fitPhiHoaDetail(phd, box, center, hasChain, shortW) {
+          const vp = phd.querySelector('.phd-viewport');
+          if (!vp) return;
+          box.style.width = (hasChain ? Math.max(shortW, 220) : center.offsetWidth - 36) + 'px';
+          const extra = box.offsetHeight - vp.offsetHeight;          // tiêu đề, dòng cung, tab, lề
+          const h = Math.max(60, Math.round(center.offsetHeight * 3 / 5) - extra);   // cả box = 2/5 ô giữa
+          vp.style.height = h + 'px';
+          phd.style.setProperty('--phd-max', h + 'px');              // panel dài hơn thì cuộn dọc
+        }
+
+      // Box Phi hóa dạng chi tiết: ẩn các dòng ngắn gọn, gắn phần luận vào cùng box
+      function mountPhiHoaDetail(wrap, chi, center) {
+        const box = wrap.querySelector('.ph-box');
+        if (!box || box.querySelector('.phd-box')) return;
+        const shortW = box.offsetWidth;            // đo khi còn ở dạng ngắn gọn
+        box.classList.add('is-detail');
+        box.insertAdjacentHTML('beforeend', buildPhiHoaDetailBox(chi));
+        const phd = box.querySelector('.phd-box');
+        if (!phd) return;
+        fitPhiHoaDetail(phd, box, center, !!wrap.querySelector('.tt-chain:not(.ph-box)'), shortW);
+        bindPhiHoaDetail(phd);
+        fillPhiHoaDetail(phd, chi, _phdToken);
+      }
+
+      // Box Phi hóa dạng ngắn gọn
+      function unmountPhiHoaDetail(wrap) {
+        const box = wrap.querySelector('.ph-box');
+        if (!box) return;
+        box.querySelector('.phd-box')?.remove();
+        box.classList.remove('is-detail');
+        box.style.width = '';
+      }
+
+      // Nút Chi tiết / Ngắn gọn trong box Phi hóa
+      function bindPhiHoaToggle(wrap, chi, center) {
+        const btn = wrap.querySelector('.ph-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          _phdShow = !_phdShow;
+          try { localStorage.setItem('phdShow', _phdShow ? '1' : '0'); } catch (err) {}
+          btn.textContent = _phdShow ? 'Rút gọn' : 'Chi tiết';
+          if (_phdShow) mountPhiHoaDetail(wrap, chi, center);
+          else unmountPhiHoaDetail(wrap);
+        });
+      }
       // Hiện box ở giữa lá số: luôn có box Phi hóa, thêm box truy tung nếu đang bật
       function showFlyBoxes(state, chi, gridEl) {
         gridEl?.querySelector('.fly-boxes')?.remove();
+        ++_phdToken;
         const center = gridEl?.querySelector('.center');
         if (!center || !state || chi === null) return;
 
         const wrap = document.createElement('div');
         wrap.className = 'fly-boxes';
-        const html = (state.showPhi ? buildPhiHoaBox(chi) : '')
-        + (state.flow && state.arrows.length ? buildChainBox(state) : '');
+        const phBoxHtml = state.showPhi ? buildPhiHoaBox(chi) : '';
+        const chainHtml = state.flow && state.arrows.length ? buildChainBox(state) : '';
+        const html = phBoxHtml + chainHtml;
+        
       if (!html) return;
       wrap.innerHTML = html;
 
@@ -377,6 +639,11 @@ const TUVI_RENDER = (() => {
         wrap.style.maxWidth = (center.offsetWidth - 16) + 'px';
         wrap.style.zIndex = 4;
         gridEl.appendChild(wrap);
+
+        if (wrap.querySelector('.ph-box')) {
+          bindPhiHoaToggle(wrap, chi, center);
+          if (_phdShow) mountPhiHoaDetail(wrap, chi, center);
+        }
       }
 
       // Vẽ mũi tên + box cùng lúc
