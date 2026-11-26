@@ -83,7 +83,7 @@
       scale = applyZoom(scale);
       
 
-      if (hanNav) {
+      if (hanNav && getComputedStyle(hanNav).position !== 'fixed') {
         const bottom = hanNav.getBoundingClientRect().bottom + (parseFloat(getComputedStyle(hanNav).marginBottom) || 0);
         const limit = viewH - 10;
         if (bottom > limit + 0.5 && gridH > 0) {

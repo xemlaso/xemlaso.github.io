@@ -9,8 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,900&display=swap&subset=vietnamese" rel="stylesheet">
   <title>Vận mệnh</title>
     <link rel="stylesheet" href="src/styles.css">
+    <link rel="stylesheet" href="src/css/note.css">
 </head>
 <button id="btnToggleSidebar" id="btnToggleSidebar" class="sidebar-toggle" onclick="toggleSidebar()" title="Ẩn/hiện thanh bên">⇤</button>
+<button id="btnToggleNote" class="note-toggle" onclick="toggleNote()" title="Ghi chú">✎</button>
+<button id="btnSettings" class="settings-toggle" onclick="toggleSettingsMenu(event)" title="Tùy chọn">⚙</button>
+<div id="settingsMenu" class="settings-menu" role="menu">
+  <button type="button" onclick="settingsExportPrompt()"><span class="sm-icon">📋</span><span class="sm-label">Xuất Prompt</span></button>
+  <button type="button" onclick="settingsDownloadImage(this)"><span class="sm-icon">🖼️</span><span class="sm-label">Tải ảnh lá số</span></button>
+</div>
 <body data-layout="desktop">
   <div class="page">
     <div class="main-layout" id="mainLayout">
@@ -289,11 +296,35 @@
         <!-- Lá số -->
         <div class="laso-wrap" id="lasoWrap">
           <!-- <div class="ls-title" id="lsTitle">LÁ SỐ TỬ VI ĐẨU SỐ</div> -->
-          <div class="grid-scaler-outer" id="gridScalerOuter">
-            <div class="grid-scaler" id="gridScaler">
-              <div class="grid" id="grid"></div>
+          <div class="laso-row" id="lasoRow">
+            <div class="grid-scaler-outer" id="gridScalerOuter">
+              <div class="grid-scaler" id="gridScaler">
+                <div class="grid" id="grid"></div>
+              </div>
             </div>
-          </div>
+              <div class="note-sep" id="noteSep" title="Kéo để đổi bề rộng · nháy đúp: về 70/30"></div>
+              <div class="note-panel" id="notePanel">
+                <div class="note-toolbar" id="noteToolbar">
+                  <button type="button" data-cmd="bold" title="Đậm (Ctrl+B)"><b>B</b></button>
+                  <button type="button" data-cmd="italic" title="Nghiêng (Ctrl+I)"><i>I</i></button>
+                  <button type="button" data-cmd="underline" title="Gạch chân (Ctrl+U)"><u>U</u></button>
+                  <button type="button" data-cmd="strikeThrough" title="Gạch ngang"><s>S</s></button>
+                  <span class="note-tb-sep"></span>
+                  <button type="button" data-cmd="formatBlock" data-val="h3" title="Tiêu đề">H</button>
+                  <button type="button" data-cmd="insertUnorderedList" title="Danh sách chấm">•≡</button>
+                  <button type="button" data-cmd="insertOrderedList" title="Danh sách số">1≡</button>
+                  <span class="note-tb-sep"></span>
+                  <button type="button" data-cmd="foreColor" data-val="#c0392b" title="Chữ đỏ"><span class="note-color" style="background:#c0392b"></span></button>
+                  <button type="button" data-cmd="foreColor" data-val="#2e8b57" title="Chữ xanh lá"><span class="note-color" style="background:#2e8b57"></span></button>
+                  <button type="button" data-cmd="foreColor" data-val="#1f4e79" title="Chữ xanh dương"><span class="note-color" style="background:#1f4e79"></span></button>
+                  <button type="button" data-cmd="foreColor" data-val="#1a1008" title="Chữ đen"><span class="note-color" style="background:#1a1008"></span></button>
+                  <button type="button" data-cmd="hiliteColor" data-val="#fff3a0" title="Tô nền vàng"><span class="note-color" style="background:#fff3a0;border:1px solid #d9c96b"></span></button>
+                  <span class="note-tb-sep"></span>
+                  <button type="button" data-cmd="removeFormat" title="Xóa định dạng">✕</button>
+                </div>
+                <div class="note-editor" id="noteEditor" contenteditable="true" spellcheck="false" data-placeholder="Ghi chú… (không được lưu, tải lại trang là mất)"></div>
+              </div>
+            </div>
           <div id="lysoApiWrap" style="display:none;">
             <img id="lysoApiImage" alt="Lá số lyso.vn" style="max-width:100%;height:auto;border:1px solid #c8b88a;border-radius:6px;background:#fff;">
           </div>
@@ -534,6 +565,8 @@
   <script src="src/js/features/layout-scale.js?v=winh"></script>
   <script src="src/js/features/layout-responsive.js"></script>
   <script src="src/js/features/layout-resize.js"></script>
+  <script src="src/js/features/note-panel.js"></script>
+  <script src="src/js/features/desktop-tools.js"></script>
   <script src="src/js/features/chatbot.js"></script>
   <script src="src/js/features/lunar-calendar.js"></script>
   <script src="src/js/features/lap-so-dialog.js"></script>
