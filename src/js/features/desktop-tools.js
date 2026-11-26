@@ -70,6 +70,10 @@
     }
   
     function init() {
+            // Không khôi phục vị trí cuộn cũ khi tải lại trang; desktop luôn bắt đầu từ đầu trang
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (isDesktop()) window.scrollTo(0, 0);
+    
       syncHanBar();
       window.addEventListener('resize', syncHanBar);
       const col = $('colLaso');

@@ -17,6 +17,7 @@
 <div id="settingsMenu" class="settings-menu" role="menu">
   <button type="button" onclick="settingsExportPrompt()"><span class="sm-icon">📋</span><span class="sm-label">Xuất Prompt</span></button>
   <button type="button" onclick="settingsDownloadImage(this)"><span class="sm-icon">🖼️</span><span class="sm-label">Tải ảnh lá số</span></button>
+  <button type="button" id="menuDraw" onclick="settingsToggleDraw()"><span class="sm-icon">✏️</span><span class="sm-label">Vẽ trên lá số</span><span class="sm-check">✓</span></button>
 </div>
 <body data-layout="desktop">
   <div class="page">
@@ -337,6 +338,26 @@
           </div>
           <!-- Năm xem hạn & Giờ xem hạn -->
           <div id="hanNavBar" class="han-nav-bar">
+            <div id="drawToolbar" class="draw-toolbar">
+              <button type="button" data-tool="free" class="on" title="Vẽ tự do">✎</button>
+              <button type="button" data-tool="arrow" title="Mũi tên">↗</button>
+              <button type="button" data-tool="ellipse" title="Hình tròn (giữ Shift: tròn đều)">◯</button>
+              <button type="button" data-tool="rect" title="Hình vuông (giữ Shift: vuông đều)">▢</button>
+              <span class="draw-sep"></span>
+              <button type="button" data-color="#2e8b57" style="background:#2e8b57" title="Lộc"></button>
+              <button type="button" data-color="#c0392b" style="background:#c0392b" title="Quyền"></button>
+              <button type="button" data-color="#7d3c98" style="background:#7d3c98" title="Khoa"></button>
+              <button type="button" data-color="#222222" style="background:#222222" title="Kị"></button>
+              <button type="button" data-color="#1f4e79" style="background:#1f4e79" title="Xanh dương"></button>
+              <button type="button" data-color="#e67e22" style="background:#e67e22" title="Cam"></button>
+              <input type="color" id="drawColor" value="#c0392b" title="Màu khác">
+              <span class="draw-sep"></span>
+              <label class="draw-width">Độ dày <input type="range" id="drawWidth" min="1" max="12" value="3"><span id="drawWidthVal">3</span></label>
+              <span class="draw-sep"></span>
+              <button type="button" data-act="undo" title="Hoàn tác (Ctrl+Z)">↶</button>
+              <button type="button" data-act="clear" title="Xóa hết nét vẽ">🗑</button>
+              <button type="button" data-act="close" title="Tắt vẽ (xóa hết nét)">✕</button>
+            </div>
             <label id="chkXemHanLabel" class="han-nav-check-label">
               <input type="checkbox" id="chkXemHan" onchange="onNamXemChange()"
                 class="han-nav-check-input">
@@ -567,6 +588,7 @@
   <script src="src/js/features/layout-resize.js"></script>
   <script src="src/js/features/note-panel.js"></script>
   <script src="src/js/features/desktop-tools.js"></script>
+  <script src="src/js/features/draw-tools.js"></script>
   <script src="src/js/features/chatbot.js"></script>
   <script src="src/js/features/lunar-calendar.js"></script>
   <script src="src/js/features/lap-so-dialog.js"></script>

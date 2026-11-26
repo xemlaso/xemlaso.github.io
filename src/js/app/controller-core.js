@@ -149,7 +149,7 @@
             const wrap = document.getElementById('lasoWrap');
             const isFirstRender = wrap.style.display === 'none' || wrap.style.display === '';
             wrap.style.display = 'block';
-            if (isFirstRender) {
+            if (isFirstRender && document.body.dataset.layout !== 'desktop') {   // desktop: lá số đã ở sẵn trong màn hình
               wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
             requestAnimationFrame(() => { applyResponsiveLayout(); });
@@ -200,7 +200,7 @@
       const wrap = document.getElementById('lasoWrap');
       const isFirstRender = wrap.style.display === 'none' || wrap.style.display === '';
       wrap.style.display = 'block';
-      if (isFirstRender) {
+      if (isFirstRender && document.body.dataset.layout !== 'desktop') {   // desktop: lá số đã ở sẵn trong màn hình
         wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 

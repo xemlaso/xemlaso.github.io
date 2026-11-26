@@ -125,3 +125,42 @@
         background: rgba(255, 255, 255, .96);
         border-top: 1px solid #e5dcc4;
       }
+
+
+          /* ── Vẽ trên lá số ─────────────────────────────────────────── */
+    .draw-svg {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%;
+        overflow: visible;
+        z-index: 50;                   /* trên mọi thứ trong lá số */
+        pointer-events: none;
+      }
+      body.draw-on .draw-svg { pointer-events: auto; cursor: crosshair; touch-action: none; }
+  
+      /* Mục menu ⚙ có dấu ✓ khi đang bật */
+      .settings-menu .sm-check { margin-left: auto; visibility: hidden; color: #8b5e1a; font-weight: bold; }
+      .settings-menu button.checked .sm-check { visibility: visible; }
+  
+      /* Thanh công cụ vẽ: hàng riêng ở trên cùng trong thanh Xem hạn (đáy màn hình) */
+      .draw-toolbar { display: none; }
+      body.draw-on .draw-toolbar {
+        display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px;
+        flex-basis: 100%;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #e5dcc4;
+      }
+      .draw-toolbar button {
+        min-width: 28px; height: 28px; padding: 0 6px;
+        border: 1px solid #c8b88a; border-radius: 6px;
+        background: #fff; color: #4a2e08;
+        font: 15px/1 Arial, sans-serif; cursor: pointer;
+      }
+      .draw-toolbar button:hover { background: #f5efe0; }
+      .draw-toolbar button[data-tool].on { background: #8b5e1a; border-color: #8b5e1a; color: #fff; }
+      .draw-toolbar button[data-color] { min-width: 22px; width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #c8b88a; }
+      .draw-toolbar button[data-color].on { box-shadow: 0 0 0 2px #4a2e08; }
+      .draw-toolbar input[type="color"] { width: 28px; height: 26px; padding: 0; border: 1px solid #c8b88a; border-radius: 6px; background: #fff; cursor: pointer; }
+      .draw-toolbar .draw-width { display: flex; align-items: center; gap: 4px; font: 12px Arial, sans-serif; color: #4a2e08; }
+      .draw-toolbar .draw-width input { width: 80px; accent-color: #8b5e1a; }
+      .draw-toolbar .draw-width span { min-width: 16px; text-align: right; }
+      .draw-toolbar .draw-sep { width: 1px; height: 20px; background: #e0d6bd; margin: 0 4px; }
