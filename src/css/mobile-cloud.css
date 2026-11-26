@@ -1,0 +1,150 @@
+/* src/css/mobile-cloud.css – mobile: thanh đáy ☁ / 📝 / 💾 và bảng toàn màn hình (đặt SAU cloud.css) */
+.m-bar, .m-bar-spacer, .m-sheet { display: none; }
+body[data-layout="mobile"] .m-bar-spacer { display: block; height: calc(52px + env(safe-area-inset-bottom)); }
+body[data-layout="mobile"] .m-bar:not([hidden]) {
+  display: flex;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 9000;
+  height: calc(52px + env(safe-area-inset-bottom));
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  box-sizing: border-box;
+  background: #fff;
+  border-top: 1px solid #d7dee7;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, .06);
+}
+.m-bar-btn {
+  flex: 1 1 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  height: 52px; padding: 0;
+  border: 0; background: none; color: #1f4e79;
+  font: bold 11px Arial, sans-serif;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.m-bar-btn:active { background: #eef3f8; }
+.m-bar-btn:disabled { opacity: .35; cursor: default; background: none; }
+.m-bar-btn + .m-bar-btn { border-left: 1px solid #eef1f5; }
+.m-ico { position: relative; font-size: 20px; line-height: 24px; }
+.m-dot {
+  display: none; position: absolute; top: -1px; right: -7px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #e67e22; border: 2px solid #fff;
+}
+.m-bar-btn.has-dot .m-dot { display: block; }
+
+body[data-layout="mobile"] .m-sheet:not([hidden]) {
+  display: flex; flex-direction: column;
+  position: fixed; left: 0; right: 0; top: 0; height: 100%;
+  z-index: 9500;
+  background: #f3f5f8;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: border-box;
+}
+html.m-sheet-open, html.m-sheet-open body { overflow: hidden; }
+.m-sheet-head {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 8px;
+  padding: calc(8px + env(safe-area-inset-top)) 10px 8px 14px;
+  background: #1f4e79; color: #fff;
+  font: bold 15px Arial, sans-serif;
+}
+.m-sheet-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m-sheet-close, .m-sheet-save {
+  flex: 0 0 auto; height: 34px; padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, .5); border-radius: 8px;
+  background: transparent; color: #fff;
+  font: bold 14px Arial, sans-serif; cursor: pointer;
+}
+.m-sheet-close { width: 38px; padding: 0; font-size: 16px; }
+.m-sheet-body {
+  flex: 1 1 auto; min-height: 0;
+  display: flex; flex-direction: column;
+  padding: 10px;
+  overflow: hidden;
+}
+
+/* Danh sách trong bảng: lấp đầy chiều cao, chữ 16px để iOS không tự phóng to khi gõ */
+#mSheetCloud .cloud-panel {
+  flex: 1 1 auto; min-height: 0;
+  display: flex; flex-direction: column;
+  margin: 0; font-size: 14px;
+}
+#mSheetCloud #cloudList { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+#mSheetCloud .cl-items { flex: 1 1 auto; max-height: none; min-height: 0; -webkit-overflow-scrolling: touch; }
+#mSheetCloud .cl-row { gap: 8px; margin-top: 8px; }
+#mSheetCloud .cl-row select,
+#mSheetCloud .cl-row .cl-search { height: 38px; font-size: 16px; }
+#mSheetCloud .cl-row .cl-sort { max-width: 46%; }
+#mSheetCloud .cl-item { padding: 9px 8px; gap: 8px; }
+#mSheetCloud .cl-snip { font-size: 12px; }
+#mSheetCloud .cl-del { display: none; font-size: 16px; padding: 4px 6px; }   /* chỉ hiện ở lá số đang mở, tránh chạm nhầm */
+#mSheetCloud .cl-item.active .cl-del { display: inline-block; opacity: .85; }
+body[data-layout="mobile"] .cl-toast-undo button { padding: 8px 14px; font-size: 14px; }
+#mSheetCloud .cl-btn { padding: 10px 12px; font-size: 14px; }
+
+/* Note trong bảng */
+#mSheetNote .m-sheet-body { padding: 0; }
+#mSheetNote .note-panel {
+  display: flex; flex-direction: column;
+  flex: 1 1 auto; min-height: 0;
+  border: 0; border-radius: 0; background: #fff;
+}
+#mSheetNote .note-toolbar {
+  flex: 0 0 auto; flex-wrap: nowrap; overflow-x: auto;
+  border-radius: 0; padding: 6px 8px; gap: 4px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+#mSheetNote .note-toolbar::-webkit-scrollbar { display: none; }
+#mSheetNote .note-toolbar button { flex: 0 0 auto; min-width: 34px; height: 34px; font-size: 15px; }
+#mSheetNote .note-toolbar .note-tb-sep { flex: 0 0 1px; height: 24px; }
+#mSheetNote .note-editor { font-size: 16px; padding: 12px 14px; -webkit-overflow-scrolling: touch; }
+#mSheetNote .note-editor h3 { font-size: 18px; }
+#mSheetNote .note-gallery { border-radius: 0; padding: 6px 10px 8px; }
+#mSheetNote .ng-add { padding: 6px 12px; font-size: 13px; }
+#mSheetNote .ng-item { width: 72px; height: 72px; }
+#mSheetNote .ng-btn { opacity: 1; width: 24px; height: 24px; font-size: 13px; line-height: 24px; }
+#mSheetCloud .cl-head { display: none; }                             /* trùng tiêu đề bảng */
+html.m-sheet-open .cl-toast { top: auto; bottom: calc(20px + env(safe-area-inset-bottom)); }
+
+/* ── Tab Cấu hình (bảng) / tab Tìm (trang) ─────────────────────── */
+body[data-layout="mobile"] #tabSEARCH,
+body[data-layout="mobile"] #tabCFG { display: none !important; }
+
+#mSheetCfg .m-sheet-body { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+#mSheetCfg #cfgPanel {
+  display: block !important;                       /* thắng style="display:none" do switchTab đặt */
+  flex: 0 0 auto;
+  margin: 0 !important;
+  border-radius: 10px;
+}
+#mSheetCfg input:not([type="range"]), #mSheetCfg select { font-size: 16px !important; }
+
+/* Thanh đáy: tab đang xem */
+.m-bar-btn.on { color: #e67e22; box-shadow: inset 0 3px 0 #e67e22; }
+
+/* Tab Lá số: không có hàng ◀ ▶ ☰ ★ */
+body[data-layout="mobile"]:not(.m-page-search) #searchResultNav { display: none !important; }
+
+/* Tab Tìm: chỉ khung tìm kiếm + danh sách + ◀ ▶ ☰ ★ + lá số kết quả */
+body.m-page-search #formAreaLaso > .tab-bar,
+body.m-page-search #formWrap,
+body.m-page-search #err,
+body.m-page-search #btnNoteMobile { display: none !important; }
+body.m-page-search.m-search-empty #lasoWrap { display: none !important; }   /* chưa có kết quả: chưa có lá số */
+body.m-page-search #searchPanel { display: block !important; }
+body.m-page-search #searchPanel input,
+body.m-page-search #searchPanel select { font-size: 16px; }
+body[data-layout="mobile"] #searchResultList {                           /* danh sách dài: cuộn trong khung */
+  max-height: 45vh; overflow-y: auto; overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+body[data-layout="mobile"] #searchResultNav { margin: 0 0 8px; }
+
+/* Nút 📝 Note trong hàng Xem hạn / Tương tác… */
+.m-note-btn { display: none; }
+body[data-layout="mobile"] .m-note-btn {
+  display: inline-flex; align-items: center; gap: 4px; position: relative;
+  padding: 4px 10px; border: 1px solid #1f4e79; border-radius: 6px;
+  background: #fff; color: #1f4e79; font: bold 12px Arial, sans-serif; cursor: pointer;
+}
+.m-note-btn:disabled { opacity: .4; cursor: default; }
+.m-note-btn .m-dot { top: -4px; right: -4px; }
+.m-note-btn.has-dot .m-dot { display: block; }

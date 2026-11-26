@@ -13,7 +13,8 @@
   
     let user = null;          // người đang đăng nhập (đã xác minh email)
     let unsub = null;         // huỷ theo dõi Firestore
-    let items = [];           // [{ id, ...data }]
+    let items = [];           // [{ id, ...data }] – đang hiển thị (đã bỏ lá số chờ xóa)
+    let allItems = [];        // toàn bộ lá số nhận từ Firestore
     let loaded = false;
     let query = '';
     let currentId = null;     // lá số đang mở (đã lưu)
@@ -38,7 +39,7 @@
             <div class="rc-title">${esc(title)}</div>
             <div class="rc-text">${text}</div>
             <div class="rc-actions">${buttons.map(b =>
-              `<button type="button" data-key="${b.key}" class="${b.kind === 'ok' ? 'rc-ok cl-ok' : b.kind === 'danger' ? 'rc-ok' : 'rc-cancel'}">${esc(b.label)}</button>`).join('')}
+              `<button type="button" data-key="${b.key}" class="${b.kind === 'ok' ? 'rc-ok cl-ok' : b.kind === 'danger' ? 'rc-ok cl-danger' : 'rc-cancel'}">${esc(b.label)}</button>`).join('')}
             </div></div>`;
         const done = key => { ov.remove(); document.removeEventListener('keydown', onKey, true); resolve(key); };
         const onKey = e => { if (e.key === 'Escape') { e.stopPropagation(); done(null); } };
@@ -257,10 +258,11 @@
     function subscribe() {
       unsub?.();
       loaded = false;
-      items = [];
+      items = []; allItems = [];
       renderList();
       unsub = col().onSnapshot(snap => {
-        items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        applyPending();
         loaded = true;
         if (currentId && !items.some(x => x.id === currentId)) { currentId = null; savedForm = null; }
         renderList();
@@ -276,6 +278,21 @@
       if (busy) return false;
       if (!window.FB?.auth.currentUser) { toast('Đăng nhập để lưu lá số.'); return false; }
       if (!user) { toast('Cần xác minh email trước khi lưu lá số.'); return false; }
+
+      const hoTenEl = $('hoTen');
+      if (!(hoTenEl?.value || '').trim()) {                 // chưa nhập họ tên → báo, đưa con trỏ tới ô Họ tên
+        toast('Chưa nhập họ tên. Nhập họ tên rồi bấm Lưu.');
+        window.MCLOUD_closeSheet?.();                       // mobile: đóng bảng Note / Lá số để thấy ô Họ tên
+        if (hoTenEl) {
+          hoTenEl.classList.add('cl-missing');
+          hoTenEl.addEventListener('input', () => hoTenEl.classList.remove('cl-missing'), { once: true });
+          hoTenEl.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          setTimeout(() => hoTenEl.focus({ preventScroll: true }), 50);
+        }
+        return false;
+      }
+
+      
       let mode = forceMode || 'new';
       if (!forceMode && currentId) {
         const cur = items.find(x => x.id === currentId);
@@ -319,11 +336,16 @@
       if (key === 'save') return currentId ? saveFlow('update') : saveFlow('new');
       return false;
     }
-    window.CLOUD_beforeLogout = confirmLeave;
+    window.CLOUD_beforeLogout = async () => {
+        const ok = await confirmLeave();
+        if (ok) await flushDeletes();                     // đăng xuất: xóa luôn các lá số đang chờ hoàn tác
+        return ok;
+      };
   
     // ── Mở một lá số ────────────────────────────────────────────
+    const announceOpened = id => document.dispatchEvent(new CustomEvent('cloud-opened', { detail: { id } }));
     async function openLaso(id) {
-      if (id === currentId) return;
+      if (id === currentId) { announceOpened(id); return; }
       const d = items.find(x => x.id === id);
       if (!d) return;
       if (!(await confirmLeave())) return;
@@ -335,28 +357,114 @@
       setNote(d.note);
       currentId = id;
       markSaved();
+      announceOpened(id);
     }
   
-    async function deleteLaso(id) {
-      const d = items.find(x => x.id === id);
-      const key = await askChoice('Xóa lá số',
-        `Xóa lá số <b>${esc(d?.hoTen || '(không tên)')}</b>${d?.dl?.y ? ' (' + d.dl.y + ')' : ''}? Không khôi phục được.`,
-        [{ key: 'cancel', label: 'Hủy' }, { key: 'del', label: 'Xóa', kind: 'danger' }]);
-      if (key !== 'del') return;
-      try {
-        const anh = await anhCol(id).get();              // Firestore không tự xóa dữ liệu con
-        for (const a of anh.docs) await a.ref.delete();
-        await col().doc(id).delete();
-        if (id === currentId) {                    // xóa đúng lá số đang mở: bỏ liên kết, dọn note & ảnh
-          currentId = null; savedForm = null; savedNote = '';
-          images = []; deletedImageIds = [];
-          const ed = noteEl(); if (ed) ed.innerHTML = '';
-          renderList(); renderGallery();
-        }
-        toast('Đã xóa lá số.');
-      } catch (err) {
-        toast('Không xóa được: ' + err.message);
+    // ── Xóa lá số: hỏi → ẩn khỏi danh sách → "Hoàn tác" trong 8 giây → mới xóa thật ──
+    const UNDO_MS = 8000;
+    const pendingDel = new Map();   // id → { timer, toast, restore }
+    const goneIds = new Set();      // đã xóa xong, chờ Firestore báo về
+    function applyPending() { items = allItems.filter(x => !pendingDel.has(x.id) && !goneIds.has(x.id)); }
+  
+    const noteHasContent = html => /<img/i.test(html || '') ||
+      !!String(html || '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').trim();
+  
+      let askingDel = false;
+      async function deleteLaso(id) {
+        if (askingDel || document.querySelector('.rc-overlay')) return;     // đang có hộp thoại → không mở thêm
+        const d = items.find(x => x.id === id);
+        if (!d) return;
+        askingDel = true;
+        try { await deleteLasoAsk(id, d); } finally { askingDel = false; }
       }
+      async function deleteLasoAsk(id, d) {
+      const info = [];
+      if (d.soAnh > 0) info.push(d.soAnh + ' ảnh');
+      info.push(noteHasContent(d.note) ? 'có ghi chú' : 'không có ghi chú');
+      const isCur = id === currentId;
+      const key = await askChoice('Xóa lá số',
+        `<div class="cl-del-name"><b>${esc(d.hoTen || '(không tên)')}</b>${d.dl?.y ? ' (' + esc(d.dl.y) + ')' : ''}</div>
+         <div class="cl-del-meta">${esc(info.join(' · '))}</div>
+         ${isCur ? '<div class="cl-del-note">Lá số này đang mở: nội dung trên màn hình vẫn được giữ, bấm Lưu nếu muốn lưu lại thành lá số mới.</div>' : ''}
+         <div class="cl-del-note">Sau khi xóa, bạn có ${UNDO_MS / 1000} giây để hoàn tác.</div>`,
+        [{ key: 'cancel', label: 'Hủy' }, { key: 'del', label: 'Xóa', kind: 'danger' }]);
+      if (key !== 'del' || !items.some(x => x.id === id)) return;
+  
+      flushDeletes();                                   // lá số đang chờ xóa trước đó: xóa luôn
+  
+      // Đang mở đúng lá số này: bỏ liên kết nhưng giữ form, note, ảnh trên màn hình
+      let restoreCur = null;
+      if (isCur) {
+        const prev = {
+          savedForm, savedNote,
+          deleted: deletedImageIds.slice(),
+          oldIds: new Set(images.filter(x => !x.isNew).map(x => x.id)),
+        };
+        currentId = null; savedForm = null; savedNote = '';
+        images.forEach(x => { x.isNew = true; });       // "Lưu" sau đó sẽ ghi lại toàn bộ ảnh vào lá số mới
+        deletedImageIds = [];
+        restoreCur = () => {
+          if (currentId !== null) return;               // đã lưu / mở lá số khác trong lúc chờ → không liên kết lại
+          currentId = id;
+          savedForm = prev.savedForm; savedNote = prev.savedNote;
+          images.forEach(x => { if (prev.oldIds.has(x.id)) x.isNew = false; });
+          deletedImageIds = prev.deleted.concat([...prev.oldIds].filter(oid => !images.some(x => x.id === oid) && !prev.deleted.includes(oid)));
+        };
+      }
+  
+      const p = { restore: restoreCur };
+      pendingDel.set(id, p);
+      applyPending(); renderList(); renderGallery();
+      p.toast = undoToast(`Đã xóa <b>${esc(d.hoTen || '(không tên)')}</b>.`, () => undoDelete(id), UNDO_MS);
+      p.timer = setTimeout(() => commitDelete(id), UNDO_MS);
+    }
+  
+    function undoDelete(id) {
+      const p = pendingDel.get(id);
+      if (!p) return;
+      clearTimeout(p.timer);
+      p.toast?.close();
+      pendingDel.delete(id);
+      p.restore?.();
+      applyPending(); renderList(); renderGallery();
+      toast('Đã hoàn tác.');
+    }
+  
+    async function commitDelete(id) {
+      const p = pendingDel.get(id);
+      if (!p) return;
+      clearTimeout(p.timer);
+      p.toast?.close();
+      pendingDel.delete(id);
+      goneIds.add(id);
+      applyPending(); renderList();
+      try {
+        const anh = await anhCol(id).get();               // Firestore không tự xóa dữ liệu con
+        const batch = window.FB.db.batch();               // ảnh + lá số xóa cùng lúc: xong hết hoặc không gì cả
+        anh.docs.forEach(a => batch.delete(a.ref));
+        batch.delete(col().doc(id));
+        await batch.commit();
+      } catch (err) {
+        console.warn('[Xóa lá số]', err);
+        goneIds.delete(id);
+        p.restore?.();
+        applyPending(); renderList(); renderGallery();
+        toast('Không xóa được: ' + (err.code === 'permission-denied' ? 'không có quyền.' : err.message));
+      }
+    }
+    const flushDeletes = () => Promise.all([...pendingDel.keys()].map(commitDelete));
+    // Đóng / tải lại trang khi còn lá số chờ xóa: cố gửi lệnh xóa (nếu không kịp, lá số vẫn còn – không mất dữ liệu)
+    window.addEventListener('pagehide', () => { if (pendingDel.size) flushDeletes(); });
+  
+    // Thông báo có nút "Hoàn tác"
+    function undoToast(html, onUndo, ms) {
+      const t = document.createElement('div');
+      t.className = 'cl-toast cl-toast-undo';
+      t.innerHTML = `<span>${html}</span><button type="button">Hoàn tác</button><i style="animation-duration:${ms}ms"></i>`;
+      const close = () => t.remove();
+      t.querySelector('button').addEventListener('click', () => { close(); onUndo(); });
+      document.body.appendChild(t);
+      return { close };
     }
   
     // ── Nút "Lập lá số": đang mở lá số đã lưu mà form đã sửa → hỏi ──
@@ -710,7 +818,8 @@
       user = ok ? u : null;
       if (!u) {                                    // đăng xuất: xóa liên kết và note khỏi màn hình
         if (currentId || savedForm) { images = []; setNote(''); }
-        currentId = null; savedForm = null; savedNote = ''; items = []; query = '';
+        pendingDel.forEach(p => { clearTimeout(p.timer); p.toast?.close(); }); pendingDel.clear(); goneIds.clear();
+        currentId = null; savedForm = null; savedNote = ''; items = []; allItems = []; query = '';
         images = []; deletedImageIds = []; renderGallery();
       }
       if (user) subscribe();
