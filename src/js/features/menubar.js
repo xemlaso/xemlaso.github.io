@@ -277,8 +277,36 @@
       setTimeout(() => t.remove(), 3500);
     }
   
+    // ── Nút ✎ Note và ⚙ Tùy chọn: đưa vào đầu thanh Xem hạn (#hanNavBar) ──
+    function placeHanButtons() {
+      const han = $('hanNavBar'), note = $('btnToggleNote'), set = $('btnSettings');
+      if (!han || !note || !set || note.parentNode === han) return;
+      note.innerHTML = '<span class="hb-ico">✎</span>Note';
+      set.innerHTML = '<span class="hb-ico">⚙</span>Tùy chọn';
+      const div = document.createElement('span');
+      div.className = 'han-nav-divider hb-div';
+      div.textContent = '|';
+      // sau thanh công cụ vẽ (hàng riêng phía trên), trước "Xem hạn"
+      const before = $('btnNoteMobile') || $('chkXemHanLabel') || null;
+      han.insertBefore(note, before);
+      han.insertBefore(set, before);
+      han.insertBefore(div, before);
+      // Menu ⚙ mở lên trên, ngay trên nút (nút giờ nằm trong thanh dưới, không còn ở góc cố định)
+      set.addEventListener('click', placeSettingsMenu);
+      window.addEventListener('resize', () => $('settingsMenu')?.classList.remove('open'));
+      window.dispatchEvent(new Event('resize'));               // thanh dưới đổi chiều cao → căn lại lá số
+    }
+    function placeSettingsMenu() {
+      const menu = $('settingsMenu'), set = $('btnSettings');
+      if (!menu || !set) return;
+      const r = set.getBoundingClientRect();
+      menu.style.left = Math.max(8, Math.min(r.left, window.innerWidth - menu.offsetWidth - 8)) + 'px';
+      menu.style.bottom = (window.innerHeight - r.top + 6) + 'px';
+    }
+  
     // ── Khởi động ───────────────────────────────────────────────
     function init() {
+      placeHanButtons();
       build();
       wrapDirtyCheck();
       guardSearchApi();
