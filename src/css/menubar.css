@@ -130,3 +130,12 @@ body.mb-page-cfg #formArea {
   padding-bottom: 12px !important;
   box-sizing: border-box;
 }
+
+/* Thanh "Sao lưu" trong thanh Xem hạn (desktop): hàng riêng phía trên, chỉ khi bật Xem hạn */
+body[data-layout="desktop"] #hanNavBar #luuModeBar {
+  display: none !important;
+  flex-basis: 100%;
+  margin: 0 !important;
+  justify-content: center;
+}
+body[data-layout="desktop"].han-xem-on #hanNavBar #luuModeBar { display: flex !important; }

@@ -304,9 +304,44 @@
       menu.style.bottom = (window.innerHeight - r.top + 6) + 'px';
     }
   
+    // ── Thanh "Sao lưu" (#luuModeBar): desktop đưa vào thanh Xem hạn ở đáy, thành hàng riêng phía trên,
+    //    chỉ hiện khi bật "Xem hạn" (trước đây nằm dưới lá số nên bị thanh đáy che mất) ──
+    let luuHome = null;
+    function placeLuuBar() {
+      const luu = $('luuModeBar'), han = $('hanNavBar');
+      if (!luu || !han) return;
+      if (!luuHome) { luuHome = document.createComment(' luuModeBar (vị trí mobile) '); luu.parentNode.insertBefore(luuHome, luu); }
+      if (isDesktop()) {
+        const draw = $('drawToolbar');
+        const after = draw && draw.parentNode === han ? draw.nextSibling : han.firstChild;
+        if (luu.parentNode !== han) han.insertBefore(luu, after);
+      } else if (luu.previousSibling !== luuHome) {
+        luuHome.parentNode.insertBefore(luu, luuHome.nextSibling);
+      }
+      syncLuuBar();
+    }
+    function syncLuuBar() {
+      const on = !!$('chkXemHan')?.checked;
+      if (document.body.classList.contains('han-xem-on') === on) return;
+      document.body.classList.toggle('han-xem-on', on);
+      if (isDesktop()) requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));  // thanh đáy cao lên/thấp xuống
+    }
+    function hookXemHan() {
+      $('chkXemHan')?.addEventListener('change', syncLuuBar);
+      // "Xem hạn" còn được bật bằng code (bấm ‹ › năm xem) → bắt qua onNamXemChange
+      const orig = window.onNamXemChange;
+      if (typeof orig === 'function' && !orig._luuHooked) {
+        const w = function () { const r = orig.apply(this, arguments); syncLuuBar(); return r; };
+        w._luuHooked = true;
+        window.onNamXemChange = w;
+      }
+    }
+  
     // ── Khởi động ───────────────────────────────────────────────
     function init() {
       placeHanButtons();
+      placeLuuBar();
+      hookXemHan();
       build();
       wrapDirtyCheck();
       guardSearchApi();
@@ -320,6 +355,7 @@
         if (el) new MutationObserver(syncFromTab).observe(el, { attributes: true, attributeFilter: ['class'] });
       });
       new MutationObserver(() => {
+        placeLuuBar();
         if (!isDesktop()) { page = 'laso'; formSnap = null; closeAccMenu(); }
         else syncFromTab();
         syncUi();

@@ -1,3 +1,4 @@
+// src/js/features/han-controls.js
 // ── Năm xem hạn ──────────────────────────────────────────
     function changeNamXem(delta) {
       const chk = document.getElementById('chkXemHan');

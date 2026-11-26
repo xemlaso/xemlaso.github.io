@@ -32,18 +32,37 @@
       if (typeof scaleGrid === 'function') scaleGrid();
     }
   
-    function setNoteOpen(open) {
+    // Bật/tắt Note là lựa chọn chung cho mọi lá số (không phụ thuộc lá số có note hay không),
+    // nhớ qua các lần mở trang (localStorage 'noteOpen')
+    const OPEN_KEY = 'noteOpen';
+    const loadOpen = () => { try { return localStorage.getItem(OPEN_KEY) === '1'; } catch (e) { return false; } };
+    const saveOpen = v => { try { localStorage.setItem(OPEN_KEY, v ? '1' : '0'); } catch (e) {} };
+
+    // opts.save: ghi nhớ lựa chọn (chỉ khi người dùng bấm); opts.focus: đặt con trỏ vào note
+    function setNoteOpen(open, opts = {}) {
       if (open && !isDesktop()) return;
+      if (opts.save) saveOpen(open);
       document.body.classList.toggle('note-open', open);
       const btn = $('btnToggleNote');
       if (btn) btn.classList.toggle('active', open);
       relayout(true);
-      if (open) $('noteEditor')?.focus();
+      if (open && opts.focus) $('noteEditor')?.focus();
     }
   
+       // Chỉ nút Note (#btnToggleNote) mới mở/tắt được Note.
+    // Mọi chỗ khác gọi toggleNote() (vd. mở lá số có note) → bỏ qua.
+    let fromNoteBtn = false;
+    document.addEventListener('click', e => {
+      if (!e.target.closest?.('#btnToggleNote')) return;
+      fromNoteBtn = true;                                   // chạy TRƯỚC onclick="toggleNote()" của nút
+      setTimeout(() => { fromNoteBtn = false; }, 0);
+    }, true);
     window.toggleNote = function () {
-      setNoteOpen(!document.body.classList.contains('note-open'));
+      if (!fromNoteBtn) return;
+      fromNoteBtn = false;
+      setNoteOpen(!document.body.classList.contains('note-open'), { save: true, focus: true });
     };
+ 
   
     // ── Kéo separator ────────────────────────────────────────────
     function bindSeparator() {
@@ -139,10 +158,15 @@
       setRatio(loadRatio());
       bindSeparator();
       bindToolbar();
-      // Chuyển sang mobile thì đóng note
-      new MutationObserver(() => {
-        if (!isDesktop() && document.body.classList.contains('note-open')) setNoteOpen(false);
-      }).observe(document.body, { attributes: true, attributeFilter: ['data-layout'] });
+            // Desktop: mở lại theo lựa chọn đã nhớ. Sang mobile thì đóng (không đổi lựa chọn đã nhớ),
+      // về lại desktop thì mở lại nếu trước đó đang bật
+      const syncLayout = () => {
+        const open = document.body.classList.contains('note-open');
+        if (!isDesktop()) { if (open) setNoteOpen(false); }
+        else if (loadOpen() !== open) setNoteOpen(loadOpen());
+      };
+      syncLayout();
+      new MutationObserver(syncLayout).observe(document.body, { attributes: true, attributeFilter: ['data-layout'] });
     }
   
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

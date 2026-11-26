@@ -1,3 +1,4 @@
+// src/js/features/gio-controls.js
 // ── Giờ xem hạn (sync với input #gio) ────────────────────
     // Format hiển thị: "Dậu (17:20)" — tên chi + giờ chính xác từ #gio
     function fmtHHMM(h, m) {

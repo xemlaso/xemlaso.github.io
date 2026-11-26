@@ -1089,60 +1089,42 @@ const TUVI_RENDER = (() => {
           ? { ...L_SAO_THEO_CAN, ...ttlLuuTheoCan }
           : L_SAO_THEO_CAN;
 
-        const dvSaoMap = {}; // chiIndex → [tên sao lưu]
-        if (chiDVMenh !== null) {
-          // Theo địa chi
-          Object.entries(DV_SAO_THEO_MENH).forEach(([tenSao, arr]) => {
-            const chiSao = arr[chiDVMenh];
+          const dvSaoMap = {}; // chiIndex → [tên sao lưu]
+          const themSao = (chiSao, tenSao) => {
+            if (chiSao === undefined || chiSao === null) return;
             if (!dvSaoMap[chiSao]) dvSaoMap[chiSao] = [];
             dvSaoMap[chiSao].push(tenSao);
-          });
-          // Theo thiên can: lấy can của cung ĐV.Mệnh = BANG_THIENCAN_CUNGMENH[canNam][chiDVMenh]
-          const canDVMenh = TUVI_DATA.BANG_THIENCAN_CUNGMENH[canIdx(meta.canNam)][chiDVMenh];
-          Object.entries(DV_SAO_THEO_CAN).forEach(([tenSao, arr]) => {
-            const chiSao = arr[canDVMenh];
-            if (!dvSaoMap[chiSao]) dvSaoMap[chiSao] = [];
-            dvSaoMap[chiSao].push(tenSao);
-          });
-          // An sao L. theo thiên can năm xem hạn
-          const canNamXem = ((namXem - 4) % 10 + 10) % 10;
-          Object.entries(lSaoTheoCanMethod).forEach(([tenSao, arr]) => {
-            const chiSao = arr[canNamXem];
-            if (!dvSaoMap[chiSao]) dvSaoMap[chiSao] = [];
-            dvSaoMap[chiSao].push(tenSao);
-          });
-          // An sao N. theo địa chi năm xem hạn
-          Object.entries(lSaoTheoChiMethod).forEach(([tenSao, arr]) => {
-            const chiSao = arr[chiNamXem];
-            if (!dvSaoMap[chiSao]) dvSaoMap[chiSao] = [];
-            dvSaoMap[chiSao].push(tenSao);
-          });
-
-          // ĐV.Tứ Hóa: theo thiên can cung ĐV.Mệnh
+          };
           const HOA_TEN = ['Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kị'];
           // Lookup: tên sao → chiIndex của cung chứa sao đó (từ cung[])
           const chiCuaSao = (tenSao) => {
             const c = cung.find(c => c.sao.some(s => s.name === tenSao));
             return c ? chiIdx(c.diaChi) : undefined;
           };
-          TUVI_DATA.TU_HOA[canDVMenh].forEach((tenSaoHoa, i) => {
-            const chiSao = chiCuaSao(tenSaoHoa);
-            if (chiSao !== undefined) {
-              if (!dvSaoMap[chiSao]) dvSaoMap[chiSao] = [];
-              dvSaoMap[chiSao].push(`ĐV.${HOA_TEN[i]}`);
-            }
-          });
-
-          // L.Tứ Hóa: theo thiên can năm xem hạn
-          TUVI_DATA.TU_HOA[canNamXem].forEach((tenSaoHoa, i) => {
-            const chiSao = chiCuaSao(tenSaoHoa);
-            if (chiSao !== undefined) {
-              if (!dvSaoMap[chiSao]) dvSaoMap[chiSao] = [];
-              dvSaoMap[chiSao].push(`L.${HOA_TEN[i]}`);
-            }
-          });
-
-        }
+  
+          // ── Sao ĐV.: chỉ khi đã vào đại vận (tuổi xem ≥ số cục) ──
+          if (chiDVMenh !== null) {
+            // Theo địa chi cung ĐV.Mệnh
+            Object.entries(DV_SAO_THEO_MENH).forEach(([tenSao, arr]) => themSao(arr[chiDVMenh], tenSao));
+            // Theo thiên can cung ĐV.Mệnh = BANG_THIENCAN_CUNGMENH[canNam][chiDVMenh]
+            const canDVMenh = TUVI_DATA.BANG_THIENCAN_CUNGMENH[canIdx(meta.canNam)][chiDVMenh];
+            Object.entries(DV_SAO_THEO_CAN).forEach(([tenSao, arr]) => themSao(arr[canDVMenh], tenSao));
+            // ĐV.Tứ Hóa: theo thiên can cung ĐV.Mệnh
+            TUVI_DATA.TU_HOA[canDVMenh].forEach((tenSaoHoa, i) => themSao(chiCuaSao(tenSaoHoa), `ĐV.${HOA_TEN[i]}`));
+          }
+  
+          // ── Sao L. (lưu niên): theo can chi năm xem, KHÔNG phụ thuộc đại vận ──
+          //    An cả khi tuổi xem < số cục; chỉ không an khi xem đúng năm sinh (hoặc trước năm sinh)
+          const tuoiXem = namXem - Number(meta.namAL) + 1;
+          if (xemHan && tuoiXem >= 2) {
+            const canNamXem = ((namXem - 4) % 10 + 10) % 10;
+            // Theo thiên can năm xem hạn
+            Object.entries(lSaoTheoCanMethod).forEach(([tenSao, arr]) => themSao(arr[canNamXem], tenSao));
+            // Theo địa chi năm xem hạn
+            Object.entries(lSaoTheoChiMethod).forEach(([tenSao, arr]) => themSao(arr[chiNamXem], tenSao));
+            // L.Tứ Hóa: theo thiên can năm xem hạn
+            TUVI_DATA.TU_HOA[canNamXem].forEach((tenSaoHoa, i) => themSao(chiCuaSao(tenSaoHoa), `L.${HOA_TEN[i]}`));
+          }
 
         // Lưu Triệt: theo thiên can NĂM XEM (canNamXem)
         // Lưu Tuần: theo địa chi + thiên can NĂM XEM

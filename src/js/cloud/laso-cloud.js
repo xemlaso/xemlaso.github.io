@@ -128,9 +128,7 @@
       ed.innerHTML = cleanNote(html || '');
       hydrateNoteImages();
       renderGallery();
-      const hasText = !!ed.textContent.replace(/\s+/g, '') || images.length > 0;
-      // Lá số có note thì tự mở cột note (không tự đóng nếu người dùng đang mở)
-      if (hasText && !document.body.classList.contains('note-open') && typeof window.toggleNote === 'function') window.toggleNote();
+         // Không tự mở/đóng cột Note: bật/tắt Note là lựa chọn chung của người dùng (note-panel.js)
     }
   
     // ── Form ⇄ dữ liệu ──────────────────────────────────────────
@@ -292,7 +290,7 @@
         return false;
       }
 
-      
+
       let mode = forceMode || 'new';
       if (!forceMode && currentId) {
         const cur = items.find(x => x.id === currentId);
