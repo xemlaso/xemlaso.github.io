@@ -135,6 +135,35 @@
       setOn(!st.on);
     };
   
+      // ── Tạm dừng / tiếp tục khi chuyển tab trên menubar ─────────
+  //   Rời tab Xem lá số: tắt bút (ẩn thanh công cụ) nhưng GIỮ nét vẽ; quay lại thì bật bút + vẽ lại nét.
+  let paused = null;                                        // { strokes } khi đang tạm dừng
+  window.DRAW_suspend = function () {
+    if (!st.on) return;
+    paused = { strokes: layer ? layer.innerHTML : '' };
+    st.on = false;
+    cur = null;
+    document.body.classList.remove('draw-on');              // lớp vẽ vẫn hiện nhưng không bắt chuột
+    $('menuDraw')?.classList.remove('checked');
+    window.dispatchEvent(new Event('resize'));
+  };
+  let refill = null;                                        // nét chờ vẽ lại nếu lá số còn đang vẽ lại
+  window.DRAW_resume = function () {
+    if (!paused) return;
+    const saved = paused;
+    paused = null;
+    setOn(true);                                            // lá số vẽ lại trong lúc vắng → tạo lớp mới
+    if (layer && !layer.childNodes.length && saved.strokes) layer.innerHTML = saved.strokes;
+    // Lá số có thể được vẽ lại thêm lần nữa ngay sau đó (khung hình sau) → lớp vẽ bị thay bằng lớp trống;
+    // trong 1,5 giây đầu, gặp lớp trống thì điền lại nét
+    refill = saved.strokes || null;
+    setTimeout(() => { refill = null; }, 1500);
+  };
+  // Đang tạm dừng mà còn nét vẽ → vẫn cảnh báo khi đóng / tải lại trang
+  window.addEventListener('beforeunload', e => {
+    if (paused && paused.strokes) { e.preventDefault(); e.returnValue = ''; }
+  });
+
     function undo() { layer?.lastChild?.remove(); }
     function clearAll() { layer?.replaceChildren(); }
   
@@ -188,7 +217,11 @@
       bindToolbar();
       // Lá số được vẽ lại (innerHTML thay mới) → lớp vẽ cũ mất; đang bật vẽ thì tạo lớp mới (trống)
       const g = $('grid');
-      if (g) new MutationObserver(() => { if (st.on) ensureOverlay(); }).observe(g, { childList: true });
+      if (g) new MutationObserver(() => {
+        if (!st.on) return;
+        ensureOverlay();
+        if (refill && layer && !layer.childNodes.length) layer.innerHTML = refill;
+      }).observe(g, { childList: true });
       // Chuyển sang mobile → tắt vẽ
       new MutationObserver(() => {
         if (st.on && document.body.dataset.layout !== 'desktop') setOn(false);

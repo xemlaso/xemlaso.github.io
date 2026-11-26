@@ -1,0 +1,149 @@
+/* src/css/menubar.css – thanh menu trên cùng (chỉ desktop). Đặt SAU note.css, cloud.css */
+.menubar { display: none; }
+body[data-layout="desktop"] .menubar {
+  display: flex; align-items: center; gap: 16px;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 950;
+  height: 44px; padding: 0 12px;
+  box-sizing: border-box;
+  background: #fff;
+  border-bottom: 1px solid #e5dcc4;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+  font: 13px Arial, sans-serif; color: #4a2e08;
+}
+
+/* Chừa chỗ cho thanh: nội dung bắt đầu dưới 46px, thanh bên cao vừa phần còn lại */
+body[data-layout="desktop"] { padding-top: 46px; }
+body[data-layout="desktop"] .col-chat {
+  height: calc(100vh - 48px);
+  height: calc(100dvh - 48px);
+}
+
+.mb-left { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+/* Chữ "Vận mệnh": vàng kim nghiêng, viền sao ✦, ánh vàng lướt qua chậm */
+.mb-brand {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 0 4px;
+    font: italic 900 20px/1 'Playfair Display', Georgia, serif;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+    background: linear-gradient(100deg,
+        #6b4410 0%, #b8862b 22%, #f6dc8c 38%, #b8862b 52%,
+        #7a1f1f 70%, #b8862b 86%, #6b4410 100%);
+    background-size: 250% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 3px rgba(212, 160, 50, .35));
+    animation: mbBrandShimmer 9s ease-in-out infinite;
+    user-select: none;
+  }
+  .mb-brand::before,
+  .mb-brand::after {
+    content: '✦';
+    font: normal 10px/1 Arial, sans-serif;
+    letter-spacing: 0;
+    -webkit-text-fill-color: #c9a24a;
+    opacity: .85;
+  }
+  .mb-brand::after { font-size: 7px; align-self: flex-start; margin-top: 2px; }
+  @keyframes mbBrandShimmer {
+    0%, 70%  { background-position: 100% 0; }
+    85%      { background-position: 0% 0; }
+    100%     { background-position: 0% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .mb-brand { animation: none; } }
+
+/* Nút ⇤ (#btnToggleSidebar) nằm trong thanh, không còn nổi ở góc dưới */
+#menuBar .sidebar-toggle { position: static; width: 30px; height: 30px; }
+
+.mb-tabs { display: flex; align-items: stretch; gap: 2px; height: 100%; }
+.mb-tab {
+  padding: 0 14px;
+  border: 0; border-bottom: 3px solid transparent;
+  background: none; color: #7a5c2a;
+  font: bold 13px Arial, sans-serif; cursor: pointer;
+}
+.mb-tab:hover { color: #4a2e08; background: #faf6ec; }
+.mb-tab.on { color: #4a2e08; border-bottom-color: #8b5e1a; }
+
+.mb-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+/* Tài khoản */
+.mb-acc { position: relative; }
+.mb-acc-btn {
+  display: flex; align-items: center; gap: 6px;
+  max-width: 260px; height: 32px; padding: 0 10px;
+  border: 1px solid #d7dee7; border-radius: 16px;
+  background: #fff; color: #1c2834;
+  font: 13px Arial, sans-serif; cursor: pointer;
+}
+.mb-acc-btn:hover { background: #f3f5f8; }
+.mb-login { border-color: #1f4e79; background: #1f4e79; color: #fff; font-weight: bold; }
+.mb-login:hover { background: #163a5c; }
+.mb-avatar {
+  flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%;
+  background: #1f4e79; color: #fff; font: bold 12px/22px Arial, sans-serif; text-align: center;
+}
+.mb-email { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mb-warn { color: #e67e22; }
+.mb-acc-menu {
+  display: none; position: absolute; right: 0; top: calc(100% + 6px); z-index: 1002;
+  min-width: 230px; padding: 4px;
+  background: #fff; border: 1px solid #d7dee7; border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .15);
+}
+.mb-acc.open .mb-acc-menu { display: block; }
+.mb-acc-menu button {
+  display: block; width: 100%; padding: 8px 10px;
+  border: 0; border-radius: 6px; background: none;
+  font: 13px Arial, sans-serif; color: #1c2834; text-align: left; cursor: pointer;
+}
+.mb-acc-menu button:hover { background: #eef3f8; }
+.mb-acc-info { padding: 8px 10px 6px; font-weight: bold; color: #1c2834; word-break: break-all; border-bottom: 1px solid #eef1f5; margin-bottom: 4px; }
+.mb-acc-note { padding: 6px 10px; font-size: 12px; color: #7a5c2a; background: #fff6e0; border-radius: 6px; margin: 2px 0 4px; }
+.mb-acc-sep { height: 1px; background: #eef1f5; margin: 4px 0; }
+
+/* Đăng nhập / tài khoản / cảnh báo xác minh đã lên menubar: bỏ khỏi khối "Lá số đã lưu" ở sidebar */
+body[data-layout="desktop"] #cloudPanel .cl-user,
+body[data-layout="desktop"] #cloudPanel .cl-btns,
+body[data-layout="desktop"] #cloudPanel .cl-warn { display: none !important; }
+
+/* Tab Dương/Âm lịch trong sidebar: chỉ còn 2 tab, chỉ hiện ở trang Xem lá số */
+body[data-layout="desktop"] #tabSEARCH,
+body[data-layout="desktop"] #tabCFG { display: none !important; }
+body.mb-page-search #formArea .tab-bar,
+body.mb-page-cfg #formArea .tab-bar { display: none !important; }
+
+/* ✎ Note và ⚙ chỉ có ở trang Xem lá số; ⇤ đã lên menubar nên dịch sang trái */
+body[data-layout="desktop"] .note-toggle { left: 10px; }
+body[data-layout="desktop"] .settings-toggle,
+body[data-layout="desktop"] .settings-menu { left: 46px; }
+body.mb-page-search .note-toggle, body.mb-page-cfg .note-toggle,
+body.mb-page-search .settings-toggle, body.mb-page-cfg .settings-toggle,
+body.mb-page-search .settings-menu, body.mb-page-cfg .settings-menu { display: none !important; }
+/* Note thuộc lá số của trang Xem lá số → ẩn ở 2 trang kia */
+body.mb-page-search .note-panel, body.mb-page-cfg .note-panel,
+body.mb-page-search .note-sep, body.mb-page-cfg .note-sep { display: none !important; }
+
+/* Trang Tìm lá số chưa có kết quả: chưa có lá số để hiện */
+body.mb-page-search.mb-search-empty #lasoWrap { display: none !important; }
+
+/* Hàng ◀ ▶ ☰ ★ chỉ thuộc trang Tìm lá số */
+body.mb-page-laso #searchResultNav,
+body.mb-page-cfg #searchResultNav { display: none !important; }
+body.mb-page-search #searchResultNav { margin: 0 0 6px; }
+
+/* Trang Tìm / Cấu hình: ẩn "Lá số đã lưu", vùng form chiếm hết thanh bên và cuộn riêng
+   (giống đoạn :has() đã thêm trong cloud.css, nhưng không cần trình duyệt hỗ trợ :has) */
+body.mb-page-search #cloudPanel,
+body.mb-page-cfg #cloudPanel { display: none !important; }
+body.mb-page-search #formArea,
+body.mb-page-cfg #formArea {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  padding-bottom: 12px !important;
+  box-sizing: border-box;
+}

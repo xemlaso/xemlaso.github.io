@@ -174,6 +174,7 @@
       if (snap !== false) formSnap = snapForm();
       page = 'search';
       if (typeof switchTab === 'function' && window._currentTab !== 'SEARCH') switchTab('SEARCH');
+      if (window.SEARCH_RESTORE_IF_LOST?.()) return;                       // kết quả lỡ bị xóa → lấy lại (menubar.js)
       const idx = searchIdx();
       if (idx >= 0 && hasFn('openSearchResult')) window.openSearchResult(idx);   // vẽ lại lá số kết quả đang xem
     }
@@ -191,15 +192,19 @@
         const w = $('lasoWrap'); if (w) w.style.display = 'none';
       }
     }
+    const scrollMem = {};                 // vị trí cuộn của từng tab
     function goPage(p) {
       if (!isMobile()) return;
       if (openKey) closeSheet(true);
-      if (p !== page) {
-        if (p === 'search') enterSearch(); else leaveSearch();
+      if (p === page) {                     // bấm lại tab đang xem → lên đầu trang
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
       }
+      scrollMem[page] = window.scrollY;
+      if (p === 'search') enterSearch(); else leaveSearch();
       syncPageClass();
       refreshBar();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      requestAnimationFrame(() => window.scrollTo(0, scrollMem[p] || 0));   // về đúng chỗ đang xem của tab đó
     }
     function syncPageClass() {
       const onSearch = isMobile() && page === 'search';

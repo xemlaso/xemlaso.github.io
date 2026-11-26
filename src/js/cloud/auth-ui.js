@@ -67,11 +67,15 @@
     }
   
     async function onPanelClick(e) {
-      const b = e.target.closest('[data-act]');
-      if (!b || !window.FB) return;
-      const { auth } = window.FB;
-      const act = b.dataset.act;
-      try {
+        const b = e.target.closest('[data-act]');
+        if (b) await runAuthAct(b.dataset.act);
+      }
+  
+      // Dùng chung cho khối "Lá số đã lưu" (mobile) và menubar (desktop)
+      async function runAuthAct(act) {
+        if (!window.FB) return;
+        const { auth } = window.FB;
+        try {
         if (act === 'google') {
           const provider = new firebase.auth.GoogleAuthProvider();
           provider.setCustomParameters({ prompt: 'select_account' });
@@ -97,6 +101,7 @@
       }
     }
   
+    window.CLOUD_authAct = runAuthAct;
     // ── Hộp đăng nhập email ─────────────────────────────────────
     function openEmailDialog() {
       if ($('clEmailDlg')) return;
