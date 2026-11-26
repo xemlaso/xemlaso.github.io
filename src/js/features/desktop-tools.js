@@ -29,13 +29,16 @@
   
 
       // ── Cảnh báo khi tải lại / đóng trang mà còn note hoặc nét vẽ (những thứ này không được lưu) ──
-  function unsavedState() {
-    const ed = $('noteEditor');
-    return {
-      note: !!ed && ed.textContent.replace(/\s+/g, '').length > 0,
-      draw: !!document.querySelector('#grid .draw-svg > g > *'),
-    };
-  }
+      function unsavedState() {
+        const ed = $('noteEditor');
+        return {
+          // Có module lá số đã lưu: chỉ tính khi form/note có thay đổi chưa lưu
+          note: typeof window.CLOUD_isDirty === 'function'
+            ? window.CLOUD_isDirty()
+            : (!!ed && ed.textContent.replace(/\s+/g, '').length > 0),
+          draw: !!document.querySelector('#grid .draw-svg > g > *'),
+        };
+      }
   const hasUnsaved = () => { const s = unsavedState(); return s.note || s.draw; };
 
   let skipUnloadWarn = false;      // đã đồng ý trong hộp riêng → không hỏi lần hai
@@ -57,7 +60,7 @@
   function confirmReload() {
     if ($('reloadConfirm')) return;
     const s = unsavedState();
-    const what = [s.note && 'ghi chú', s.draw && 'nét vẽ trên lá số'].filter(Boolean).join(' và ');
+    const what = [s.note && 'thông tin lá số hoặc ghi chú', s.draw && 'nét vẽ trên lá số'].filter(Boolean).join(' và ');
     const ov = document.createElement('div');
     ov.id = 'reloadConfirm';
     ov.className = 'rc-overlay';
@@ -96,6 +99,15 @@
         closeMenu();
       }
     };
+
+  // Desktop: khóa cuộn cả trang, chỉ các vùng riêng (danh sách lá số, note…) tự cuộn.
+  // Dùng class + CSS !important để script khác có gán style.overflow cũng không mở khóa được.
+  const lockStyle = document.createElement('style');
+  lockStyle.textContent = 'html.page-locked, html.page-locked body { overflow: hidden !important; overscroll-behavior: none; }';
+  document.head.appendChild(lockStyle);
+  function lockPageScroll() {
+    document.documentElement.classList.toggle('page-locked', isDesktop());
+  }
   
     // ── Thanh Xem hạn (#hanNavBar) luôn ở đáy màn hình, rộng đúng cột lá số ──
     function syncHanBar() {
@@ -131,7 +143,8 @@
       window.addEventListener('resize', syncHanBar);
       const col = $('colLaso');
       if (col && 'ResizeObserver' in window) new ResizeObserver(syncHanBar).observe(col);   // ẩn sidebar, kéo separator…
-      new MutationObserver(syncHanBar)
+      lockPageScroll();
+      new MutationObserver(() => { syncHanBar(); lockPageScroll(); })
         .observe(document.body, { attributes: true, attributeFilter: ['data-layout', 'class'] });
     }
   

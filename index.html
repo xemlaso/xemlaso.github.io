@@ -10,6 +10,7 @@
   <title>Vận mệnh</title>
     <link rel="stylesheet" href="src/styles.css">
     <link rel="stylesheet" href="src/css/note.css">
+    <link rel="stylesheet" href="src/css/cloud.css">
 </head>
 <button id="btnToggleSidebar" id="btnToggleSidebar" class="sidebar-toggle" onclick="toggleSidebar()" title="Ẩn/hiện thanh bên">⇤</button>
 <button id="btnToggleNote" class="note-toggle" onclick="toggleNote()" title="Ghi chú">✎</button>
@@ -27,28 +28,9 @@
       <div class="col-chat" id="colChat">
         <!-- Form area: tab + form nhập + cfgPanel sẽ được JS move vào đây khi desktop -->
         <div id="formArea"></div>
+        <div id="cloudPanel" class="cloud-panel"></div>
         <!-- Chatbot -->
-        <div class="chat-panel">
-          <div class="chat-apikey">
-            <label>API Key:</label>
-            <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off">
-          </div>
-          <div class="chat-messages" id="chatMessages">
-            <div class="chat-msg assistant">Xin chào! Tôi có thể giúp bạn luận giải lá số Tử Vi. Hãy lập lá số trước rồi
-              đặt câu hỏi nhé.</div>
-          </div>
-          <div class="chat-input-row">
-            <textarea id="chatInput" placeholder="Nhập câu hỏi… (Enter gửi, Shift+Enter xuống dòng)"
-              onkeydown="chatKeyDown(event)"></textarea>
-            <button class="chat-send" id="chatSend" onclick="sendChat()">Gửi</button>
-          </div>
-          <div style="padding:4px 8px 8px;display:flex;gap:6px;flex-wrap:wrap">
-            <button id="skillMenh" onclick="sendChat(SKILL_CUNG_MENH)"
-              style="font-size:11px;padding:4px 10px;border:1px solid #8b5e1a;background:#fffbf2;color:#4a2e08;border-radius:4px;cursor:pointer;">
-              🔍 Luận cung Mệnh
-            </button>
-          </div>
-        </div>
+      
         <!-- <button id="chatToggleBtn" class="chat-toggle-btn" onclick="toggleChatbotVisibility()">Hiện chatbot</button> -->
       </div>
 
@@ -156,6 +138,9 @@
             </div>
             <div class="fg fg-lap-laso">
               <button type="button" class="btn" onclick="lapLaSo()">Lập lá số</button>
+            </div>
+            <div class="fg fg-save-laso">
+              <button type="button" class="btn" onclick="saveLaso()">💾 Lưu lá số</button>
             </div>
           </div>
           <div class="err" id="err"></div>
@@ -350,9 +335,9 @@
               <button type="button" data-color="#222222" style="background:#222222" title="Kị"></button>
               <button type="button" data-color="#1f4e79" style="background:#1f4e79" title="Xanh dương"></button>
               <button type="button" data-color="#e67e22" style="background:#e67e22" title="Cam"></button>
-              <input type="color" id="drawColor" value="#c0392b" title="Màu khác">
+              <input type="color" id="drawColor" value="#2e8b57" title="Màu khác">
               <span class="draw-sep"></span>
-              <label class="draw-width">Độ dày <input type="range" id="drawWidth" min="1" max="12" value="3"><span id="drawWidthVal">3</span></label>
+              <label class="draw-width">Độ dày <input type="range" id="drawWidth" min="1" max="12" value="2"><span id="drawWidthVal">2</span></label>
               <span class="draw-sep"></span>
               <button type="button" data-act="undo" title="Hoàn tác (Ctrl+Z)">↶</button>
               <button type="button" data-act="clear" title="Xóa hết nét vẽ">🗑</button>
@@ -589,6 +574,12 @@
   <script src="src/js/features/note-panel.js"></script>
   <script src="src/js/features/desktop-tools.js"></script>
   <script src="src/js/features/draw-tools.js"></script>
+  <script src="src/vendor/firebase/firebase-app-compat.js"></script>
+  <script src="src/vendor/firebase/firebase-auth-compat.js"></script>
+  <script src="src/vendor/firebase/firebase-firestore-compat.js"></script>
+  <script src="src/js/cloud/firebase-init.js"></script>
+  <script src="src/js/cloud/auth-ui.js"></script>
+  <script src="src/js/cloud/laso-cloud.js"></script>
   <script src="src/js/features/chatbot.js"></script>
   <script src="src/js/features/lunar-calendar.js"></script>
   <script src="src/js/features/lap-so-dialog.js"></script>
