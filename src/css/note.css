@@ -164,3 +164,30 @@
       .draw-toolbar .draw-width input { width: 80px; accent-color: #8b5e1a; }
       .draw-toolbar .draw-width span { min-width: 16px; text-align: right; }
       .draw-toolbar .draw-sep { width: 1px; height: 20px; background: #e0d6bd; margin: 0 4px; }
+
+
+    /* ── Hộp hỏi tải lại trang ─────────────────────────────────── */
+    .rc-overlay {
+        position: fixed; inset: 0; z-index: 10000;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(0, 0, 0, .35);
+      }
+      .rc-box {
+        width: min(380px, 92vw);
+        padding: 18px 20px 14px;
+        background: #fff;
+        border: 1px solid #c8b88a; border-radius: 10px;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, .25);
+        font: 13px/1.5 Arial, sans-serif; color: #1a1008;
+      }
+      .rc-title { font-size: 15px; font-weight: bold; color: #4a2e08; margin-bottom: 6px; }
+      .rc-text { color: #5c3d10; }
+      .rc-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+      .rc-actions button {
+        padding: 6px 16px; border-radius: 6px; cursor: pointer;
+        font: bold 13px Arial, sans-serif;
+      }
+      .rc-cancel { border: 1px solid #c8b88a; background: #fff; color: #4a2e08; }
+      .rc-cancel:hover { background: #f5efe0; }
+      .rc-ok { border: 1px solid #c0392b; background: #c0392b; color: #fff; }
+      .rc-ok:hover { background: #a93226; }

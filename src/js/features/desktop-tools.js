@@ -27,6 +27,59 @@
     });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
   
+
+      // ── Cảnh báo khi tải lại / đóng trang mà còn note hoặc nét vẽ (những thứ này không được lưu) ──
+  function unsavedState() {
+    const ed = $('noteEditor');
+    return {
+      note: !!ed && ed.textContent.replace(/\s+/g, '').length > 0,
+      draw: !!document.querySelector('#grid .draw-svg > g > *'),
+    };
+  }
+  const hasUnsaved = () => { const s = unsavedState(); return s.note || s.draw; };
+
+  let skipUnloadWarn = false;      // đã đồng ý trong hộp riêng → không hỏi lần hai
+  // Nút tải lại của trình duyệt, đóng tab…: chỉ dùng được hộp hỏi mặc định của trình duyệt
+  window.addEventListener('beforeunload', e => {
+    if (skipUnloadWarn || !hasUnsaved()) return;
+    e.preventDefault();
+    e.returnValue = '';
+  });
+
+  // Desktop: F5 / Ctrl+R / Cmd+R → hộp hỏi riêng
+  document.addEventListener('keydown', e => {
+    const isReload = e.key === 'F5' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'r');
+    if (!isReload || !isDesktop() || !hasUnsaved()) return;
+    e.preventDefault();
+    confirmReload();
+  }, true);
+
+  function confirmReload() {
+    if ($('reloadConfirm')) return;
+    const s = unsavedState();
+    const what = [s.note && 'ghi chú', s.draw && 'nét vẽ trên lá số'].filter(Boolean).join(' và ');
+    const ov = document.createElement('div');
+    ov.id = 'reloadConfirm';
+    ov.className = 'rc-overlay';
+    ov.innerHTML = `<div class="rc-box" role="dialog" aria-modal="true" aria-labelledby="rcTitle">
+        <div class="rc-title" id="rcTitle">Tải lại trang?</div>
+        <div class="rc-text">Bạn đang có ${what} chưa được lưu. Tải lại trang sẽ mất hết.</div>
+        <div class="rc-actions">
+          <button type="button" class="rc-cancel">Ở lại</button>
+          <button type="button" class="rc-ok">Tải lại</button>
+        </div>
+      </div>`;
+    const onKey = ev => { if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); close(); } };
+    const close = () => { ov.remove(); document.removeEventListener('keydown', onKey, true); };
+    ov.addEventListener('click', ev => {
+      if (ev.target === ov || ev.target.closest('.rc-cancel')) close();
+      else if (ev.target.closest('.rc-ok')) { skipUnloadWarn = true; location.reload(); }
+    });
+    document.addEventListener('keydown', onKey, true);
+    document.body.appendChild(ov);
+    ov.querySelector('.rc-cancel').focus();      // mặc định chọn "Ở lại" cho an toàn
+  }
+  
     window.settingsExportPrompt = function () {
       closeMenu();
       if (typeof exportPrompt === 'function') exportPrompt();
@@ -73,7 +126,7 @@
             // Không khôi phục vị trí cuộn cũ khi tải lại trang; desktop luôn bắt đầu từ đầu trang
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     if (isDesktop()) window.scrollTo(0, 0);
-    
+
       syncHanBar();
       window.addEventListener('resize', syncHanBar);
       const col = $('colLaso');
