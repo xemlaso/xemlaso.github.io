@@ -252,3 +252,18 @@ body[data-layout="desktop"] #formArea #cfgPanel {
     box-shadow: 0 0 0 2px rgba(192, 57, 43, .25) !important;
     background: #fff6f5 !important;
   }
+
+
+
+  /* ── Desktop: tab Tìm lá số / Cấu hình → vùng form cuộn riêng, ẩn "Lá số đã lưu" ── */
+body[data-layout="desktop"]:has(#tabSEARCH.tab-active, #tabCFG.tab-active) #cloudPanel {
+    display: none !important;
+  }
+  body[data-layout="desktop"]:has(#tabSEARCH.tab-active, #tabCFG.tab-active) #formArea {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    padding-bottom: 56px !important;      /* chừa chỗ cho các nút ⇤ ✎ ⚙ ở góc dưới */
+    box-sizing: border-box;
+  }
