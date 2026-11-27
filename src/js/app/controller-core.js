@@ -13,10 +13,14 @@
       }
       sel.innerHTML = html;
     })();
+    // Giờ (0–23) → value canh giờ. 23h = Tý muộn "23:00", 0h = Tý sớm "00:00"
+    function gioToCanhValue(h) {
+      h = +h;
+      if (h === 23) return '23:00';
+      return String(Math.floor(((h + 1) % 24) / 2) * 2).padStart(2, '0') + ':00';
+    }
     function setGioCanh(hhmm) {
-      const [h] = String(hhmm).split(':').map(Number);
-      const canh = Math.floor(((h + 1) % 24) / 2);          // 0=Tý … 11=Hợi
-      document.getElementById('gio').value = String(canh * 2).padStart(2, '0') + ':00';
+      document.getElementById('gio').value = gioToCanhValue(String(hhmm).split(':')[0]);
     }
 
         // Dropdown giờ sinh: mọi lệnh gán gio.value = "HH:MM" tự quy về canh giờ
@@ -27,9 +31,7 @@
           const native = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value');
           const toCanh = v => {
             const m = String(v ?? '').match(/^\s*(\d{1,2})/);
-            if (!m) return null;
-            const canh = Math.floor(((+m[1] + 1) % 24) / 2);      // 0=Tý … 11=Hợi
-            return String(canh * 2).padStart(2, '0') + ':00';
+            return m ? gioToCanhValue(m[1]) : null;
           };
           Object.defineProperty(sel, 'value', {
             get() { return native.get.call(this); },
@@ -46,8 +48,7 @@
       const sel = document.getElementById('gio');
       if (!sel || sel.tagName !== 'SELECT') return;
       const h = new Date().getHours();
-      const canh = Math.floor(((h + 1) % 24) / 2);              // 0=Tý … 11=Hợi
-      sel.value = String(canh * 2).padStart(2, '0') + ':00';
+      sel.value = gioToCanhValue(h);
       if (typeof syncGioToGioXem === 'function') syncGioToGioXem();
     })();
 
@@ -120,6 +121,19 @@
         setTimeout(() => { btn.textContent = '⧉'; }, 1000);
       });
     }, true);
+
+        // Tý sớm ("23:00", 23h–24h): ngày âm tính theo ngày DL hôm sau. Ô DL trên form giữ nguyên.
+    // Tý muộn ("00:00", 0h–1h): ngày DL đã đúng, đổi bình thường.
+    function convertDLTheoGio() {
+      const elN = document.getElementById('ngayDL');
+      const elT = document.getElementById('thangDL');
+      const elY = document.getElementById('namDL');
+      if (document.getElementById('gio')?.value !== '23:00' || !elN || !elT || !elY) { convertDL(); return; }
+      const n0 = elN.value, t0 = elT.value, y0 = elY.value;
+      const d = new Date(+y0, +t0 - 1, +n0 + 1);            // tự sang tháng / năm
+      elN.value = String(d.getDate()); elT.value = String(d.getMonth() + 1); elY.value = String(d.getFullYear());
+      try { convertDL(); } finally { elN.value = n0; elT.value = t0; elY.value = y0; }
+    }
       
     function lapLaSo() {
       if ((window._currentTab || 'DL') !== 'SEARCH' && typeof clearSearchResultsState === 'function' && window._searchResults?.length) {
@@ -140,7 +154,7 @@
       }
 
       const lysoActive = typeof isLysoTemplateActive === 'function' && isLysoTemplateActive();
-      if (tab === 'DL' && typeof convertDL === 'function') convertDL();
+      if (tab === 'DL' && typeof convertDL === 'function') convertDLTheoGio();
       else if (lysoActive && tab !== 'DL' && typeof syncDlInputsFromAmLich === 'function') syncDlInputsFromAmLich();
 
       if (typeof isLysoTemplateActive === 'function' && isLysoTemplateActive()) {
@@ -152,7 +166,7 @@
             if (isFirstRender && document.body.dataset.layout !== 'desktop') {   // desktop: lá số đã ở sẵn trong màn hình
               wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-            requestAnimationFrame(() => { applyResponsiveLayout(); });
+            requestAnimationFrame(() => { applyResponsiveLayout(); scaleGrid(); });
             return;
           }
         } catch (e) {
@@ -168,7 +182,7 @@
       const ngay = parseInt(document.getElementById('ngay').value);
       const thang = parseInt(document.getElementById('thang').value);
       const nam = parseInt(document.getElementById('nam').value);
-      const gioSinh = document.getElementById('gio').value.trim();
+      const gioSinh = (v => v === '23:00' ? '00:00' : v)(document.getElementById('gio').value.trim());   // Tý sớm vẫn là giờ Tý khi an sao
       const gioiTinh = document.getElementById('gt').value;
 
       // Tính toán — logic.js

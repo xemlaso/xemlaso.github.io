@@ -17,6 +17,8 @@
       --color-bg-page: #fff;
       --color-border: #4a2e08;
       --mono-mode: 0;
+
+      --ui-brand-edge: #6b4410;
     }
 
     /* ── Reset ──────────────────────────────────────────────── */
@@ -65,7 +67,7 @@
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      background: #f3f5f8;
+      background: var(--ui-side);
     }
 
     .col-chat.visible {

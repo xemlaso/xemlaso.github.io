@@ -1,3 +1,4 @@
+// src/js/core/ansao.js
 // ============================================================
 // ansao.js — Shared core cho các phương pháp an sao
 // Phụ thuộc: data.js (TUVI_DATA phải load trước)

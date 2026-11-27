@@ -1,14 +1,49 @@
 /* src/css/menubar.css – thanh menu trên cùng (chỉ desktop). Đặt SAU note.css, cloud.css */
+/* ── Theme giao diện: menubar, sidebar, nút, thanh đáy (lá số không đổi) ──
+   Đổi bằng nút 🎨 trên menubar; menubar.js đặt <html data-theme="…"> */
+   :root, html[data-theme="sang"] {
+    --ui-bar: #ffffff;            /* nền menubar */
+    --ui-bar-fg: #7a5c2a;         /* chữ tab menubar */
+    --ui-bar-fg-on: #4a2e08;      /* chữ tab đang mở */
+    --ui-bar-hover: #faf6ec;      /* nền tab khi rê chuột */
+    --ui-bar-border: #e5dcc4;     /* viền dưới menubar */
+    --ui-accent: #8b5e1a;         /* vạch tab đang mở, avatar */
+    --ui-brand: #8b5e1a;          /* chữ "Vận mệnh" */
+    --ui-chip-bg: #ffffff;        /* nút tài khoản, 🎨, ⇤ */
+    --ui-chip-fg: #1c2834;
+    --ui-chip-border: #d7dee7;
+    --ui-primary: #8b5e1a;        /* nút Note / Tùy chọn đang bật */
+  }
+  html[data-theme="tramhuong"] {
+    --ui-bar: #3b2412; --ui-bar-fg: #e2c99a; --ui-bar-fg-on: #fff3d6; --ui-bar-hover: rgba(255, 255, 255, .08);
+    --ui-bar-border: #26170b; --ui-accent: #d4a84a; --ui-brand: #ffffff;
+    --ui-chip-bg: rgba(255, 255, 255, .10); --ui-chip-fg: #fff3d6; --ui-chip-border: rgba(255, 255, 255, .25);
+    --ui-primary: #7a4f17;
+  }
+  html[data-theme="mucau"] {
+    --ui-bar: #14213d; --ui-bar-fg: #c3cde2; --ui-bar-fg-on: #ffffff; --ui-bar-hover: rgba(255, 255, 255, .08);
+    --ui-bar-border: #0b1428; --ui-accent: #e0b45c; --ui-brand: #ffffff;
+    --ui-chip-bg: rgba(255, 255, 255, .10); --ui-chip-fg: #ffffff; --ui-chip-border: rgba(255, 255, 255, .25);
+    --ui-primary: #1d3461;
+  }
+  html[data-theme="sondo"] {
+    --ui-bar: #7a1f1f; --ui-bar-fg: #f3d9bd; --ui-bar-fg-on: #ffffff; --ui-bar-hover: rgba(255, 255, 255, .10);
+    --ui-bar-border: #561414; --ui-accent: #f2d38a; --ui-brand: #ffffff;
+    --ui-chip-bg: rgba(255, 255, 255, .12); --ui-chip-fg: #ffffff; --ui-chip-border: rgba(255, 255, 255, .28);
+    --ui-primary: #8e2424;
+  }
+
+  /* ── Menubar ────────────────────────────────────────────────────── */
 .menubar { display: none; }
 body[data-layout="desktop"] .menubar {
   display: flex; align-items: center; gap: 16px;
   position: fixed; top: 0; left: 0; right: 0; z-index: 950;
   height: 44px; padding: 0 12px;
   box-sizing: border-box;
-  background: #fff;
-  border-bottom: 1px solid #e5dcc4;
+  background: var(--ui-bar);
+  border-bottom: 1px solid var(--ui-bar-border);
   box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
-  font: 13px Arial, sans-serif; color: #4a2e08;
+  font: 13px Arial, sans-serif; color: var(--ui-bar-fg-on);
 }
 
 /* Chừa chỗ cho thanh: nội dung bắt đầu dưới 46px, thanh bên cao vừa phần còn lại */
@@ -19,7 +54,7 @@ body[data-layout="desktop"] .col-chat {
 }
 
 .mb-left { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
-.mb-brand { font: bold 16px 'Playfair Display', Georgia, serif; color: #8b5e1a; white-space: nowrap; }
+.mb-brand { font: bold 16px 'Playfair Display', Georgia, serif; color: var(--ui-brand); white-space: nowrap; }
 
 /* Nút ⇤ (#btnToggleSidebar) nằm trong thanh, không còn nổi ở góc dưới */
 #menuBar .sidebar-toggle { position: static; width: 30px; height: 30px; }
@@ -28,10 +63,10 @@ body[data-layout="desktop"] .col-chat {
 .mb-tab {
   padding: 0 14px;
   border: 0; border-bottom: 3px solid transparent;
-  background: none; color: #7a5c2a;
+  background: none; color: var(--ui-bar-fg);
   font: bold 13px Arial, sans-serif; cursor: pointer;
 }
-.mb-tab:hover { color: #4a2e08; background: #faf6ec; }
+.mb-tab:hover { color: var(--ui-bar-fg-on); border-bottom-color: var(--ui-accent); }
 .mb-tab.on { color: #4a2e08; border-bottom-color: #8b5e1a; }
 
 .mb-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
@@ -41,16 +76,16 @@ body[data-layout="desktop"] .col-chat {
 .mb-acc-btn {
   display: flex; align-items: center; gap: 6px;
   max-width: 260px; height: 32px; padding: 0 10px;
-  border: 1px solid #d7dee7; border-radius: 16px;
-  background: #fff; color: #1c2834;
+  border: 1px solid var(--ui-chip-border); border-radius: 16px;
+  background: var(--ui-chip-bg); color: var(--ui-chip-fg);
   font: 13px Arial, sans-serif; cursor: pointer;
 }
-.mb-acc-btn:hover { background: #f3f5f8; }
+.mb-acc-btn:hover { filter: brightness(1.08); }
 .mb-login { border-color: #1f4e79; background: #1f4e79; color: #fff; font-weight: bold; }
 .mb-login:hover { background: #163a5c; }
 .mb-avatar {
   flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%;
-  background: #1f4e79; color: #fff; font: bold 12px/22px Arial, sans-serif; text-align: center;
+  background: var(--ui-accent); color: var(--ui-bar); font: bold 12px/22px Arial, sans-serif; text-align: center;
 }
 .mb-email { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mb-warn { color: #e67e22; }
@@ -70,6 +105,31 @@ body[data-layout="desktop"] .col-chat {
 .mb-acc-info { padding: 8px 10px 6px; font-weight: bold; color: #1c2834; word-break: break-all; border-bottom: 1px solid #eef1f5; margin-bottom: 4px; }
 .mb-acc-note { padding: 6px 10px; font-size: 12px; color: #7a5c2a; background: #fff6e0; border-radius: 6px; margin: 2px 0 4px; }
 .mb-acc-sep { height: 1px; background: #eef1f5; margin: 4px 0; }
+
+
+/* Nút 🎨 chọn theme (cạnh tài khoản) */
+.mb-theme { position: relative; }
+.mb-theme-btn {
+  width: 32px; height: 32px; padding: 0;
+  border: 1px solid var(--ui-chip-border); border-radius: 16px;
+  background: var(--ui-chip-bg); font-size: 15px; cursor: pointer;
+}
+.mb-theme-menu {
+  display: none; position: absolute; right: 0; top: calc(100% + 6px); z-index: 1002;
+  min-width: 170px; padding: 4px;
+  background: #fff; border: 1px solid #d7dee7; border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .15);
+}
+.mb-theme.open .mb-theme-menu { display: block; }
+.mb-theme-menu button {
+  display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 10px;
+  border: 0; border-radius: 6px; background: none;
+  font: 13px Arial, sans-serif; color: #1c2834; text-align: left; cursor: pointer;
+}
+.mb-theme-menu button:hover { background: #f3f5f8; }
+.mb-theme-menu button.on { font-weight: bold; }
+.mb-theme-menu button.on::after { content: '✓'; margin-left: auto; color: #8b5e1a; }
+.mb-swatch { width: 26px; height: 16px; border-radius: 4px; border: 1px solid rgba(0, 0, 0, .15); }
 
 /* Đăng nhập / tài khoản / cảnh báo xác minh đã lên menubar: bỏ khỏi khối "Lá số đã lưu" ở sidebar */
 body[data-layout="desktop"] #cloudPanel .cl-user,
@@ -95,7 +155,7 @@ body.mb-page-cfg #formArea .tab-bar { display: none !important; }
 #hanNavBar .note-toggle:hover,
 #hanNavBar .settings-toggle:hover { background: #f5efe0; }
 #hanNavBar .note-toggle.active,
-#hanNavBar .settings-toggle.active { background: #8b5e1a; border-color: #8b5e1a; color: #fff; }
+#hanNavBar .settings-toggle.active { background: var(--ui-primary); border-color: var(--ui-primary); color: #fff; }
 #hanNavBar .hb-ico { font-size: 14px; line-height: 1; }
 body[data-layout="mobile"] #hanNavBar .hb-div,
 body[data-layout="mobile"] #hanNavBar .note-toggle,
@@ -139,3 +199,8 @@ body[data-layout="desktop"] #hanNavBar #luuModeBar {
   justify-content: center;
 }
 body[data-layout="desktop"].han-xem-on #hanNavBar #luuModeBar { display: flex !important; }
+
+
+#menuBar .sidebar-toggle { position: static; width: 30px; height: 30px; background: var(--ui-chip-bg); color: var(--ui-chip-fg); border-color: var(--ui-chip-border); }
+
+.mb-tab.on { color: var(--ui-bar-fg-on); border-bottom-color: var(--ui-accent); }

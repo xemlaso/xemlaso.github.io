@@ -16,6 +16,23 @@
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   
     // Tab Tìm lá số là trang riêng → lập lá số ở tab Xem lá số không xóa kết quả tìm
+    // ── Theme giao diện (menubar, sidebar, nút…) – không đổi màu lá số ──
+    const THEMES = [
+      { id: 'sang',      ten: 'Sáng',        bar: '#ffffff', accent: '#8b5e1a' },
+      { id: 'tramhuong', ten: 'Trầm hương',  bar: '#3b2412', accent: '#d4a84a' },
+      { id: 'mucau',     ten: 'Mực tàu',     bar: '#14213d', accent: '#e0b45c' },
+      { id: 'sondo',     ten: 'Son đỏ',      bar: '#7a1f1f', accent: '#f2d38a' },
+    ];
+    const THEME_KEY = 'uiTheme';
+    function applyTheme(id) {
+      if (!THEMES.some(t => t.id === id)) id = 'sang';
+      document.documentElement.dataset.theme = id;
+      try { localStorage.setItem(THEME_KEY, id); } catch (e) {}
+      document.querySelectorAll('#mbTheme [data-theme-id]').forEach(b => b.classList.toggle('on', b.dataset.themeId === id));
+    }
+    // Áp ngay khi tải script để không nháy màu cũ (cả mobile cũng dùng theme đã chọn)
+    try { applyTheme(localStorage.getItem(THEME_KEY) || 'sang'); } catch (e) { applyTheme('sang'); }
+  
     const prevPin = window.SEARCH_PIN_RESULTS;
     window.SEARCH_PIN_RESULTS = () => isDesktop() || !!(prevPin && prevPin());
   
@@ -87,6 +104,13 @@
           <button type="button" class="mb-tab" data-page="cfg">⚙ Cấu hình</button>
         </nav>
         <div class="mb-right">
+          <div class="mb-theme" id="mbTheme">
+            <button type="button" class="mb-theme-btn" data-acc="theme" title="Đổi giao diện">🎨</button>
+            <div class="mb-theme-menu" role="menu">
+              ${THEMES.map(t => `<button type="button" data-theme-id="${t.id}">
+                <span class="mb-swatch" style="background:${t.bar};box-shadow:inset -8px 0 0 ${t.accent}"></span>${t.ten}</button>`).join('')}
+            </div>
+          </div>
           <div class="mb-acc" id="mbAccount"></div>
         </div>`;
       document.body.insertBefore(bar, document.body.firstChild);
@@ -98,11 +122,20 @@
       bar.addEventListener('click', e => {
         const t = e.target.closest('[data-page]');
         if (t) { goPage(t.dataset.page); return; }
+        const th = e.target.closest('[data-theme-id]');
+        if (th) { applyTheme(th.dataset.themeId); $('mbTheme').classList.remove('open'); return; }
         const a = e.target.closest('[data-acc]');
+        if (a?.dataset.acc === 'theme') {
+          e.stopPropagation(); closeAccMenu(); $('mbTheme').classList.toggle('open'); return;
+        }
         if (a) onAccount(a.dataset.acc, e);
       });
-      document.addEventListener('click', e => { if (!e.target.closest('#mbAccount')) closeAccMenu(); });
-      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAccMenu(); });
+      document.addEventListener('click', e => {
+        if (!e.target.closest('#mbAccount')) closeAccMenu();
+        if (!e.target.closest('#mbTheme')) $('mbTheme')?.classList.remove('open');
+      });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeAccMenu(); $('mbTheme')?.classList.remove('open'); } });
+      applyTheme(document.documentElement.dataset.theme);     // đánh dấu theme đang dùng trong menu
     }
   
     // ── Trang ───────────────────────────────────────────────────
@@ -254,7 +287,7 @@
     }
     function closeAccMenu() { $('mbAccount')?.classList.remove('open'); }
     function onAccount(act, e) {
-      if (act === 'toggle') { e.stopPropagation(); $('mbAccount').classList.toggle('open'); return; }
+      if (act === 'toggle') { e.stopPropagation(); $('mbTheme')?.classList.remove('open'); $('mbAccount').classList.toggle('open'); return; }
       closeAccMenu();
       if (!hasFn('CLOUD_authAct')) return;
       // Đang ở trang Tìm: form đang chứa kết quả tìm → trả form về như ở trang Xem lá số
@@ -328,10 +361,16 @@
     }
     function hookXemHan() {
       $('chkXemHan')?.addEventListener('change', syncLuuBar);
+      // Bấm ‹ › đổi năm xem: code bật ô "Xem hạn" mà không phát sự kiện, rồi vẽ lại lá số
+      // → theo dõi năm xem và lá số để cập nhật thanh Sao lưu
+      const nam = $('namXem'), grid = $('grid');
+      if (nam) new MutationObserver(syncLuuBar).observe(nam, { attributes: true, childList: true, characterData: true, subtree: true });
+      if (grid) new MutationObserver(syncLuuBar).observe(grid, { childList: true });
       // "Xem hạn" còn được bật bằng code (bấm ‹ › năm xem) → bắt qua onNamXemChange
       const orig = window.onNamXemChange;
       if (typeof orig === 'function' && !orig._luuHooked) {
-        const w = function () { const r = orig.apply(this, arguments); syncLuuBar(); return r; };
+        // Hiện thanh Sao lưu TRƯỚC khi vẽ lại lá số: code an sao lưu có thể dựa vào thanh này đang hiện
+        const w = function () { syncLuuBar(); return orig.apply(this, arguments); };
         w._luuHooked = true;
         window.onNamXemChange = w;
       }

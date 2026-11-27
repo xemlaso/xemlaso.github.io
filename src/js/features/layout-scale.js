@@ -31,13 +31,32 @@
       return k / dpr;
     }
     
+        // Lá số Lý số API (ảnh): giới hạn chiều cao bằng đúng vùng trống của lá số Thái Thứ Lang
+        function fitLysoImage() {
+          const img = document.getElementById('lysoApiImage');
+          const box = document.getElementById('lysoApiWrap');
+          if (!img || !box) return;
+          const hanNav = document.getElementById('hanNavBar');
+          const hanH = hanNav ? hanNav.offsetHeight : 0;
+          let targetH;
+          if (document.body.dataset.layout !== 'desktop') {
+            targetH = window.innerHeight - hanH - 10;
+          } else {
+            const hanCss = hanNav ? getComputedStyle(hanNav) : null;
+            const hanMargin = hanCss ? (parseFloat(hanCss.marginTop) || 0) + (parseFloat(hanCss.marginBottom) || 0) : 0;
+            const top = box.getBoundingClientRect().top + window.scrollY;
+            targetH = browserWindowHeight() - top - hanH - hanMargin - 10;
+          }
+          img.style.maxHeight = Math.max(200, targetH) + 'px';
+        }
+
     function scaleGrid() {
       const outer = document.getElementById('gridScalerOuter');
       const scaler = document.getElementById('gridScaler');
       const grid = document.getElementById('grid');
       const wrap = document.getElementById('lasoWrap');
       if (!scaler || !grid || !outer || !wrap) return;
-
+      if (document.body.classList.contains('laso-lyso-api')) { fitLysoImage(); return; }
       scaler.style.zoom = '';
       scaler.style.transform = 'scale(1)';
       outer.style.height = '';
@@ -96,3 +115,5 @@
     }
 
     window.addEventListener('resize', scaleGrid);
+    // Ảnh Lý số tải xong (bất đồng bộ) → tính lại kích thước
+    document.addEventListener('load', e => { if (e.target.id === 'lysoApiImage') scaleGrid(); }, true);

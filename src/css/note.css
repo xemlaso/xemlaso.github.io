@@ -9,7 +9,8 @@
       flex: 0 0 9px;
       cursor: col-resize;
       touch-action: none;
-      background: linear-gradient(to right, transparent 4px, #c8b88a 4px, #c8b88a 5px, transparent 5px);
+      background: linear-gradient(100deg, var(--ui-brand-edge) 0%, #b8862b 22%, #f6dc8c 38%, #b8862b 52%, #7a1f1f 70%, #b8862b 86%, var(--ui-brand-edge) 100%);
+      
     }
     body[data-layout="desktop"].note-open .note-sep:hover,
     body.note-dragging .note-sep {
@@ -122,7 +123,7 @@
         margin: 0 !important;
         padding: 6px 8px;
         box-sizing: border-box;
-        background: rgba(255, 255, 255, .96);
+        background: var(--ui-hanbar);
         border-top: 1px solid #e5dcc4;
       }
 

@@ -111,6 +111,17 @@ const TUVI_RENDER = (() => {
       const CAT_BOLD = new Set(SHARED_CONST.CAT_BOLD || []);
       const HUNG_BOLD = new Set(SHARED_CONST.HUNG_BOLD || []);
 
+            // Thứ tự ưu tiên trong cột cát/hung: Tứ hóa → Lục sát → Thiên Hình → các sao khác
+            const SAO_UU_TIEN = [
+              'Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kị',
+              'Kình Dương', 'Đà La', 'Hỏa Tinh', 'Linh Tinh', 'Địa Không', 'Địa Kiếp',
+              'Thiên Hình'
+            ];
+            const rankSao = n => { const i = SAO_UU_TIEN.indexOf(n); return i < 0 ? SAO_UU_TIEN.length : i; };
+            const soSao = bold => (a, b) =>
+              (rankSao(a.name) - rankSao(b.name)) ||
+              ((bold.has(b.name) ? 1 : 0) - (bold.has(a.name) ? 1 : 0));
+
       // Tạm tắt click vào tên chính tinh (mở luận theo chính tinh). Đổi thành true để bật lại.
       const CHINH_TINH_CLICK = false;
       // ── Render MIDDLE ────────────────────────────────────────
@@ -136,16 +147,26 @@ const TUVI_RENDER = (() => {
       <div class="chinh-row">${chinhLines[1] || '<div class="chinh-empty"></div>'}</div>
     </div>`;
 
-        const catList = [...cat, ...trung].sort((a, b) => (CAT_BOLD.has(b.name) ? 1 : 0) - (CAT_BOLD.has(a.name) ? 1 : 0));
-        const hungList = hung.sort((a, b) => (HUNG_BOLD.has(b.name) ? 1 : 0) - (HUNG_BOLD.has(a.name) ? 1 : 0));
+    const catList = [...cat, ...trung].sort(soSao(CAT_BOLD));
+    const CUOI_HUNG = ['Thiên La', 'Địa Võng'];          // luôn ở cuối cột hung (sau cả sao lưu)
+    const hungList = hung.filter(s => !CUOI_HUNG.includes(s.name))
+      .sort(soSao(HUNG_BOLD));
+    const hungCuoi = CUOI_HUNG.map(t => hung.find(s => s.name === t)).filter(Boolean);
 
-        const catHtml = catList.map(s => {
+    const catHtml = catList.map(s => {
           const bold = CAT_BOLD.has(s.name) ? ' bold' : '';
           const _ms = hanhStyle(s.nguHanh);
           return `<div class="sao-cat${bold}"${_ms ? ` style="${_ms}"` : ''}>${dn(s.name)}${smTag(s)}</div>`;
         }).join('');
         const hungHtml = hungList.map(s => {
           if (s.name === 'Triệt') return '';
+          const bold = HUNG_BOLD.has(s.name) ? ' bold' : '';
+          const _ms = hanhStyle(s.nguHanh);
+          return `<div class="sao-hung${bold}"${_ms ? ` style="${_ms}"` : ''}>${dn(s.name)}${smTag(s)}</div>`;
+        }).join('');
+
+
+        const hungCuoiHtml = hungCuoi.map(s => {
           const bold = HUNG_BOLD.has(s.name) ? ' bold' : '';
           const _ms = hanhStyle(s.nguHanh);
           return `<div class="sao-hung${bold}"${_ms ? ` style="${_ms}"` : ''}>${dn(s.name)}${smTag(s)}</div>`;
@@ -169,7 +190,7 @@ const TUVI_RENDER = (() => {
 
         return `<div class="cung-mid">${chinhHtml}<div class="mid-cathung-wrap"><div class="mid-cathung">
       <div class="col-cat">${catHtml}${dvSaoCatHtml}</div>
-      <div class="col-hung">${hungHtml}${dvSaoHungHtml}</div>
+            <div class="col-hung">${hungHtml}${dvSaoHungHtml}${hungCuoiHtml}</div>
     </div></div></div>`;
       }
 
@@ -609,7 +630,7 @@ const TUVI_RENDER = (() => {
          function fitPhiHoaDetail(phd, box, center, hasChain, shortW) {
           const vp = phd.querySelector('.phd-viewport');
           if (!vp) return;
-          box.style.width = (hasChain ? Math.max(shortW, 220) : center.offsetWidth - 36) + 'px';
+          box.style.width = (center.offsetWidth - 36) + 'px';       // luôn cùng bề rộng, có bật Lộc Kị hay không
           const extra = box.offsetHeight - vp.offsetHeight;          // tiêu đề, dòng cung, tab, lề
           const h = Math.max(60, Math.round(center.offsetHeight * 5 / 7) - extra);   // cả box = 2/5 ô giữa
           vp.style.height = h + 'px';
@@ -675,7 +696,7 @@ const TUVI_RENDER = (() => {
         wrap.style.top = (center.offsetTop + center.offsetHeight / 2) + 'px';
         wrap.style.transform = 'translate(-50%, -50%)';
         wrap.style.maxWidth = (center.offsetWidth - 16) + 'px';
-        wrap.style.zIndex = 4;
+        wrap.style.zIndex = 20;
         gridEl.appendChild(wrap);
 
         if (wrap.querySelector('.ph-box')) {

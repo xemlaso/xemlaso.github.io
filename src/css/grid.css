@@ -290,11 +290,11 @@ src/css/grid.css
       font-weight: bold;
       color: var(--color-chinh);
       display: block;
-      line-height: 1;
+      /* line-height: 1; */
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      letter-spacing: .3px;
+      /* letter-spacing: .3px; */
     }
 
     .sao-cat {

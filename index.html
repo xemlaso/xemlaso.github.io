@@ -110,7 +110,7 @@
                 <select id="gioMinuteMob" aria-label="Phút"></select>
               </div>
               <select id="gio" aria-label="Giờ sinh" onchange="syncGioToGioXem()">
-              <option value="00:00">Giờ Tý (23h-1h)</option>
+              <option value="00:00">Giờ Tý sớm (0h-1h)</option>
               <option value="02:00">Giờ Sửu (1h-3h)</option>
               <option value="04:00" selected>Giờ Dần (3h-5h)</option>
               <option value="06:00">Giờ Mão (5h-7h)</option>
@@ -122,6 +122,7 @@
               <option value="18:00">Giờ Dậu (17h-19h)</option>
               <option value="20:00">Giờ Tuất (19h-21h)</option>
               <option value="22:00">Giờ Hợi (21h-23h)</option>
+              <option value="23:00">Giờ Tý muộn (23h-24h)</option>
             </select>
             </div>
             <div class="fg"><label>Giới tính</label>
@@ -314,7 +315,7 @@
               </div>
             </div>
           <div id="lysoApiWrap" style="display:none;">
-            <img id="lysoApiImage" alt="Lá số lyso.vn" style="max-width:100%;height:auto;border:1px solid #c8b88a;border-radius:6px;background:#fff;">
+            <img id="lysoApiImage" alt="Lá số lyso.vn" style="display:block;margin:0 auto;max-width:100%;width:auto;height:auto;border:1px solid #c8b88a;border-radius:6px;background:#fff;">
           </div>
           <div id="searchResultNav" class="search-result-nav">
             <button id="btnLasoPrev" class="btn nav-btn nav-btn-prev"><span class="nav-icon">◀</span><span class="nav-label"> Lá số trước</span></button>
