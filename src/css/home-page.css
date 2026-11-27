@@ -4,9 +4,12 @@ body[data-layout="desktop"].mb-page-home .home-page {
   display: block;
   position: fixed; top: 44px; left: 0; right: 0; bottom: 0; z-index: 940;   /* dưới menubar (950) */
   overflow: hidden;
-  background: radial-gradient(ellipse at 64% 50%, #16204a 0%, #0b1030 45%, #05071a 100%);
+  /* màu trời do home-page.js đặt theo giờ thật */
+  background: radial-gradient(ellipse at 64% 50%, var(--home-c1, #16204a) 0%, var(--home-c2, #0b1030) 45%, var(--home-c3, #05071a) 100%);
   color: #e9e2cf;
+  transition: opacity .45s ease;
 }
+.home-page.home-leaving { opacity: 0; }
 
 /* Tinh vân trôi chậm */
 .home-nebula {
@@ -23,14 +26,22 @@ body[data-layout="desktop"].mb-page-home .home-page {
   from { transform: translate(-2%, -1%) rotate(0deg) scale(1); opacity: .85; }
   to   { transform: translate(2%, 1.5%) rotate(8deg) scale(1.08); opacity: 1; }
 }
+/* Ráng trời lúc hửng sáng / hoàng hôn */
+.home-horizon {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 45%;
+  background: linear-gradient(0deg, var(--home-hz, transparent) 0%, transparent 100%);
+  pointer-events: none;
+}
 .home-sky { position: absolute; inset: 0; display: block; }
 
 /* Chữ và nút bên trái */
 .home-hero {
   position: absolute; left: 7%; top: 50%; transform: translateY(-50%);
-  max-width: 420px;
+  max-width: 460px;
   text-shadow: 0 2px 18px rgba(0, 0, 0, .7);
+  transition: opacity 1.2s ease, transform 1.2s ease;
 }
+.home-intro .home-hero { opacity: 0; transform: translateY(-46%); }
 .home-kicker {
   font: 16px "Noto Serif CJK SC", "Songti SC", "SimSun", serif;
   letter-spacing: .5em; color: rgba(240, 205, 135, .75);
@@ -46,13 +57,34 @@ body[data-layout="desktop"].mb-page-home .home-page {
   filter: drop-shadow(0 0 18px rgba(255, 200, 110, .35));
 }
 .home-sub {
-  margin-top: 6px;
+  margin-top: 2px;
   font: 600 15px 'Playfair Display', Georgia, serif;
   letter-spacing: .45em; text-transform: uppercase;
   color: #c9d6ff;
 }
+
+/* Hôm nay: ngày âm + can chi */
+.home-today { margin-top: 18px; }
+.home-today-date {
+  font: italic 14px 'Playfair Display', Georgia, serif;
+  color: rgba(225, 230, 255, .78);
+}
+.home-today-cc { display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
+.home-today-cc span {
+  display: flex; flex-direction: column; align-items: center; min-width: 58px;
+  font: 600 13px 'Playfair Display', Georgia, serif; color: #f1ddb0;
+}
+.home-today-cc i {
+  font: normal 10px Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(200, 210, 240, .6); margin-bottom: 2px;
+}
+.home-today-cc b {
+  font: 400 18px "Noto Serif CJK SC", "Songti SC", "SimSun", serif;
+  color: rgba(240, 205, 135, .85); margin-top: 2px; letter-spacing: .08em;
+}
+
 .home-quote {
-  margin: 22px 0 30px;
+  margin: 18px 0 24px;
   font: italic 17px/1.5 'Playfair Display', Georgia, serif;
   color: rgba(225, 230, 255, .78);
 }
@@ -72,6 +104,46 @@ body[data-layout="desktop"].mb-page-home .home-page {
 }
 .home-btn-main:hover { background: linear-gradient(180deg, #ffe7b3, #e4b35c); }
 
+/* Lá số gần đây */
+.home-recent:empty { display: none; }
+.home-recent { margin-top: 26px; }
+.home-recent-title {
+  font: 10px Arial, sans-serif; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(200, 210, 240, .6); margin-bottom: 8px;
+}
+.home-recent-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.home-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  padding: 8px 12px; border-radius: 10px; cursor: pointer; text-align: left;
+  background: rgba(255, 255, 255, .05); border: 1px solid rgba(240, 205, 135, .22);
+  backdrop-filter: blur(4px); color: inherit; text-shadow: none;
+  transition: background .2s, border-color .2s, transform .2s;
+}
+.home-card:hover { background: rgba(255, 255, 255, .11); border-color: rgba(240, 205, 135, .55); transform: translateY(-1px); }
+.home-card-name {
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font: 600 14px 'Playfair Display', Georgia, serif; color: #f6e7c1;
+}
+.home-card-meta { font: 11px Arial, sans-serif; color: rgba(205, 215, 245, .7); }
+.home-card-menh {
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font: italic 12px 'Playfair Display', Georgia, serif; color: rgba(240, 205, 135, .8);
+}
+
+/* Chú thích khi rê chuột lên sao */
+.home-tip {
+  position: absolute; z-index: 2; max-width: 260px; pointer-events: none;
+  padding: 8px 12px; border-radius: 8px;
+  background: rgba(10, 14, 40, .82); border: 1px solid rgba(240, 205, 135, .35);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .45), 0 0 18px rgba(120, 160, 255, .15);
+  backdrop-filter: blur(6px);
+}
+.home-tip[hidden] { display: none; }
+.home-tip-name { font: 600 14px 'Playfair Display', Georgia, serif; color: #f6e7c1; }
+.home-tip-name span { font: 13px "Noto Serif CJK SC", "Songti SC", "SimSun", serif; color: rgba(240, 205, 135, .8); margin-left: 4px; }
+.home-tip-quan { font: italic 12px 'Playfair Display', Georgia, serif; color: #c9d6ff; margin-top: 2px; }
+.home-tip-y { font: 12px/1.4 Arial, sans-serif; color: rgba(225, 230, 255, .78); margin-top: 3px; }
+
 /* "Đẩu bính chỉ …" góc dưới phải */
 .home-chi {
   position: absolute; right: 22px; bottom: 16px;
@@ -80,4 +152,7 @@ body[data-layout="desktop"].mb-page-home .home-page {
 }
 .home-chi b { color: #f3cf85; font-style: normal; }
 
-@media (prefers-reduced-motion: reduce) { .home-nebula { animation: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .home-nebula { animation: none; }
+  .home-hero, .home-page { transition: none; }
+}
