@@ -18,20 +18,21 @@
     // Tab Tìm lá số là trang riêng → lập lá số ở tab Xem lá số không xóa kết quả tìm
     // ── Theme giao diện (menubar, sidebar, nút…) – không đổi màu lá số ──
     const THEMES = [
+        { id: 'mucau',     ten: 'Mực tàu',     bar: '#14213d', accent: '#e0b45c' },
       { id: 'sang',      ten: 'Sáng',        bar: '#ffffff', accent: '#8b5e1a' },
       { id: 'tramhuong', ten: 'Trầm hương',  bar: '#3b2412', accent: '#d4a84a' },
-      { id: 'mucau',     ten: 'Mực tàu',     bar: '#14213d', accent: '#e0b45c' },
       { id: 'sondo',     ten: 'Son đỏ',      bar: '#7a1f1f', accent: '#f2d38a' },
     ];
     const THEME_KEY = 'uiTheme';
     function applyTheme(id) {
-      if (!THEMES.some(t => t.id === id)) id = 'sang';
+        if (!THEMES.some(t => t.id === id)) id = 'mucau';
+      
       document.documentElement.dataset.theme = id;
       try { localStorage.setItem(THEME_KEY, id); } catch (e) {}
       document.querySelectorAll('#mbTheme [data-theme-id]').forEach(b => b.classList.toggle('on', b.dataset.themeId === id));
     }
     // Áp ngay khi tải script để không nháy màu cũ (cả mobile cũng dùng theme đã chọn)
-    try { applyTheme(localStorage.getItem(THEME_KEY) || 'sang'); } catch (e) { applyTheme('sang'); }
+    try { applyTheme(localStorage.getItem(THEME_KEY) || 'mucau'); } catch (e) { applyTheme('mucau'); }
   
     const prevPin = window.SEARCH_PIN_RESULTS;
     window.SEARCH_PIN_RESULTS = () => isDesktop() || !!(prevPin && prevPin());
