@@ -1,0 +1,82 @@
+/* src/css/home-page.css – Trang chủ (desktop). Phủ toàn bộ vùng dưới menubar, không đụng tới khu vực lá số. */
+.home-page { display: none; }
+body[data-layout="desktop"].mb-page-home .home-page {
+  display: block;
+  position: fixed; top: 44px; left: 0; right: 0; bottom: 0; z-index: 940;   /* dưới menubar (950) */
+  overflow: hidden;
+  background: radial-gradient(ellipse at 64% 50%, #16204a 0%, #0b1030 45%, #05071a 100%);
+  color: #e9e2cf;
+}
+
+/* Tinh vân trôi chậm */
+.home-nebula {
+  position: absolute; inset: -20%;
+  background:
+    radial-gradient(closest-side at 30% 35%, rgba(120, 70, 200, .28), transparent),
+    radial-gradient(closest-side at 72% 62%, rgba(40, 120, 200, .22), transparent),
+    radial-gradient(closest-side at 55% 20%, rgba(200, 90, 160, .14), transparent),
+    radial-gradient(closest-side at 15% 80%, rgba(60, 160, 170, .12), transparent);
+  filter: blur(30px);
+  animation: home-nebula 60s ease-in-out infinite alternate;
+}
+@keyframes home-nebula {
+  from { transform: translate(-2%, -1%) rotate(0deg) scale(1); opacity: .85; }
+  to   { transform: translate(2%, 1.5%) rotate(8deg) scale(1.08); opacity: 1; }
+}
+.home-sky { position: absolute; inset: 0; display: block; }
+
+/* Chữ và nút bên trái */
+.home-hero {
+  position: absolute; left: 7%; top: 50%; transform: translateY(-50%);
+  max-width: 420px;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .7);
+}
+.home-kicker {
+  font: 16px "Noto Serif CJK SC", "Songti SC", "SimSun", serif;
+  letter-spacing: .5em; color: rgba(240, 205, 135, .75);
+  margin-bottom: 6px;
+}
+.home-title {
+  margin: 0;
+  font: italic 700 clamp(48px, 6vw, 84px)/1.05 'Playfair Display', Georgia, serif;
+  letter-spacing: .02em;
+  background: linear-gradient(180deg, #fff6dc 0%, #f2cf86 45%, #b98a3a 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 18px rgba(255, 200, 110, .35));
+}
+.home-sub {
+  margin-top: 6px;
+  font: 600 15px 'Playfair Display', Georgia, serif;
+  letter-spacing: .45em; text-transform: uppercase;
+  color: #c9d6ff;
+}
+.home-quote {
+  margin: 22px 0 30px;
+  font: italic 17px/1.5 'Playfair Display', Georgia, serif;
+  color: rgba(225, 230, 255, .78);
+}
+.home-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.home-btn {
+  padding: 11px 24px; border-radius: 999px; cursor: pointer;
+  font: 600 15px Arial, sans-serif; letter-spacing: .03em;
+  color: #f3e6c4; background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(240, 205, 135, .45);
+  backdrop-filter: blur(4px);
+  transition: background .2s, box-shadow .2s, transform .2s;
+}
+.home-btn:hover { background: rgba(255, 255, 255, .12); box-shadow: 0 0 22px rgba(240, 200, 120, .35); transform: translateY(-1px); }
+.home-btn-main {
+  color: #2a1a05; border-color: transparent;
+  background: linear-gradient(180deg, #f8dc9a, #d9a64c);
+}
+.home-btn-main:hover { background: linear-gradient(180deg, #ffe7b3, #e4b35c); }
+
+/* "Đẩu bính chỉ …" góc dưới phải */
+.home-chi {
+  position: absolute; right: 22px; bottom: 16px;
+  font: italic 13px 'Playfair Display', Georgia, serif;
+  color: rgba(220, 210, 180, .6); letter-spacing: .05em;
+}
+.home-chi b { color: #f3cf85; font-style: normal; }
+
+@media (prefers-reduced-motion: reduce) { .home-nebula { animation: none; } }

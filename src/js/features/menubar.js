@@ -83,7 +83,9 @@
       }
     }
   
-    let bar, page = 'laso';               // 'laso' | 'search' | 'cfg'
+    let bar, page = 'laso';               // 'home' | 'laso' | 'search' | 'cfg'
+    let homeFrom = 'laso';                // trang nằm dưới Trang chủ (Trang chủ chỉ phủ lên, không đổi tab)
+    const MO_TRANG_CHU = true;            // mở web là vào Trang chủ (desktop)
     const scrollMem = {};                 // vị trí cuộn thanh bên của từng trang
     let formSnap = null;                  // form của tab Xem lá số khi đang ở tab Tìm
     let formTab = 'DL';                   // tab Dương/Âm lịch của trang Xem lá số
@@ -99,6 +101,7 @@
           <span class="mb-brand">Vận mệnh</span>
         </div>
         <nav class="mb-tabs" role="tablist">
+                <button type="button" class="mb-tab" data-page="home">Trang chủ</button>
           <button type="button" class="mb-tab" data-page="laso">Xem lá số</button>
           <button type="button" class="mb-tab" data-page="search">Tìm lá số</button>
           <button type="button" class="mb-tab" data-page="cfg">⚙ Cấu hình</button>
@@ -185,7 +188,16 @@
     function goPage(p) {
       if (!isDesktop() || p === page) return;
       if (p === 'cfg' && typeof isLysoTemplateActive === 'function' && isLysoTemplateActive()) {
-        toast('Cấu hình không dùng được với phương pháp lyso.vn (lá số dạng ảnh).');
+            // Trang chủ chỉ phủ lên trên, trang bên dưới giữ nguyên (form, lá số, nét vẽ, kết quả tìm)
+    if (p === 'home') { homeFrom = page; page = 'home'; syncUi(); return; }
+    if (page === 'home') {
+      page = homeFrom;
+      if (p === page) {
+        syncUi();
+        if (typeof rerenderLaso === 'function') setTimeout(rerenderLaso, 0);
+        return;
+      }
+    }
         return;
       }
       // Rời tab Xem lá số: tạm dừng bút vẽ, giữ nét (quay lại thì vẽ lại đúng chỗ)
@@ -211,7 +223,7 @@
   
     // Trạng thái trang suy ra từ tab đang mở (khi tab bị đổi từ chỗ khác: mở lá số đã lưu, chuyển layout…)
     function syncFromTab() {
-      if (!isDesktop()) return;
+        if (!isDesktop() || page === 'home') return;
       const t = tabNow();
       const want = t === 'SEARCH' ? 'search' : t === 'CFG' ? 'cfg' : 'laso';
       if (want !== page) {
@@ -231,7 +243,7 @@
     function syncUi() {
       const d = isDesktop();
       placeNav();
-      ['laso', 'search', 'cfg'].forEach(k => document.body.classList.toggle('mb-page-' + k, d && page === k));
+      ['home', 'laso', 'search', 'cfg'].forEach(k => document.body.classList.toggle('mb-page-' + k, d && page === k));
       document.body.classList.toggle('mb-search-empty', d && page === 'search' && searchIdx() < 0);
       bar?.querySelectorAll('[data-page]').forEach(b => {
         const on = b.dataset.page === page;
@@ -387,7 +399,11 @@
       user = window.FB?.auth?.currentUser || null;
       renderAccount();
       syncFromTab();
+      if (MO_TRANG_CHU && isDesktop()) { homeFrom = page; page = 'home'; }
       syncUi();
+      // Mở lá số đã lưu khi đang ở Trang chủ → sang Xem lá số
+      const moLaSo = () => { if (page === 'home') goPage('laso'); };
+      document.addEventListener('cloud-opened', moLaSo);
       // Tab bị đổi từ nơi khác (switchTab gọi từ code khác) → cập nhật trang
       ['tabDL', 'tabAL', 'tabSEARCH', 'tabCFG'].forEach(id => {
         const el = $(id);
