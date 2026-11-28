@@ -226,6 +226,7 @@
   
     function veRecent() {
       if (!recentEl) return;
+      if (!isMob()) { recentEl.innerHTML = ''; return; }        // desktop: không hiện "Lá số gần đây" ở Trang chủ
       const all = typeof window.CLOUD_items === 'function' ? window.CLOUD_items() : [];
       if (!all.length) { recentEl.innerHTML = ''; return; }
       const order = docRecent();

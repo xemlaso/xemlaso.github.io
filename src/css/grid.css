@@ -1109,6 +1109,10 @@ src/css/grid.css
       cursor: pointer;
       line-height: 1;
       color: #4a2e08;
+      touch-action: manipulation;        /* bấm nhanh liên tiếp không bị phóng to trang */
+      -webkit-user-select: none;
+      user-select: none;                 /* không bôi đen ký tự ‹ › khi bấm nhiều lần */
+
     }
 
     .han-nav-nam {
