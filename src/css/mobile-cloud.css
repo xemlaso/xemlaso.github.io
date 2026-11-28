@@ -140,3 +140,66 @@ body[data-layout="mobile"] .m-note-btn {
 .m-note-btn:disabled { opacity: .4; cursor: default; }
 .m-note-btn .m-dot { top: -4px; right: -4px; }
 .m-note-btn.has-dot .m-dot { display: block; }
+
+/* ── Note thu nhỏ: cửa sổ nổi phía dưới (mobile-cloud.js) ──────── */
+.m-sheet-mini {
+  flex: 0 0 auto; width: 38px; height: 34px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255, 255, 255, .5); border-radius: 8px;
+  background: transparent; color: #fff; cursor: pointer;
+}
+.m-sheet-mini svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.m-sheet-mini .i-phong, #mSheetNote.m-mini .m-sheet-mini .i-thu { display: none; }
+#mSheetNote.m-mini .m-sheet-mini .i-phong { display: block; }
+.m-mini-grip, .m-note-tab { display: none; }
+
+body[data-layout="mobile"] #mSheetNote.m-mini:not([hidden]) {
+  left: 6px; right: 6px; bottom: auto;                 /* top/height do JS đặt */
+  z-index: 8900;                                       /* dưới các bảng toàn màn hình */
+  padding-bottom: 0;
+  border-radius: 12px; overflow: hidden;
+  background: #fff;
+  box-shadow: 0 -2px 18px rgba(7, 10, 34, .35), 0 0 0 1px rgba(7, 10, 34, .15);
+  transition: opacity .15s, transform .15s;
+}
+#mSheetNote.m-mini.m-mini-drag { transition: none; }
+#mSheetNote.m-mini .m-mini-grip {
+  display: block; flex: 0 0 14px; position: relative;
+  background: #1f4e79; touch-action: none; cursor: ns-resize;
+}
+#mSheetNote.m-mini .m-mini-grip::after {
+  content: ''; position: absolute; left: 50%; top: 5px; width: 40px; height: 4px;
+  margin-left: -20px; border-radius: 2px; background: rgba(255, 255, 255, .55);
+}
+#mSheetNote.m-mini .m-sheet-head {
+  padding: 2px 6px 6px 12px; font-size: 13px; gap: 6px;
+  touch-action: none; cursor: grab; user-select: none;
+}
+#mSheetNote.m-mini .m-sheet-head button { height: 30px; }
+#mSheetNote.m-mini .m-sheet-save { padding: 0 8px; font-size: 13px; }
+#mSheetNote.m-mini .m-sheet-close, #mSheetNote.m-mini .m-sheet-mini { width: 32px; }
+#mSheetNote.m-mini .note-toolbar,
+#mSheetNote.m-mini .note-gallery { display: none; }
+#mSheetNote.m-mini .note-editor { padding: 8px 12px; }
+/* Ảnh trong note: ẩn ảnh, chỉ để khung chữ "Ảnh" đánh dấu chỗ có ảnh */
+#mSheetNote.m-mini .note-editor img.note-img {
+  display: inline-block; width: 58px; height: 20px; margin: 2px 0;
+  object-position: -9999px 0;
+  border: 1px dashed #c8b88a; border-radius: 4px;
+  background: #fbf8f0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='14'%3E%3Crect x='1' y='2' width='13' height='10' rx='2' fill='none' stroke='%239a8a66'/%3E%3Cpath d='M2 11l4-4 3 3 2-2 3 3' fill='none' stroke='%239a8a66'/%3E%3Ctext x='18' y='11' font-family='Arial' font-size='11' fill='%239a8a66'%3E%E1%BA%A2nh%3C/text%3E%3C/svg%3E") center no-repeat;
+}
+/* Chừa chỗ ở cuối trang để cuộn được cả hàng cung cuối lên trên cửa sổ */
+html.m-note-mini-on body[data-layout="mobile"] .m-bar-spacer {
+  height: calc(52px + env(safe-area-inset-bottom) + var(--m-note-pad, 0px) + 12px);
+}
+/* Nút mũi tên bám mép khi cửa sổ đã vuốt sang bên */
+body[data-layout="mobile"] .m-note-tab:not([hidden]) {
+  display: flex; align-items: center; justify-content: center;
+  position: fixed; z-index: 8900; width: 30px; height: 44px; padding: 0;
+  border: 0; background: #1f4e79; color: #fff;
+  box-shadow: 0 2px 10px rgba(7, 10, 34, .35); cursor: pointer;
+}
+.m-note-tab[data-side="right"] { right: 0; border-radius: 10px 0 0 10px; }
+.m-note-tab[data-side="left"]  { left: 0;  border-radius: 0 10px 10px 0; }
+.m-note-tab[data-side="left"] svg { transform: scaleX(-1); }
+.m-note-tab svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
