@@ -226,21 +226,21 @@
   
     function veRecent() {
       if (!recentEl) return;
-      if (!isMob()) { recentEl.innerHTML = ''; return; }        // desktop: không hiện "Lá số gần đây" ở Trang chủ
-      const all = typeof window.CLOUD_items === 'function' ? window.CLOUD_items() : [];
-      if (!all.length) { recentEl.innerHTML = ''; return; }
-      const order = docRecent();
-      const rank = x => { const i = order.indexOf(x.id); return i < 0 ? 1e9 : i; };
-      const list = [...all].sort((a, b) => (rank(a) - rank(b)) || ((b.t || 0) - (a.t || 0))).slice(0, 4);
-      recentEl.innerHTML = `<div class="home-recent-title">Lá số gần đây</div><div class="home-recent-list">${list.map(x => {
-        const ct = Array.isArray(x.menh?.chinhTinh) && x.menh.chinhTinh.length ? x.menh.chinhTinh.join(', ') : 'Vô chính diệu';
-        const menh = x.menh?.chi ? `Mệnh ${esc(x.menh.chi)} · ${esc(ct)}` : '';
-        return `<button type="button" class="home-card" data-open="${esc(x.id)}" title="Mở lá số">
-          <span class="home-card-name">${esc(x.hoTen || '(không tên)')}</span>
-          <span class="home-card-meta">${x.dl?.y ? esc(x.dl.y) : ''}${x.gioiTinh ? ' · ' + (x.gioiTinh === 'nu' ? 'Nữ' : 'Nam') : ''}</span>
-          ${menh ? `<span class="home-card-menh">${menh}</span>` : ''}
-        </button>`;
-      }).join('')}</div>`;
+      recentEl.innerHTML = ''; return;                           // không hiện "Lá số gần đây" ở Trang chủ (cả desktop và mobile)
+      // const all = typeof window.CLOUD_items === 'function' ? window.CLOUD_items() : [];
+      // if (!all.length) { recentEl.innerHTML = ''; return; }
+      // const order = docRecent();
+      // const rank = x => { const i = order.indexOf(x.id); return i < 0 ? 1e9 : i; };
+      // const list = [...all].sort((a, b) => (rank(a) - rank(b)) || ((b.t || 0) - (a.t || 0))).slice(0, 4);
+      // recentEl.innerHTML = `<div class="home-recent-title">Lá số gần đây</div><div class="home-recent-list">${list.map(x => {
+      //   const ct = Array.isArray(x.menh?.chinhTinh) && x.menh.chinhTinh.length ? x.menh.chinhTinh.join(', ') : 'Vô chính diệu';
+      //   const menh = x.menh?.chi ? `Mệnh ${esc(x.menh.chi)} · ${esc(ct)}` : '';
+      //   return `<button type="button" class="home-card" data-open="${esc(x.id)}" title="Mở lá số">
+      //     <span class="home-card-name">${esc(x.hoTen || '(không tên)')}</span>
+      //     <span class="home-card-meta">${x.dl?.y ? esc(x.dl.y) : ''}${x.gioiTinh ? ' · ' + (x.gioiTinh === 'nu' ? 'Nữ' : 'Nam') : ''}</span>
+      //     ${menh ? `<span class="home-card-menh">${menh}</span>` : ''}
+      //   </button>`;
+      // }).join('')}</div>`;
     }
   
     // Mobile: lời chào hoặc nút đăng nhập ở đầu Trang chủ (desktop đã có tài khoản trên menubar)
