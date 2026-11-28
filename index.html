@@ -160,7 +160,10 @@
               </select>
             </div>
             <div class="fg fg-lap-laso">
-              <button type="button" class="btn" onclick="lapLaSo()">Lập lá số</button>
+              <div class="ui-btn-row">
+                <button type="button" class="ui-btn ui-btn-primary" data-lap data-icon="sparkle" onclick="lapLaSo()">Lập lá số</button>
+                <button type="button" class="ui-btn ui-btn-secondary" data-icon="clock" onclick="lapLaSoHienTai()">Hiện tại</button>
+              </div>
             </div>
             <div class="fg fg-save-laso">
               <button type="button" class="btn" onclick="saveLaso()">💾 Lưu lá số</button>

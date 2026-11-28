@@ -348,6 +348,17 @@
         return ok;
       };
   
+        // Nút "Hiện tại": hỏi lưu nếu có thay đổi → bỏ liên kết lá số đang mở (Note, ảnh) để form lập lá số mới
+  window.CLOUD_closeCurrent = async () => {
+    if (!(await confirmLeave())) return false;
+    currentId = null;
+    images = []; deletedImageIds = [];
+    setNote('');
+    savedForm = null; savedNote = '';
+    renderList(); renderGallery();
+    return true;
+  };
+
     // ── Mở một lá số ────────────────────────────────────────────
     const announceOpened = id => document.dispatchEvent(new CustomEvent('cloud-opened', { detail: { id } }));
     async function openLaso(id) {
@@ -475,7 +486,7 @@
   
     // ── Nút "Lập lá số": đang mở lá số đã lưu mà form đã sửa → hỏi ──
     document.addEventListener('click', async e => {
-      const btn = e.target.closest('#formWrap .fg-lap-laso .btn');
+      const btn = e.target.closest('#formWrap .fg-lap-laso [data-lap]');
       if (!btn || silent || !formDirty()) return;
       e.preventDefault();
       e.stopPropagation();                     // chặn onclick="lapLaSo()" của nút, xử lý tại đây

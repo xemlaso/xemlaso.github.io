@@ -108,6 +108,23 @@
       onNamXemChange();
     }
 
+        // Nút "Hiện tại": lập lá số của thời điểm này (chưa lưu).
+    // Đang mở lá số đã lưu: hỏi lưu nếu có thay đổi → đóng lá số đó → lập lá số mới.
+    async function lapLaSoHienTai() {
+      if (typeof window.CLOUD_closeCurrent === 'function' && !(await window.CLOUD_closeCurrent())) return;
+      const now = new Date();
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = String(v); };
+      if ((window._currentTab || 'DL') !== 'DL' && typeof switchTab === 'function') switchTab('DL');
+      set('hoTen', '');
+      set('gt', 'nam');
+      set('ngayDL', now.getDate()); set('thangDL', now.getMonth() + 1); set('namDL', now.getFullYear());
+      set('gio', fmtHHMM(now.getHours(), now.getMinutes()));   // tự quy về canh giờ (23h → Tý muộn)
+      if (typeof convertDL === 'function') convertDL();
+      if (typeof syncMobilePickersFromInputs === 'function') syncMobilePickersFromInputs();
+      lapLaSo();
+    }
+    window.lapLaSoHienTai = lapLaSoHienTai;
+    
     (function bindGioArrowButtons() {
       const prev = document.getElementById('btnGioXemPrev');
       const next = document.getElementById('btnGioXemNext');

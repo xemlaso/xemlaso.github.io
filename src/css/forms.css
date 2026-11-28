@@ -46,10 +46,6 @@
       grid-column: 1 / -1;
     }
 
-    #formWrap .fg-lap-laso .btn {
-      width: 100%;
-    }
-
     #cfgPanel.is-lyso-locked .fg input:not([data-lyso-keep]),
     #cfgPanel.is-lyso-locked .fg select:not([data-lyso-keep]),
     #cfgPanel.is-lyso-locked .fg button:not([data-lyso-keep]) {
