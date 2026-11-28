@@ -80,6 +80,18 @@
   .cl-item:hover .cl-del, .cl-item.active .cl-del { opacity: .7; }
   .cl-del:hover { opacity: 1 !important; }
   .cl-empty { padding: 6px 4px; color: #5b6b7c; font-style: italic; }
+  .cl-group {
+    position: sticky; top: 0; z-index: 1;
+    display: flex; align-items: center; gap: 6px;
+    margin: 6px 0 2px; padding: 4px 6px;
+    background: #f1f5f9; border-radius: 6px; cursor: pointer; user-select: none;
+    font-size: 10px; font-weight: bold; letter-spacing: .5px; text-transform: uppercase; color: #5b6b7c;
+  }
+  .cl-group:hover { background: #e6edf4; }
+  .cl-group:first-child { margin-top: 0; }
+  .cl-group svg { flex: 0 0 auto; transition: transform .15s ease; }
+  .cl-group.dong svg { transform: rotate(-90deg); }
+  .cl-group span { margin-left: auto; font-weight: normal; letter-spacing: 0; }
   
   /* Popup hỏi (lưu / cập nhật / xóa) */
   .cl-ask { width: min(440px, 92vw); }

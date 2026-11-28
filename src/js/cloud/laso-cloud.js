@@ -793,9 +793,9 @@
       if (!noteTextCache.has(key)) {
         const tpl = document.createElement('template');
         tpl.innerHTML = String(x.note || '').replace(/<(br|\/p|\/div|\/li|\/h\d)>/gi, ' $&');
-        const raw = (tpl.content.textContent || '').replace(/\s+/g, ' ').trim();
-        const norm = Array.from(raw).map(ch => noDau(ch) || ch).join('');   // cùng độ dài với raw
-        noteTextCache.set(key, { raw: Array.from(raw), norm });
+        const raw = Array.from((tpl.content.textContent || '').normalize('NFC').replace(/\s+/g, ' ').trim());
+        const low = raw.map(ch => { const l = ch.toLowerCase(); return l.length === ch.length ? l : ch; }).join('');
+        noteTextCache.set(key, { raw, low });
       }
       return noteTextCache.get(key);
     }
@@ -809,6 +809,8 @@
       const q = noDau(query);
       const years = q.match(/\b\d{4}\b/g) || [];
       const words = q.replace(/\b\d{4}\b/g, ' ').replace(/\s+/g, ' ').trim();
+          // Tìm trong Note: không phân biệt hoa thường nhưng phải đúng dấu
+    const wordsDau = Array.from(String(query).normalize('NFC').toLowerCase().replace(/\b\d{4}\b/g, ' ').replace(/\s+/g, ' ').trim());
       const out = [];
       for (const x of items) {
         if (years.length && !years.includes(String(yearOf(x)))) continue;
@@ -818,20 +820,22 @@
           if (!Array.isArray(ct)) continue;                            // lá số lưu khi chưa có thông tin cung Mệnh
           if (filterSao === VCD ? ct.length > 0 : !ct.includes(filterSao)) continue;
         }
-        let snippet = '';
+        let snippet = '', nhom = '';
         if (words) {
           const inName = (x.hoTenKhongDau || noDau(x.hoTen)).includes(words);
+          nhom = inName ? 'ten' : 'note';
           if (!inName) {
             const nt = noteText(x);
-            const i = nt.norm.indexOf(words);
-            if (i < 0) continue;
-            const from = Math.max(0, i - 25), to = Math.min(nt.raw.length, i + words.length + 35);
+            const j = nt.low.indexOf(wordsDau.join(''));
+            if (j < 0) continue;
+            const i = Array.from(nt.low.slice(0, j)).length, n = wordsDau.length;   // vị trí theo ký tự
+            const from = Math.max(0, i - 25), to = Math.min(nt.raw.length, i + n + 35);
             snippet = (from > 0 ? '…' : '') + esc(nt.raw.slice(from, i).join(''))
-              + '<mark>' + esc(nt.raw.slice(i, i + words.length).join('')) + '</mark>'
-              + esc(nt.raw.slice(i + words.length, to).join('')) + (to < nt.raw.length ? '…' : '');
+              + '<mark>' + esc(nt.raw.slice(i, i + n).join('')) + '</mark>'
+              + esc(nt.raw.slice(i + n, to).join('')) + (to < nt.raw.length ? '…' : '');
           }
         }
-        out.push({ x, snippet });
+        out.push({ x, snippet, nhom });
       }
       const by = {
         'ten': (a, b) => cmpName(a.x, b.x),
@@ -840,8 +844,30 @@
         'nam-desc': (a, b) => yearOf(b.x) - yearOf(a.x) || cmpName(a.x, b.x),
         'moi': (a, b) => timeOf(b.x) - timeOf(a.x) || cmpName(a.x, b.x),
       }[sortBy];
-      return out.sort(by);
+      return out.sort((a, b) => (a.nhom === 'note') - (b.nhom === 'note') || by(a, b));   // nhóm Tên trước, Note sau
     }
+
+  // Kết quả tìm theo chữ: chia vùng "Tên phù hợp" / "Nội dung Note phù hợp", bấm tiêu đề để thu/mở
+  const NHOM = [['ten', 'Tên phù hợp'], ['note', 'Nội dung Note phù hợp']];
+  const nhomDong = new Set();                                  // các vùng đang thu (giữ đến khi tải lại trang)
+  function nhomHtml(rows, veHang) {
+    if (!rows.some(r => r.nhom)) return rows.map(veHang).join('');        // không gõ chữ (chỉ lọc/năm): giữ như cũ
+    return NHOM.map(([k, ten]) => {
+      const r = rows.filter(row => row.nhom === k);
+      if (!r.length) return '';
+      const dong = nhomDong.has(k);
+      return `<div class="cl-group${dong ? ' dong' : ''}" data-nhom="${k}" title="${dong ? 'Mở rộng' : 'Thu gọn'}">`
+        + `<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        + `${ten}<span>${r.length}</span></div>` + (dong ? '' : r.map(veHang).join(''));
+    }).join('');
+  }
+  document.addEventListener('click', e => {
+    const g = e.target.closest('#cloudList .cl-group[data-nhom]');
+    if (!g) return;
+    const k = g.dataset.nhom;
+    if (nhomDong.has(k)) nhomDong.delete(k); else nhomDong.add(k);
+    renderList();
+  });
   
     function buildListControls(box) {
       box.innerHTML = `
@@ -937,7 +963,7 @@
       if (!rows.length) { list.innerHTML = '<div class="cl-empty">Không có lá số phù hợp.</div>'; return; }
       if (cursorId && !rows.some(r => r.x.id === cursorId)) cursorId = null;
       const dirty = isDirty();
-      list.innerHTML = rows.map(({ x, snippet }) => `
+          const veHang = ({ x, snippet }) => `
         <div class="cl-item${x.id === currentId ? ' active' : ''}${x.id === cursorId ? ' cursor' : ''}" data-id="${esc(x.id)}" title="Bấm hoặc Enter để mở">
           <div class="cl-main">
             <span class="cl-name">${esc(x.hoTen || '(không tên)')}${x.id === currentId && dirty ? ' <span class="cl-dirty" title="Có thay đổi chưa lưu">●</span>' : ''}</span>
@@ -946,7 +972,8 @@
                   <span class="cl-gt">${x.gioiTinh === 'nu' ? 'Nữ' : x.gioiTinh === 'nam' ? 'Nam' : ''}</span>
           <span class="cl-year">${esc(x.dl?.y ?? '')}</span>
           <button type="button" class="cl-del" title="Xóa lá số" tabindex="-1">🗑</button>
-        </div>`).join('');
+              </div>`;
+    list.innerHTML = nhomHtml(rows, veHang);
     }
   
     // Cập nhật dấu "● chưa lưu" khi sửa form / note

@@ -78,9 +78,9 @@
       bar.className = 'm-bar';
       bar.innerHTML = `
              <button type="button" class="m-bar-btn" data-go="home"><span class="m-ico">${ICON.home}</span>Trang chủ</button>
+             <button type="button" class="m-bar-btn" data-go="cloud"><span class="m-ico">${ICON.user}</span>Tài khoản</button>
       <button type="button" class="m-bar-btn" data-go="laso"><span class="m-ico">${ICON.laso}</span>Lá số</button>
-      <button type="button" class="m-bar-btn" data-go="search"><span class="m-ico">${ICON.search}</span>Tìm</button>
-      <button type="button" class="m-bar-btn" data-go="cloud"><span class="m-ico">${ICON.user}</span>Tài khoản</button>
+      <button type="button" class="m-bar-btn" data-go="search"><span class="m-ico">${ICON.search}</span>Chọn giờ</button>
       <button type="button" class="m-bar-btn" data-go="cfg"><span class="m-ico">${ICON.cfg}</span>Cấu hình</button>`;
       bar.addEventListener('click', e => {
         const k = e.target.closest('[data-go]')?.dataset.go;
