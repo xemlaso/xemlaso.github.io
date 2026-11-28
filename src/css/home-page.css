@@ -1,8 +1,9 @@
-/* src/css/home-page.css – Trang chủ (desktop). Phủ toàn bộ vùng dưới menubar, không đụng tới khu vực lá số. */
+/* src/css/home-page.css – Trang chủ (desktop + mobile). Phủ lên trên, không đụng tới khu vực lá số. */
 .home-page { display: none; }
-body[data-layout="desktop"].mb-page-home .home-page {
+body[data-layout="desktop"].mb-page-home .home-page,
+body[data-layout="mobile"].m-page-home .home-page {
   display: block;
-  position: fixed; top: 44px; left: 0; right: 0; bottom: 0; z-index: 940;   /* dưới menubar (950) */
+  position: fixed; top: 44px; left: 0; right: 0; bottom: 0; z-index: 940;   /* desktop: dưới menubar (950) */
   overflow: hidden;
   /* màu trời do home-page.js đặt theo giờ thật */
   background: radial-gradient(ellipse at 64% 50%, var(--home-c1, #16204a) 0%, var(--home-c2, #0b1030) 45%, var(--home-c3, #05071a) 100%);
@@ -19,7 +20,6 @@ body[data-layout="desktop"].mb-page-home .home-page {
     radial-gradient(closest-side at 72% 62%, rgba(40, 120, 200, .22), transparent),
     radial-gradient(closest-side at 55% 20%, rgba(200, 90, 160, .14), transparent),
     radial-gradient(closest-side at 15% 80%, rgba(60, 160, 170, .12), transparent);
-  filter: blur(30px);
   animation: home-nebula 60s ease-in-out infinite alternate;
 }
 @keyframes home-nebula {
@@ -94,7 +94,6 @@ body[data-layout="desktop"].mb-page-home .home-page {
   font: 600 15px Arial, sans-serif; letter-spacing: .03em;
   color: #f3e6c4; background: rgba(255, 255, 255, .06);
   border: 1px solid rgba(240, 205, 135, .45);
-  backdrop-filter: blur(4px);
   transition: background .2s, box-shadow .2s, transform .2s;
 }
 .home-btn:hover { background: rgba(255, 255, 255, .12); box-shadow: 0 0 22px rgba(240, 200, 120, .35); transform: translateY(-1px); }
@@ -116,7 +115,7 @@ body[data-layout="desktop"].mb-page-home .home-page {
   display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
   padding: 8px 12px; border-radius: 10px; cursor: pointer; text-align: left;
   background: rgba(255, 255, 255, .05); border: 1px solid rgba(240, 205, 135, .22);
-  backdrop-filter: blur(4px); color: inherit; text-shadow: none;
+  color: inherit; text-shadow: none;
   transition: background .2s, border-color .2s, transform .2s;
 }
 .home-card:hover { background: rgba(255, 255, 255, .11); border-color: rgba(240, 205, 135, .55); transform: translateY(-1px); }
@@ -136,7 +135,6 @@ body[data-layout="desktop"].mb-page-home .home-page {
   padding: 8px 12px; border-radius: 8px;
   background: rgba(10, 14, 40, .82); border: 1px solid rgba(240, 205, 135, .35);
   box-shadow: 0 6px 24px rgba(0, 0, 0, .45), 0 0 18px rgba(120, 160, 255, .15);
-  backdrop-filter: blur(6px);
 }
 .home-tip[hidden] { display: none; }
 .home-tip-name { font: 600 14px 'Playfair Display', Georgia, serif; color: #f6e7c1; }
@@ -151,6 +149,63 @@ body[data-layout="desktop"].mb-page-home .home-page {
   color: rgba(220, 210, 180, .6); letter-spacing: .05em;
 }
 .home-chi b { color: #f3cf85; font-style: normal; }
+
+/* ═════════ Mobile: trời ở nửa trên, chữ ở nửa dưới ═════════ */
+body[data-layout="mobile"].m-page-home { overflow: hidden; }         /* không cuộn trang bên dưới */
+body[data-layout="mobile"].m-page-home .home-page {
+  top: 0; bottom: calc(52px + env(safe-area-inset-bottom)); z-index: 8900;   /* dưới thanh đáy (9000) */
+  overscroll-behavior: contain;
+}
+body[data-layout="mobile"] .home-nebula { animation-duration: 90s; }
+body[data-layout="mobile"] .home-hero {
+  left: 0; right: 0; top: 54%; bottom: 0; transform: none; max-width: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 18px 12px; box-sizing: border-box; overflow-y: auto;
+  text-align: center;
+}
+body[data-layout="mobile"] .home-intro .home-hero { transform: translateY(16px); }
+body[data-layout="mobile"] .home-kicker, body[data-layout="mobile"] .home-quote { display: none; }
+body[data-layout="mobile"] .home-title { font-size: clamp(38px, 11vw, 52px); }
+body[data-layout="mobile"] .home-sub { font-size: 12px; letter-spacing: .35em; }
+body[data-layout="mobile"] .home-today { margin-top: 10px; }
+body[data-layout="mobile"] .home-today-date { font-size: 13px; }
+body[data-layout="mobile"] .home-today-cc { justify-content: center; gap: 10px; }
+body[data-layout="mobile"] .home-today-cc span { min-width: 54px; font-size: 12px; }
+body[data-layout="mobile"] .home-today-cc b { font-size: 16px; }
+body[data-layout="mobile"] .home-cta { margin-top: 16px; width: 100%; max-width: 360px; flex-wrap: nowrap; }
+body[data-layout="mobile"] .home-btn { flex: 1; padding: 11px 10px; }
+body[data-layout="mobile"] .home-recent { margin-top: 16px; width: 100%; }
+body[data-layout="mobile"] .home-recent-title { text-align: left; }
+body[data-layout="mobile"] .home-recent-list {               /* vuốt ngang */
+  display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px;
+}
+body[data-layout="mobile"] .home-recent-list::-webkit-scrollbar { display: none; }
+body[data-layout="mobile"] .home-card { flex: 0 0 62%; scroll-snap-align: start; }
+body[data-layout="mobile"] .home-chi {                         /* ngay dưới vòng chi (top do JS đặt) */
+  right: auto; bottom: auto; left: 0; width: 100%; text-align: center; font-size: 12px;
+}
+body[data-layout="mobile"] .home-tip { max-width: 220px; }
+/* Lời chào / đăng nhập ở đầu trang (chỉ mobile) */
+.home-user { display: none; }
+body[data-layout="mobile"] .home-user {
+  position: absolute; z-index: 2; left: 14px; right: 14px; top: max(10px, env(safe-area-inset-top));
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.home-hello {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font: italic 13px 'Playfair Display', Georgia, serif; color: rgba(225, 230, 255, .8);
+}
+.home-hello b { font-style: normal; color: #f6e7c1; }
+.home-avatar {
+  flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; border: 0; cursor: pointer;
+  font: bold 14px Arial, sans-serif; color: #2a1a05; background: linear-gradient(180deg, #f8dc9a, #d9a64c);
+}
+.home-login {
+  flex: 0 0 auto; padding: 6px 14px; border-radius: 999px; cursor: pointer;
+  font: 600 12px Arial, sans-serif; color: #f3e6c4; background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(240, 205, 135, .5);
+}
 
 @media (prefers-reduced-motion: reduce) {
   .home-nebula { animation: none; }

@@ -22,7 +22,7 @@
   
     // ── Bảng toàn màn hình ──────────────────────────────────────
     const SHEETS = {
-      cloud: { id: 'mSheetCloud', title: 'Lá số đã lưu', panel: 'cloudPanel' },
+      cloud: { id: 'mSheetCloud', title: 'Tài khoản', panel: 'cloudPanel' },
       note:  { id: 'mSheetNote',  title: 'Ghi chú',      panel: 'notePanel',
                extra: '<button type="button" class="m-sheet-save" data-mact="save">💾 Lưu</button>' },
       // đặt trong #formAreaLaso để CSS mobile sẵn có của form vẫn áp dụng
@@ -30,7 +30,10 @@
     };
   
     let bar, noteBtn, openKey = null;
-    let page = 'laso';                    // 'laso' | 'search'
+    let page = 'laso';                    // 'home' | 'laso' | 'search'
+    let homeFrom = 'laso';                // trang nằm dưới Trang chủ
+    const MO_TRANG_CHU = true;            // mở web trên mobile là vào Trang chủ
+    let daVaoTrangChu = false;            // chỉ tự vào Trang chủ một lần, lúc trang vừa mở
     let formSnap = null;                  // form của tab Lá số khi chuyển sang tab Tìm
     let cfgReturn = 'DL';                 // tab trước khi mở Cấu hình
     const sheets = {};
@@ -60,17 +63,28 @@
       sheets[key] = s;
     }
   
+      // Icon nét mảnh (SVG), màu theo chữ của nút: đang chọn thì vàng
+  const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const ICON = {
+    home:   svg('<path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9v11a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1V9"/>'),
+    laso:   svg('<rect x="3" y="3" width="18" height="18" rx="2"/><rect x="8" y="8" width="8" height="8" rx="1"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/>'),
+    search: svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'),
+    user:   svg('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>'),
+    cfg:    svg('<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>'),
+  };
+
     function build() {
       bar = document.createElement('div');
       bar.className = 'm-bar';
       bar.innerHTML = `
-        <button type="button" class="m-bar-btn" data-go="laso"><span class="m-ico">🏠</span>Lá số</button>
-        <button type="button" class="m-bar-btn" data-go="search"><span class="m-ico">🔍</span>Tìm</button>
-        <button type="button" class="m-bar-btn" data-go="cloud"><span class="m-ico">☁</span>Đã lưu</button>
-        <button type="button" class="m-bar-btn" data-go="cfg"><span class="m-ico">⚙</span>Cấu hình</button>`;
+             <button type="button" class="m-bar-btn" data-go="home"><span class="m-ico">${ICON.home}</span>Trang chủ</button>
+      <button type="button" class="m-bar-btn" data-go="laso"><span class="m-ico">${ICON.laso}</span>Lá số</button>
+      <button type="button" class="m-bar-btn" data-go="search"><span class="m-ico">${ICON.search}</span>Tìm</button>
+      <button type="button" class="m-bar-btn" data-go="cloud"><span class="m-ico">${ICON.user}</span>Tài khoản</button>
+      <button type="button" class="m-bar-btn" data-go="cfg"><span class="m-ico">${ICON.cfg}</span>Cấu hình</button>`;
       bar.addEventListener('click', e => {
         const k = e.target.closest('[data-go]')?.dataset.go;
-        if (k === 'laso' || k === 'search') goPage(k);
+        if (k === 'home' || k === 'laso' || k === 'search') goPage(k);
         else if (k) showSheet(k);
       });
       document.body.appendChild(bar);
@@ -120,12 +134,16 @@
       if (m) moveTo(nav, wrap, wrap?.firstElementChild);
       else moveHome(nav);
   
+      if (m && MO_TRANG_CHU && !daVaoTrangChu && page !== 'search') { homeFrom = page; page = 'home'; }
+      if (m) daVaoTrangChu = true;
+
       if (m) {
         const t = window._currentTab;
         if (t === 'CFG' && !openKey && typeof switchTab === 'function') switchTab('DL');
         if (t === 'SEARCH' && page !== 'search') enterSearch(false);   // từ desktop đang ở tab Tìm
       } else {
         if (openKey) closeSheet(true);
+        if (page === 'home') page = homeFrom;                            // desktop có Trang chủ riêng (menubar.js)
         if (page === 'search') { page = 'laso'; formSnap = null; }       // desktop tự hiện tab Tìm như cũ
       }
       syncPageClass();
@@ -200,6 +218,20 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
+      if (p === 'home') {                   // Trang chủ chỉ phủ lên trên: không đổi form, lá số, kết quả tìm
+        scrollMem[page] = window.scrollY;
+        homeFrom = page; page = 'home';
+        syncPageClass(); refreshBar();
+        return;
+      }
+      if (page === 'home') {                // rời Trang chủ: trở về trang bên dưới rồi đi tiếp như thường
+        page = homeFrom;
+        if (p === page) {
+          syncPageClass(); refreshBar();
+          requestAnimationFrame(() => window.scrollTo(0, scrollMem[p] || 0));
+          return;
+        }
+      }
       scrollMem[page] = window.scrollY;
       if (p === 'search') enterSearch(); else leaveSearch();
       syncPageClass();
@@ -210,6 +242,7 @@
       const onSearch = isMobile() && page === 'search';
       document.body.classList.toggle('m-page-search', onSearch);
       document.body.classList.toggle('m-search-empty', onSearch && searchIdx() < 0);
+      document.body.classList.toggle('m-page-home', isMobile() && page === 'home');
     }
   
     // Bấm một kết quả tìm → cuộn xuống lá số
@@ -279,6 +312,7 @@
     // Mở một lá số đã lưu → về tab Lá số (form đã được điền theo lá số vừa mở)
     document.addEventListener('cloud-opened', () => {
       if (!isMobile() || openKey !== 'cloud') return;
+      if (page === 'home') { page = homeFrom; syncPageClass(); }           // mở từ Trang chủ → về trang bên dưới
       if (page === 'search') {
         const snap = formSnap;
         page = 'laso'; formSnap = null;

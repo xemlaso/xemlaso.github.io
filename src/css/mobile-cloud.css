@@ -7,22 +7,22 @@ body[data-layout="mobile"] .m-bar:not([hidden]) {
   height: calc(52px + env(safe-area-inset-bottom));
   padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   box-sizing: border-box;
-  background: #fff;
-  border-top: 1px solid #d7dee7;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, .06);
+  background: #070a22;                          /* tối như bầu trời Trang chủ, mọi tab đều vậy */
+  border-top: 1px solid rgba(240, 205, 135, .25);
 }
 .m-bar-btn {
   flex: 1 1 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
   height: 52px; padding: 0;
-  border: 0; background: none; color: #1f4e79;
+  border: 0; background: none; color: #c9d2ee;
   font: bold 11px Arial, sans-serif;
   cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
-.m-bar-btn:active { background: #eef3f8; }
-.m-bar-btn:disabled { opacity: .35; cursor: default; background: none; }
-.m-bar-btn + .m-bar-btn { border-left: 1px solid #eef1f5; }
-.m-ico { position: relative; font-size: 20px; line-height: 24px; }
+.m-bar-btn:active { background: rgba(255, 255, 255, .08); }
+.m-bar-btn + .m-bar-btn { border-left: 1px solid rgba(255, 255, 255, .06); }
+.m-bar-btn.on { color: #f2c86e; box-shadow: inset 0 3px 0 #f2c86e; }
+.m-ico { position: relative; display: flex; align-items: center; justify-content: center; height: 24px; }
+.m-ico svg { width: 22px; height: 22px; display: block; }
 .m-dot {
   display: none; position: absolute; top: -1px; right: -7px;
   width: 9px; height: 9px; border-radius: 50%;

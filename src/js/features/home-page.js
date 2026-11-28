@@ -1,31 +1,27 @@
-// src/js/features/home-page.js – Trang chủ (desktop)
-// Bầu trời đêm theo giờ thật, Ngân Hà và vệt sao quay quanh Bắc Thần, Bắc Đẩu chỉ chi của tháng âm hiện tại,
-// Nam Đẩu lục tinh, can chi hôm nay, lá số gần đây, hiệu ứng mở trang và chuyển sang lá số.
-// Hiện khi body có class "mb-page-home" (menubar.js bật/tắt). Ẩn thì dừng vẽ.
+// src/js/features/home-page.js – Trang chủ (desktop + mobile)
+// Bầu trời đêm theo giờ thật, vệt sao quay quanh Bắc Thần, Bắc Đẩu chỉ chi của tháng âm hiện tại,
+// can chi hôm nay, lá số gần đây, hiệu ứng mở trang và chuyển sang lá số.
+// Desktop: hiện khi body có class "mb-page-home" (menubar.js). Mobile: class "m-page-home" (mobile-cloud.js).
+// Ẩn thì dừng vẽ. Mobile chạy bản nhẹ: ít sao, không vệt sao, độ phân giải thấp hơn.
 (function () {
     'use strict';
   
     // ═════════ Dữ liệu sao ═════════
     // Bắc Đẩu (toạ độ tương đối theo hình mẫu); tinh quân theo Đạo giáo: Thiên Xu – Tham Lang …
     const BAC_DAU = [
-      { ten: 'Thiên Xu',    han: '天樞', quan: 'Tham Lang 貪狼',  y_: 'chủ phúc họa, dục vọng, tài nghệ', x: 697, y: 150, m: 1.00 },
-      { ten: 'Thiên Tuyền', han: '天璇', quan: 'Cự Môn 巨門',     y_: 'chủ khẩu thiệt, thị phi, ngôn luận', x: 668, y: 303, m: 0.90 },
-      { ten: 'Thiên Cơ',    han: '天璣', quan: 'Lộc Tồn 祿存',    y_: 'chủ tài lộc, bổng lộc',            x: 476, y: 318, m: 0.85 },
-      { ten: 'Thiên Quyền', han: '天權', quan: 'Văn Khúc 文曲',   y_: 'chủ văn chương, khoa danh',         x: 437, y: 195, m: 0.65 },
-      { ten: 'Ngọc Hành',   han: '玉衡', quan: 'Liêm Trinh 廉貞', y_: 'chủ quan lộc, hình ngục',           x: 316, y: 133, m: 1.00 },
-      { ten: 'Khai Dương',  han: '開陽', quan: 'Vũ Khúc 武曲',    y_: 'chủ tài tinh, cương nghị',          x: 217, y:  83, m: 0.90 },
-      { ten: 'Dao Quang',   han: '搖光', quan: 'Phá Quân 破軍',   y_: 'chủ hao tán, phá cũ lập mới',       x:  68, y: 118, m: 0.95 },
+      { ten: 'Thiên Xu',    han: '天樞', quan: 'Tham Lang 貪狼',  y_: 'Chủ phúc họa, dục vọng, tài nghệ', x: 697, y: 150, m: 1.00 },
+      { ten: 'Thiên Tuyền', han: '天璇', quan: 'Cự Môn 巨門',     y_: 'Chủ khẩu thiệt, thị phi, ngôn luận', x: 668, y: 303, m: 0.90 },
+      { ten: 'Thiên Cơ',    han: '天璣', quan: 'Lộc Tồn 祿存',    y_: 'Chủ tài lộc, bổng lộc',            x: 476, y: 318, m: 0.85 },
+      { ten: 'Thiên Quyền', han: '天權', quan: 'Văn Khúc 文曲',   y_: 'Chủ văn chương, khoa danh',         x: 437, y: 195, m: 0.65 },
+      { ten: 'Ngọc Hành',   han: '玉衡', quan: 'Liêm Trinh 廉貞', y_: 'Chủ quan lộc, hình ngục',           x: 316, y: 133, m: 1.00 },
+      { ten: 'Khai Dương',  han: '開陽', quan: 'Vũ Khúc 武曲',    y_: 'Chủ tài tinh, cương nghị',          x: 217, y:  83, m: 0.90 },
+      { ten: 'Dao Quang',   han: '搖光', quan: 'Phá Quân 破軍',   y_: 'Chủ hao tán, phá cũ lập mới',       x:  68, y: 118, m: 0.95 },
     ];
     const BD_NOI = [[0, 1], [1, 2], [2, 3], [3, 0], [3, 4], [4, 5], [5, 6]];
     // Bắc Thần: kéo dài Thiên Tuyền → Thiên Xu (rút ngắn so với thực tế để Bắc Đẩu to, rõ)
     const BAC_THAN = { x: 697 + 2.2 * 29, y: 150 - 2.2 * 153 };
-    const BAC_THAN_INFO = { ten: 'Bắc Thần', han: '北辰', quan: 'ngôi Tử Vi 紫微', y_: 'ở yên một chỗ, các sao chầu quanh' };
+    const BAC_THAN_INFO = { ten: 'Bắc Thần', han: '北辰', quan: 'ngôi Tử Vi 紫微', y_: 'Đế tinh chòm Bắc đẩu' };
   
-    // Nam Đẩu lục tinh (μ λ φ σ τ ζ Sgr), góc trên trái, đứng yên
-    const NAM_DAU = [[0, 0], [-60, 44], [-104, 60], [-128, 53], [-157, 67], [-146, 89]];
-    const ND_NOI = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 2]];
-    const NAM_DAU_INFO = { ten: 'Nam Đẩu lục tinh', han: '南斗六星', quan: 'Nam Đẩu chú sinh, Bắc Đẩu chú tử',
-      y_: 'Tử Vi: Thiên Phủ, Thiên Lương, Thiên Cơ, Thiên Đồng, Thiên Tướng, Thất Sát' };
   
     const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tị', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
     const CHI_HAN = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
@@ -38,8 +34,9 @@
     const INTRO_MS = 6000;              // hiệu ứng mở trang (lần đầu)
     const LEAVE_MS = 1100;              // hiệu ứng chuyển sang lá số
     const SWAY = 0.12, SWAY_MS = 50000; // Bắc Đẩu đung đưa quanh hướng tháng
-    const FPS = 30;                     // sao di chuyển chậm: 30 khung hình/giây là đủ mượt, đỡ tốn gấp 2–5 lần
+    const FPS = 30;                     // sao di chuyển chậm: 30 khung hình/giây là đủ mượt
     let lastVe = 0;
+    const isMob = () => document.body.dataset.layout === 'mobile';
     const reduce = !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const FONT_HAN = '"Noto Serif CJK SC", "Songti SC", "SimSun", serif';
     const FONT_VN = '"Playfair Display", Georgia, serif';
@@ -131,7 +128,7 @@
     }
   
     // ═════════ Trạng thái ═════════
-    let root, cv, ctx, tipEl, todayEl, chiEl, recentEl, W = 0, H = 0, dpr = 1, raf = 0, running = false;
+    let root, cv, ctx, tipEl, todayEl, chiEl, recentEl, userEl, W = 0, H = 0, dpr = 1, raf = 0, running = false;
     let cx = 0, cy = 0, R = 0, scale = 1, rMax = 0, nen = [], glow = null, ngan = null;
     let saoBang = null, nextBang = 0, chiCu = -1, info = homNay(), tick = 0;
     let introAt = 0, introDone = reduce, leave = null, hover = null, hits = [];
@@ -148,6 +145,7 @@
         <div class="home-nebula"></div>
         <div class="home-horizon"></div>
         <canvas class="home-sky"></canvas>
+        <div class="home-user"></div>
         <div class="home-hero">
           <div class="home-kicker">紫 微 斗 數</div>
           <h1 class="home-title">Vận mệnh</h1>
@@ -169,12 +167,14 @@
       todayEl = root.querySelector('.home-today');
       chiEl = root.querySelector('.home-chi');
       recentEl = root.querySelector('.home-recent');
+      userEl = root.querySelector('.home-user');
   
       root.addEventListener('click', e => {
         const b = e.target.closest('[data-go]');
         if (b) { roiTrang(b.dataset.go); return; }
         const r = e.target.closest('[data-open]');
         if (r) moLaSo(r.dataset.open);
+        if (e.target.closest('[data-acc]')) bamTab('cloud');           // mở bảng Tài khoản (đăng nhập / lá số đã lưu)
       });
       root.addEventListener('mousemove', e => {
         const rc = root.getBoundingClientRect();
@@ -183,11 +183,29 @@
         timHover(x, y);
       });
       root.addEventListener('mouseleave', () => { mx = my = 0; hover = null; tipEl.hidden = true; });
+      // Mobile: chạm vào sao để xem chú thích, tự ẩn sau 3 giây
+      let tipTimer = 0;
+      root.addEventListener('touchstart', e => {
+        if (e.target !== cv) return;
+        const rc = root.getBoundingClientRect(), t = e.touches[0];
+        timHover(t.clientX - rc.left, t.clientY - rc.top, 26);
+        clearTimeout(tipTimer);
+        tipTimer = setTimeout(() => { hover = null; tipEl.hidden = true; }, 3000);
+      }, { passive: true });
     }
   
-    // Bấm tab tương ứng trên menubar: menubar.js lo chuyển trang và giữ trạng thái
-    const bamTab = p => document.querySelector(`#menuBar [data-page="${p}"]`)?.click();
+    // Bấm tab tương ứng (menubar desktop / thanh đáy mobile): các file đó lo chuyển trang và giữ trạng thái
+    const bamTab = p => document.querySelector(isMob() ? `.m-bar [data-go="${p}"]` : `#menuBar [data-page="${p}"]`)?.click();
   
+    function huyRoiTrang() {
+        if (!leave) return;
+        leave = null;
+        root.classList.remove('home-leaving');
+      }
+      document.addEventListener('click', e => {
+        if (e.target.closest('.m-bar [data-go="home"], #menuBar [data-page="home"]')) huyRoiTrang();
+      }, true);
+      
     function roiTrang(p) {
       if (leave) return;
       if (reduce) { bamTab(p); return; }
@@ -224,6 +242,20 @@
       }).join('')}</div>`;
     }
   
+    // Mobile: lời chào hoặc nút đăng nhập ở đầu Trang chủ (desktop đã có tài khoản trên menubar)
+    function veUser() {
+      if (!userEl) return;
+      const u = window.FB?.auth?.currentUser;
+      if (u) {
+        const ten = (u.displayName || (u.email || '').split('@')[0] || 'bạn').trim();
+        userEl.innerHTML = `<span class="home-hello">Xin chào, <b>${esc(ten)}</b></span>
+          <button type="button" class="home-avatar" data-acc title="Tài khoản">${esc(ten.charAt(0).toUpperCase())}</button>`;
+      } else {
+        userEl.innerHTML = `<span class="home-hello">Đăng nhập để lưu và xem lại lá số</span>
+          <button type="button" class="home-login" data-acc>Đăng nhập</button>`;
+      }
+    }
+  
     function moLaSo(id) {
       bamTab('laso');                                      // sang Xem lá số trước, rồi mới mở (có thể hỏi lưu thay đổi)
       if (typeof window.CLOUD_open === 'function') window.CLOUD_open(id);
@@ -242,8 +274,9 @@
           <span><i>Ngày</i>${info.ngay.vn}<b>${info.ngay.han}</b></span>
           <span><i>Giờ</i>${info.gio.vn}<b>${info.gio.han}</b></span>
         </div>`;
-      chiCu = -1;
-      mauTroi();
+        chiCu = info.chiThang;                                 // hiện ngay, không chờ vòng chi được vẽ
+        chiEl.innerHTML = `Tháng ${THANG_TEN[a.m]} âm lịch · Đẩu bính chỉ <b>${CHI[info.chiThang]}</b>`;
+        mauTroi();
     }
   
     // Màu trời theo giờ máy: đêm sâu, hửng sáng tím hồng, ngày xanh lam huyền ảo, hoàng hôn cam tím
@@ -265,20 +298,27 @@
   
     // ═════════ Kích thước, ảnh dựng sẵn ═════════
     function resize() {
-      const r = root.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const r = root.getBoundingClientRect(), mob = isMob();
+      dpr = Math.min(window.devicePixelRatio || 1, mob ? 1.25 : 1.5);
       W = Math.max(1, r.width); H = Math.max(1, r.height);
       cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
       cv.style.width = W + 'px'; cv.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   
-      cx = W * 0.64; cy = H * 0.5;                       // tâm quay (Bắc Thần)
-      R = Math.min(W * 0.42, H * 0.44);                  // bán kính vòng 12 chi
+      if (mob) {                                         // mobile: bầu trời ở nửa trên, chữ ở nửa dưới
+        cx = W * 0.5; cy = H * 0.29;
+        R = Math.min(W * 0.41, H * 0.22);
+        chiEl.style.top = (cy + R + 6) + 'px';
+      } else {
+        cx = W * 0.64; cy = H * 0.5;                     // tâm quay (Bắc Thần)
+        R = Math.min(W * 0.42, H * 0.44);                // bán kính vòng 12 chi
+        chiEl.style.top = '';
+      }
       const xa = Math.max(...BAC_DAU.map(s => Math.hypot(s.x - BAC_THAN.x, s.y - BAC_THAN.y)));
       scale = (R * 0.9) / xa;
       rMax = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) + 20;
   
-      const n = Math.round((W * H) / (lowPower ? 5200 : 2600));
+      const n = Math.round((W * H) / (lowPower || mob ? 5200 : 2600));
       nen = Array.from({ length: n }, () => {
         const big = Math.random() < 0.06;
         const o = big ? 0.65 + Math.random() * 0.35 : 0.2 + Math.random() * 0.5;
@@ -286,12 +326,12 @@
           r: Math.sqrt(Math.random()) * rMax, a: Math.random() * PI * 2,
           s: big ? 1.1 + Math.random() * 0.8 : 0.35 + Math.random() * 0.7, o,
           f: 0.4 + Math.random() * 1.6, p: Math.random() * 6.28, z: 0.25 + Math.random() * 0.75,
-          trail: !lowPower && o > 0.55 && Math.random() < 0.6,
+          trail: !lowPower && !mob && o > 0.55 && Math.random() < 0.3,
           hue: Math.random() < 0.15 ? 'rgb(255,226,190)' : Math.random() < 0.3 ? 'rgb(190,210,255)' : '#fff',
         };
       });
       glow = makeGlow();
-    //   ngan = makeNganHa();
+      ngan = null;                 // tắt Ngân Hà (bật lại: ngan = makeNganHa();)
     }
   
     function makeGlow() {
@@ -321,19 +361,19 @@
         const t = i * S / 12, x = m + ux * t + nx * off, y = m + uy * t + ny * off;
         const rg = g.createRadialGradient(x, y, 0, x, y, w * 2.4);
         const col = i % 3 === 0 ? '170,140,230' : i % 3 === 1 ? '120,160,240' : '220,170,210';
-        rg.addColorStop(0, `rgba(${col},0.10)`); rg.addColorStop(1, `rgba(${col},0)`);
+        rg.addColorStop(0, `rgba(${col},0.17)`); rg.addColorStop(1, `rgba(${col},0)`);
         g.fillStyle = rg; g.fillRect(x - w * 2.4, y - w * 2.4, w * 4.8, w * 4.8);
       }
       // bụi sao: hai thùy, giữa có vệt tối (rãnh bụi)
-      const N = lowPower ? 1500 : 3500;
+      const N = lowPower ? 2500 : 6000;
       for (let i = 0; i < N; i++) {
         const t = (Math.random() - 0.5) * S * 1.1;
         const side = Math.random() < 0.5 ? -1 : 1;
         const d = side * (0.35 + Math.abs(gauss())) * w;
         const x = m + ux * t + nx * (off + d), y = m + uy * t + ny * (off + d);
-        g.globalAlpha = 0.05 + Math.random() * 0.3;
+        g.globalAlpha = 0.07 + Math.random() * 0.33;
         g.fillStyle = Math.random() < 0.2 ? '#ffe9d0' : '#e6ecff';
-        g.beginPath(); g.arc(x, y, 0.3 + Math.random() * 0.6, 0, 6.283); g.fill();
+        g.beginPath(); g.arc(x, y, 0.15 + Math.random() * 0.35, 0, 6.283); g.fill();
       }
       g.globalAlpha = 1;
       return c;
@@ -353,8 +393,7 @@
       const aT = gocChi(info.chiThang) - theta0;
       if (reduce) return aT;
       const sway = SWAY * Math.sin((now - t0) * 2 * PI / SWAY_MS);
-    //   if (introDone) return aT + sway;
-    if (introDone) return aT + gocTroi(now) - gocTroi(introAt + INTRO_MS);   // quay đều cùng bầu trời, bắt đầu từ hướng tháng
+      if (introDone) return aT + sway;
       const k = clamp01((now - introAt) / INTRO_MS);
       return aT + sway + PI * 1.8 * (1 - ease(k));     // xoay nhanh rồi chậm dần, dừng đúng hướng tháng
     }
@@ -392,7 +431,7 @@
     }
   
     function nhan(txt, x, y, o) {
-      if (o <= 0) return;
+      if (o <= 0 || W < 600) return;                        // màn hẹp: bỏ tên sao cho đỡ rối (chạm vào sao để xem)
       ctx.globalAlpha = o;
       ctx.font = '11px ' + FONT_VN;
       ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
@@ -444,8 +483,6 @@
         ctx.beginPath(); ctx.arc(x, y, s.s, 0, 6.283); ctx.fill();
       }
       ctx.globalAlpha = 1;
-  
-    //   veNamDau(now, t);
   
       const kLeave = leave ? clamp01((now - leave.t) / leave.ms) : 0;
       const ringA = (introDone ? 1 : clamp01((now - introAt - 2400) / 1500)) * (1 - kLeave);
@@ -505,26 +542,6 @@
       if (++tick % 3600 === 0) capNhatHomNay();               // ~1 phút cập nhật giờ, màu trời
     }
   
-    // Nam Đẩu lục tinh: góc trên trái, lệch parallax nhiều hơn Bắc Đẩu
-    function veNamDau(now, t) {
-      const l = introDone ? 1 : clamp01((now - introAt - 3200) / 1200);
-      if (l <= 0) return;
-      const on = hover?.info === NAM_DAU_INFO;
-      const bx = W * 0.30 + px * 8, by = H * 0.12 + py * 8, k = Math.min(1, W / 1440) * 1.15;
-      const P = NAM_DAU.map(([x, y]) => ({ x: bx + x * k, y: by + y * k }));
-      ctx.save();
-      ctx.strokeStyle = `rgba(255,215,170,${(on ? 0.45 : 0.22) * l})`; ctx.lineWidth = 1;
-      ctx.beginPath();
-      ND_NOI.forEach(([i, j]) => { ctx.moveTo(P[i].x, P[i].y); ctx.lineTo(P[j].x, P[j].y); });
-      ctx.stroke();
-      ctx.restore();
-      P.forEach((p, i) => {
-        veSaoSang(p.x, p.y, (2.2 + 0.25 * Math.sin(t * 1.4 + i)) * (on ? 1.4 : 1), 0.7 * l * sang + (on ? 0.3 : 0), 0);
-        hits.push({ x: p.x, y: p.y, info: NAM_DAU_INFO });
-      });
-      nhan('Nam Đẩu', P[2].x - 10, P[2].y + 30, 0.45 * l);
-    }
-  
     // Vòng 12 địa chi; cán gáo chỉ vào chi nào thì chi đó sáng lên
     function veVongChi(a, t, alpha) {
       if (alpha <= 0) return;
@@ -532,7 +549,8 @@
       ctx.globalAlpha = alpha;
       ctx.strokeStyle = 'rgba(230,200,130,0.10)'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy, R - 26, 0, 6.283); ctx.stroke();
+      const vt = R < 150 ? 20 : 26;                         // bề rộng vành chữ (mobile hẹp hơn)
+      ctx.beginPath(); ctx.arc(cx, cy, R - vt, 0, 6.283); ctx.stroke();
   
       const dq = toScreen(BAC_DAU[6], a);
       const gocCan = Math.atan2(dq.y - cy, dq.x - cx);
@@ -544,8 +562,8 @@
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       for (let i = 0; i < 12; i++) {
         const g = gocChi(i), on = i === chiChi;
-        const x = cx + (R - 13) * Math.cos(g), y = cy + (R - 13) * Math.sin(g);
-        ctx.font = (on ? 'bold 17px ' : '15px ') + FONT_HAN;
+        const x = cx + (R - vt / 2) * Math.cos(g), y = cy + (R - vt / 2) * Math.sin(g);
+        ctx.font = (on ? 'bold ' + (R < 150 ? 14 : 17) + 'px ' : (R < 150 ? 12 : 15) + 'px ') + FONT_HAN;
         ctx.fillStyle = on ? `rgba(255,214,130,${0.85 + 0.15 * Math.sin(t * 2)})` : 'rgba(230,200,140,0.28)';
         if (on) { ctx.shadowColor = 'rgba(255,190,90,0.9)'; ctx.shadowBlur = 14; } else ctx.shadowBlur = 0;
         ctx.fillText(CHI_HAN[i], x, y);
@@ -553,11 +571,11 @@
         ctx.shadowBlur = 0;
         ctx.strokeStyle = 'rgba(230,200,130,0.10)';
         ctx.beginPath();
-        ctx.moveTo(cx + (R - 26) * Math.cos(gv), cy + (R - 26) * Math.sin(gv));
+        ctx.moveTo(cx + (R - vt) * Math.cos(gv), cy + (R - vt) * Math.sin(gv));
         ctx.lineTo(cx + R * Math.cos(gv), cy + R * Math.sin(gv));
         ctx.stroke();
       }
-      const ex = cx + (R - 28) * Math.cos(gocCan), ey = cy + (R - 28) * Math.sin(gocCan);
+      const ex = cx + (R - vt - 2) * Math.cos(gocCan), ey = cy + (R - vt - 2) * Math.sin(gocCan);
       const lg = ctx.createLinearGradient(dq.x, dq.y, ex, ey);
       lg.addColorStop(0, 'rgba(255,214,130,0.35)'); lg.addColorStop(1, 'rgba(255,214,130,0)');
       ctx.strokeStyle = lg;
@@ -620,8 +638,8 @@
     }
   
     // ═════════ Rê chuột lên sao ═════════
-    function timHover(x, y) {
-      let best = null, bd = 18;
+    function timHover(x, y, ban = 18) {
+      let best = null, bd = ban;
       for (const h of hits) { const d = Math.hypot(h.x - x, h.y - y); if (d < bd) { bd = d; best = h; } }
       hover = best;
       if (!best) { tipEl.hidden = true; root.style.cursor = ''; return; }
@@ -647,7 +665,8 @@
   
     // ═════════ Bật / tắt ═════════
     function sync() {
-      const on = document.body.classList.contains('mb-page-home') && !document.hidden;
+      const b = document.body.classList;
+      const on = (isMob() ? b.contains('m-page-home') : b.contains('mb-page-home')) && !document.hidden;
       if (on && !running) {
         running = true;
         root.classList.remove('home-leaving');
@@ -655,6 +674,7 @@
         capNhatHomNay();
         resize();
         veRecent();
+        veUser();
         if (!introAt) introAt = performance.now();             // hiệu ứng mở trang: chỉ lần đầu
         nextBang = performance.now() + 2500;
         perf = { n: 0, sum: 0, last: 0 };
@@ -669,11 +689,16 @@
     function init() {
       build();
       sync();
-      new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ['class'] });
-      window.addEventListener('resize', () => { if (running) resize(); });
+      new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ['class', 'data-layout'] });
+      let rzT = 0;
+      new ResizeObserver(() => {                                       // đo lại mỗi khi vùng Trang chủ đổi cỡ
+        if (!running) return;
+        clearTimeout(rzT); rzT = setTimeout(resize, 60);
+      }).observe(root);
       document.addEventListener('visibilitychange', sync);
       document.addEventListener('cloud-opened', e => ghiRecent(e.detail?.id));
       document.addEventListener('cloud-list', () => { if (running) veRecent(); });
+      document.addEventListener('cloud-auth', () => { veUser(); if (running) veRecent(); });   // đăng nhập / đăng xuất
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
