@@ -654,6 +654,7 @@
             <span class="cl-name">${esc(x.hoTen || '(không tên)')}${x.id === currentId && dirty ? ' <span class="cl-dirty" title="Có thay đổi chưa lưu">●</span>' : ''}</span>
             ${snippet ? `<span class="cl-snip">${snippet}</span>` : ''}
           </div>
+                  <span class="cl-gt">${x.gioiTinh === 'nu' ? 'Nữ' : x.gioiTinh === 'nam' ? 'Nam' : ''}</span>
           <span class="cl-year">${esc(x.dl?.y ?? '')}</span>
           <button type="button" class="cl-del" title="Xóa lá số" tabindex="-1">🗑</button>
         </div>`).join('');

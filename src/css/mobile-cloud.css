@@ -70,8 +70,6 @@ html.m-sheet-open, html.m-sheet-open body { overflow: hidden; }
 #mSheetCloud #cloudList { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
 #mSheetCloud .cl-items { flex: 1 1 auto; max-height: none; min-height: 0; -webkit-overflow-scrolling: touch; }
 #mSheetCloud .cl-row { gap: 8px; margin-top: 8px; }
-#mSheetCloud .cl-row select,
-#mSheetCloud .cl-row .cl-search { height: 38px; font-size: 16px; }
 #mSheetCloud .cl-row .cl-sort { max-width: 46%; }
 #mSheetCloud .cl-item { padding: 9px 8px; gap: 8px; }
 #mSheetCloud .cl-snip { font-size: 12px; }
@@ -115,7 +113,6 @@ body[data-layout="mobile"] #tabCFG { display: none !important; }
   margin: 0 !important;
   border-radius: 10px;
 }
-#mSheetCfg input:not([type="range"]), #mSheetCfg select { font-size: 16px !important; }
 
 /* Tab Lá số: không có hàng ◀ ▶ ☰ ★ */
 body[data-layout="mobile"]:not(.m-page-search) #searchResultNav { display: none !important; }
@@ -127,8 +124,6 @@ body.m-page-search #err,
 body.m-page-search #btnNoteMobile { display: none !important; }
 body.m-page-search.m-search-empty #lasoWrap { display: none !important; }   /* chưa có kết quả: chưa có lá số */
 body.m-page-search #searchPanel { display: block !important; }
-body.m-page-search #searchPanel input,
-body.m-page-search #searchPanel select { font-size: 16px; }
 body[data-layout="mobile"] #searchResultList {                           /* danh sách dài: cuộn trong khung */
   max-height: 45vh; overflow-y: auto; overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;

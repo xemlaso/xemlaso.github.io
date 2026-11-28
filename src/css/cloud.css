@@ -69,8 +69,9 @@
   .cl-item:hover { background: #eef3f8; }
   .cl-item.active { background: #1f4e79; color: #fff; }
   .cl-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .cl-year { color: #5b6b7c; font-variant-numeric: tabular-nums; }
-  .cl-item.active .cl-year { color: #d6e2ee; }
+  .cl-gt, .cl-year { color: #5b6b7c; font-variant-numeric: tabular-nums; }
+  .cl-gt { flex: 0 0 2.6em; text-align: center; }               /* cột giới tính, rộng cố định cho thẳng hàng */
+  .cl-item.active .cl-gt, .cl-item.active .cl-year { color: #d6e2ee; }
   .cl-dirty { color: #e67e22; font-size: 10px; }
   .cl-del {
     border: 0; background: none; padding: 0 2px; cursor: pointer;
