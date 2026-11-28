@@ -1,19 +1,5 @@
 src/css/grid.css
-/* Nút */
-.laso-download-btn {
-  padding: 4px 10px;
-  border: 1px solid #c8b88a;
-  border-radius: 6px;
-  background: #fff;
-  color: #4a2e08;
-  font-size: 12px;
-  cursor: pointer;
-}
-.laso-download-btn:disabled { opacity: .6; cursor: wait; }
-
 /* Khi đang chụp: tắt mọi hiệu ứng, hiện trạng thái cuối */
-
-
 .capturing *,
 .capturing *::before,
 .capturing *::after {
@@ -305,6 +291,7 @@ src/css/grid.css
       white-space: nowrap;
       overflow: visible;
       text-align: left;
+      -webkit-text-stroke: 0.3px currentColor;   /* dày nét lên một chút (Arial không có độ đậm 500/600) */
     }
 
     .sao-cat.bold {
@@ -320,6 +307,7 @@ src/css/grid.css
       overflow: visible;
       max-width: max-content;
       text-align: right;
+      -webkit-text-stroke: 0.3px currentColor;   /* dày nét lên một chút (Arial không có độ đậm 500/600) */
     }
 
     .sao-hung.bold {

@@ -1,10 +1,11 @@
+/* src/css/modals.css */
     /* ── Prompt Export Modal ──────────────────────────────────── */
     .prompt-overlay {
       display: none;
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.55);
-      z-index: 1000;
+      z-index: 9600;                 /* trên thanh đáy mobile (9000) và bảng toàn màn hình (9500) */
       align-items: center;
       justify-content: center;
     }
@@ -19,7 +20,8 @@
       box-shadow: 0 8px 40px rgba(0,0,0,0.25);
       /* desktop: ~2/3 màn hình */
       width: 66vw;
-      height: 66vh;
+      height: min(76vh, 820px);
+      max-height: calc(100dvh - 32px);   /* không bao giờ cao hơn màn hình đang thấy */
       display: flex;
       flex-direction: column;
       font-family: Arial, sans-serif;
@@ -29,8 +31,9 @@
     /* mobile: gần full màn hình */
     @media (max-width: 768px) {
       .prompt-modal {
-        width: 95vw;
-        height: 92vh;
+        width: calc(100vw - 16px);
+        height: 92vh;                    /* trình duyệt cũ */
+        height: calc(100dvh - 16px);     /* chiều cao màn hình thật, trừ khi thanh địa chỉ hiện/ẩn */
         border-radius: 8px;
       }
     }
@@ -71,7 +74,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 4000;
+      z-index: 9600;
       padding: 16px;
     }
 
@@ -80,6 +83,7 @@
     .rule-modal {
       width: min(900px, 96vw);
       max-height: 86vh;
+      max-height: calc(100dvh - 32px);
       overflow: hidden;
       display: flex;
       flex-direction: column;

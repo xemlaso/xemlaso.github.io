@@ -113,8 +113,7 @@
   
       /* Desktop: Xuất Prompt, Tải ảnh đã vào menu ⚙; bỏ dòng chú giải M V B H */
       body[data-layout="desktop"] #lasoWrap .legend,
-      body[data-layout="desktop"] #lasoWrap > .btn-prompt,
-      body[data-layout="desktop"] #lasoWrap > .laso-download-btn { display: none !important; }
+      body[data-layout="desktop"] #lasoWrap .laso-actions { display: none !important; }
   
       /* Desktop: thanh Xem hạn cố định ở đáy màn hình (left/width do JS đặt theo cột lá số) */
       #hanNavBar.han-fixed {

@@ -148,7 +148,7 @@ const TUVI_RENDER = (() => {
     </div>`;
 
     const catList = [...cat, ...trung].sort(soSao(CAT_BOLD));
-    const CUOI_HUNG = ['Thiên La', 'Địa Võng'];          // luôn ở cuối cột hung (sau cả sao lưu)
+    const CUOI_HUNG = ['Thiên La', 'Địa Võng', 'Thiên Thương', 'Thiên Sứ'];          // luôn ở cuối cột hung (sau cả sao lưu)
     const hungList = hung.filter(s => !CUOI_HUNG.includes(s.name))
       .sort(soSao(HUNG_BOLD));
     const hungCuoi = CUOI_HUNG.map(t => hung.find(s => s.name === t)).filter(Boolean);

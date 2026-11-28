@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="src/css/cloud.css">
     <link rel="stylesheet" href="src/css/mobile-cloud.css">
     <link rel="stylesheet" href="src/css/menubar.css">
-    <link rel="stylesheet" href="src/css/home-page.css?v=1">
+    <link rel="stylesheet" href="src/css/home-page.css">
+    <link rel="stylesheet" href="src/css/buttons.css">
 </head>
 <button id="btnToggleSidebar" id="btnToggleSidebar" class="sidebar-toggle" onclick="toggleSidebar()" title="Ẩn/hiện thanh bên">⇤</button>
 <button id="btnToggleNote" class="note-toggle" onclick="toggleNote()" title="Ghi chú">✎</button>
@@ -418,23 +419,24 @@
             </label>
           </div>
 
-          <div class="legend">
+          <!-- <div class="legend">
             <!-- <span class="leg"><span class="leg-dot" style="background:#8b0000"></span>Chính tinh</span> -->
             <!-- <span class="leg"><span class="leg-dot" style="background:#1a5c00"></span>Cát tinh</span> -->
             <!-- <span class="leg"><span class="leg-dot" style="background:#7a2000"></span>Hung tinh</span> -->
-            <span class="leg"><span style="font-size:10px;color:#c8960a;font-weight:bold">M</span> Miếu</span>
+            <!-- <span class="leg"><span style="font-size:10px;color:#c8960a;font-weight:bold">M</span> Miếu</span>
             <span class="leg"><span style="font-size:10px;color:#2e7d32;font-weight:bold">V</span> Vượng</span>
             <span class="leg"><span style="font-size:10px;color:#5c3d10;font-weight:bold">B</span> Bình</span>
-            <span class="leg"><span style="font-size:10px;color:#aaa;font-weight:bold">H</span> Hãm</span>
+            <span class="leg"><span style="font-size:10px;color:#aaa;font-weight:bold">H</span> Hãm</span> -->
             <!-- <span class="leg" style="margin-left:8px;border-left:1px solid #ccc;padding-left:8px">
               <span
                 style="display:inline-block;width:10px;height:10px;background:#f0f0f0;border:1px solid #999;margin-right:3px"></span>Tam
               phương tứ chính
             </span> -->
+          <!-- </div> --> 
+          <div class="ui-btn-row laso-actions">
+            <button type="button" class="ui-btn ui-btn-secondary btn-prompt" data-icon="copy" onclick="exportPrompt()">Xuất prompt</button>
+            <button type="button" class="ui-btn ui-btn-primary laso-download-btn" data-icon="download" onclick="downloadLasoImage(this)">Tải ảnh</button>
           </div>
-          <button class="btn-prompt" onclick="exportPrompt()">📋 Xuất Prompt</button>
-
-          <button type="button" class="laso-download-btn" onclick="downloadLasoImage(this)">⬇ Tải ảnh</button>
         </div>
 
         <div id="searchResultMobileDock" style="display:none;"></div>
