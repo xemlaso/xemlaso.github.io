@@ -342,6 +342,283 @@
       if (key === 'save') return currentId ? saveFlow('update') : saveFlow('new');
       return false;
     }
+
+
+// ═══════════ TẢI LÁ SỐ VỀ MÁY (.zip) — chỉ desktop ═══════════
+  // Mỗi lá số 1 thư mục "<tên>-<giờ>-<phút>-<nam|nu>-<ngày>-<tháng>-<năm>DL" gồm:
+  //   laso.json : đủ dữ liệu, dùng để NHẬP LẠI (giữ nguyên Note, ảnh, mã ảnh)
+  //   note.html : mở bằng trình duyệt để xem Note kèm ảnh
+  //   note.txt  : chữ của Note, đọc nhanh
+  //   anh/      : ảnh của lá số
+  const JSZIP_URL = 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js';
+  let jszipLoading = null;
+  function loadJSZip() {
+    if (window.JSZip) return Promise.resolve(window.JSZip);
+    return jszipLoading || (jszipLoading = new Promise((ok, fail) => {
+      const s = document.createElement('script');
+      s.src = JSZIP_URL;
+      s.onload = () => ok(window.JSZip);
+      s.onerror = () => { jszipLoading = null; fail(new Error('không tải được thư viện nén .zip (kiểm tra mạng)')); };
+      document.head.appendChild(s);
+    }));
+  }
+
+  const xuatTen = s => String(s || '').normalize('NFC').replace(/[\/\\:*?"<>|\u0000-\u001f]/g, '_')
+    .replace(/\s+/g, ' ').trim().slice(0, 80) || 'khong-ten';
+  function tenThuMuc(x) {
+    const [h, mi] = String(x.gio || '00:00').split(':').map(n => parseInt(n, 10) || 0);
+    const dl = x.dl || {};
+    return `${xuatTen(x.hoTen)}-${h}-${String(mi).padStart(2, '0')}-${x.gioiTinh === 'nu' ? 'nu' : 'nam'}-${dl.d}-${dl.m}-${dl.y}DL`;
+  }
+  function xuatNoteTxt(html) {
+    const t = document.createElement('template');
+    t.innerHTML = String(html || '').replace(/<(div|p|br|li|h[1-4]|blockquote)\b/gi, '\n<$1');
+    return t.content.textContent.replace(/\n{3,}/g, '\n\n').trim() + '\n';
+  }
+  function noteHtmlFile(x, map) {
+    const body = String(x.note || '').replace(/<img\b[^>]*\bdata-anh="([^"]+)"[^>]*>/gi,
+      (m, id) => (map[id] ? `<img src="${map[id]}" style="max-width:100%;border-radius:6px">` : ''));
+    return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>${esc(x.hoTen || '')}</title></head>`
+      + `<body style="font:15px/1.6 Arial,sans-serif;max-width:820px;margin:24px auto;padding:0 16px">`
+      + `<h2 style="margin:0 0 4px">${esc(x.hoTen || '')}</h2>`
+      + `<div style="color:#666;margin-bottom:16px">${x.dl?.d}/${x.dl?.m}/${x.dl?.y} DL · ${esc(x.canhGio || '')} · ${x.gioiTinh === 'nu' ? 'Nữ' : 'Nam'}</div>`
+      + body + '</body></html>';
+  }
+  const isoTime = t => (t?.toDate ? t.toDate().toISOString() : null);
+
+  async function xuatZip(list, tenZip, onTienDo) {
+    const JSZip = await loadJSZip();
+    const zip = new JSZip(), used = new Set();
+    let i = 0;
+    for (const x of list) {
+      onTienDo?.(++i, list.length);
+      const goc = tenThuMuc(x);
+      let dir = goc;
+      for (let k = 2; used.has(dir); k++) dir = `${goc} (${k})`;      // trùng tên thư mục trong cùng tệp
+      used.add(dir);
+      const f = zip.folder(dir);
+      const imgs = (x.soAnh ?? 1) > 0 ? await loadImages(x.id) : [];
+      const anh = [], map = {};
+      imgs.forEach(im => {
+        const m = String(im.data).match(/^data:image\/([a-z0-9.+-]+);base64,(.+)$/i);
+        if (!m) return;
+        const ext = m[1].toLowerCase().replace('jpeg', 'jpg').replace(/\+.*$/, '');
+        const tep = `anh/${im.id}.${ext}`;
+        f.file(tep, m[2], { base64: true });
+        anh.push({ id: im.id, tep });
+        map[im.id] = tep;
+      });
+      f.file('laso.json', JSON.stringify({
+        dinhDang: 'xemlaso-laso', phienBan: 1, xuatLuc: new Date().toISOString(),
+        hoTen: x.hoTen || '', gioiTinh: x.gioiTinh || 'nam', lichNhap: x.lichNhap || 'DL',
+        dl: x.dl || null, al: x.al || null, gio: x.gio || '', canhGio: x.canhGio || '', menh: x.menh || null,
+        note: x.note || '', anh,
+        taoLuc: isoTime(x.createdAt), suaLuc: isoTime(x.updatedAt),
+      }, null, 2));
+      f.file('note.html', noteHtmlFile(x, map));
+      f.file('note.txt', xuatNoteTxt(x.note));
+    }
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = tenZip;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+  }
+
+   // Hàng nút dưới danh sách lá số (chỉ hiện trên desktop, xem cloud.css)
+   function ensureExportRow(box) {
+    let row = box.querySelector('.cl-export');
+    if (!row) {
+      row = document.createElement('div');
+      row.className = 'cl-export ui-btn-row';
+      row.innerHTML = `<button type="button" class="ui-btn ui-btn-ghost ui-btn-sm" data-icon="download" data-xuat="mo">Tải lá số đang mở</button>
+        <button type="button" class="ui-btn ui-btn-ghost ui-btn-sm" data-icon="download" data-xuat="all">Tải tất cả (.zip)</button>
+        <button type="button" class="ui-btn ui-btn-ghost ui-btn-sm" data-icon="plus" data-xuat="nhap">Nhập từ .zip</button>
+        <input type="file" accept=".zip,application/zip" hidden>`;
+      const inp = row.querySelector('input[type="file"]');
+      row.addEventListener('click', e => {
+        const b = e.target.closest('[data-xuat]');
+        if (!b) return;
+        if (b.dataset.xuat === 'nhap') { if (!nhapDangChay && !xuatDangChay) inp.click(); }
+        else xuatClick(b.dataset.xuat, b);
+      });
+      inp.addEventListener('change', () => {
+        const f = inp.files[0];
+        inp.value = '';                                              // chọn lại cùng tệp vẫn chạy
+        if (f) nhapZipClick(f, row.querySelector('[data-xuat="nhap"]'));
+      });
+    }
+    box.appendChild(row);                                            // luôn nằm cuối danh sách
+    if (!xuatDangChay) {
+      row.querySelector('[data-xuat="mo"]').disabled = !currentId;
+      row.querySelector('[data-xuat="all"]').disabled = !items.length;
+    }
+    row.hidden = !loaded;
+  }
+
+  let xuatDangChay = false;
+  async function xuatClick(k, btn) {
+    if (xuatDangChay || nhapDangChay) return;
+    xuatDangChay = true;
+    const label = btn.textContent;
+    btn.disabled = true;
+    try {
+      const ngay = new Date().toISOString().slice(0, 10);
+      const tienDo = (i, n) => { btn.textContent = n > 1 ? `Đang tạo… ${i}/${n}` : 'Đang tạo…'; };
+      if (k === 'mo') {
+        const x = items.find(it => it.id === currentId);
+        if (!x) throw new Error('chưa mở lá số đã lưu nào.');
+        if (isDirty()) toast('Lưu ý: tệp tải về là bản ĐÃ LƯU, chưa gồm thay đổi chưa lưu.');
+        await xuatZip([x], `${tenThuMuc(x)}.zip`, tienDo);
+      } else {
+        if (!items.length) throw new Error('chưa có lá số nào.');
+        await xuatZip(items, `laso-${ngay}.zip`, tienDo);
+      }
+      toast('Đã tạo tệp tải về.');
+    } catch (err) {
+      toast('Không tải được: ' + err.message);
+    } finally {
+      xuatDangChay = false;
+      btn.textContent = label;
+      btn.disabled = k === 'mo' ? !currentId : !items.length;
+    }
+  }
+
+
+  // ═══════════ NHẬP LẠI LÁ SỐ TỪ TỆP .zip ĐÃ TẢI VỀ — chỉ desktop, dùng lâu dài ═══════════
+  // Đọc đúng tệp do "Tải lá số đang mở" / "Tải tất cả" tạo ra (mỗi thư mục có laso.json + anh/).
+  // Chấp nhận cả .zip nén lại bằng Finder/Windows (có thêm thư mục ngoài cùng, __MACOSX).
+  // Bỏ qua lá số trùng: cùng tên + ngày/tháng/năm DL + canh giờ (so với tài khoản và trong chính tệp).
+  const NHAP_MAX_ZIP = 300 * 1024 * 1024;
+  const NHAP_MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp', gif: 'image/gif' };
+  const nhapKey = (ten, dl, gio) => [
+    String(ten || '').normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim(),
+    +dl?.d, +dl?.m, +dl?.y,
+    window.canhGioInfo?.(gio)?.ten || String(gio || ''),
+  ].join('|');
+  const nhapDs = (arr, n = 30) => `<ul class="cl-nhap-ds">${arr.slice(0, n).map(s => `<li>${esc(s)}</li>`).join('')}`
+    + `${arr.length > n ? `<li>… và ${arr.length - n} mục khác</li>` : ''}</ul>`;
+
+  function nhapNgay(o) {
+    const d = Math.trunc(+o?.d), m = Math.trunc(+o?.m), y = Math.trunc(+o?.y);
+    return d >= 1 && d <= 31 && m >= 1 && m <= 12 && y >= 1 && y <= 9999 ? { d, m, y } : null;
+  }
+
+  // Đọc .zip → danh sách lá số hợp lệ (chưa ghi gì lên Firebase)
+  async function nhapDocZip(file) {
+    if (file.size > NHAP_MAX_ZIP) throw new Error('tệp lớn hơn 300 MB.');
+    const JSZip = await loadJSZip();
+    let zip;
+    try { zip = await JSZip.loadAsync(file); } catch { throw new Error('không phải tệp .zip hợp lệ.'); }
+    const bo = p => /(^|\/)__MACOSX\//.test(p) || /(^|\/)\._/.test(p);
+    const paths = Object.keys(zip.files).filter(p => !zip.files[p].dir && !bo(p) && /(^|\/)laso\.json$/i.test(p));
+    const ok = [], bad = [];
+    for (const p of paths) {
+      const dir = p.slice(0, p.length - 'laso.json'.length);            // "" hoặc ".../<thư mục>/"
+      const nhan = dir.replace(/\/$/, '').split('/').pop() || file.name;
+      try {
+        const j = JSON.parse(await zip.file(p).async('string'));
+        if (j?.dinhDang !== 'xemlaso-laso') throw new Error('laso.json không đúng định dạng');
+        if (+j.phienBan > 1) throw new Error('tệp tạo bởi phiên bản mới hơn, hãy tải lại trang');
+        const dl = nhapNgay(j.dl), al = nhapNgay(j.al), gio = String(j.gio || '').slice(0, 5);
+        if (!dl || !al || !/^\d{2}:\d{2}$/.test(gio)) throw new Error('thiếu ngày hoặc giờ');
+        const hoTen = String(j.hoTen || '').normalize('NFC').trim().slice(0, 100);
+        ok.push({ nhan, j, zip, dir, hoTen, dl, al, gio, key: nhapKey(hoTen, dl, gio) });
+      } catch (err) {
+        bad.push(`${nhan} — ${err.message}`);
+      }
+    }
+    return { ok, bad };
+  }
+
+  // Ghi 1 lá số: tạo tài liệu mới + ảnh (giữ mã ảnh → ảnh trong Note vẫn đúng chỗ)
+  async function nhapMot(x) {
+    const j = x.j;
+    const data = {
+      hoTen: x.hoTen,
+      hoTenKhongDau: noDau(x.hoTen).slice(0, 100),
+      gioiTinh: j.gioiTinh === 'nu' ? 'nu' : 'nam',
+      lichNhap: j.lichNhap === 'AL' ? 'AL' : 'DL',
+      dl: x.dl, al: x.al,
+      gio: x.gio,
+      canhGio: String(j.canhGio || window.canhGioInfo?.(x.gio)?.ten || '').slice(0, 10),
+      menh: {
+        chi: String(j.menh?.chi || '').slice(0, 10),
+        chinhTinh: (Array.isArray(j.menh?.chinhTinh) ? j.menh.chinhTinh : []).map(s => String(s).slice(0, 30)).slice(0, 4),
+      },
+      note: cleanNote(String(j.note || '')),
+      soAnh: 0,
+    };
+    if (data.note.length > 200000) throw new Error('Note quá dài');
+    const anh = [];
+    for (const a of (Array.isArray(j.anh) ? j.anh : []).slice(0, MAX_IMAGES)) {
+      const tep = String(a?.tep || '');
+      const ext = (tep.match(/\.([a-z0-9]+)$/i)?.[1] || '').toLowerCase();
+      if (!/^[A-Za-z0-9_-]{1,40}$/.test(a?.id || '') || !/^anh\/[^/]+$/.test(tep) || !NHAP_MIME[ext]) continue;
+      const f = x.zip.file(x.dir + tep);
+      if (!f) continue;
+      const url = `data:${NHAP_MIME[ext]};base64,` + await f.async('base64');
+      if (url.length > 1000000) throw new Error(`ảnh ${tep} quá lớn`);
+      anh.push({ id: a.id, data: url });
+    }
+    data.soAnh = anh.length;
+    const id = await createDoc(data);
+    for (const a of anh) await anhCol(id).doc(a.id).set({ data: a.data, createdAt: ts() });
+  }
+
+  let nhapDangChay = false;
+  async function nhapZipClick(file, btn) {
+    if (nhapDangChay || xuatDangChay) return;
+    if (!user || !window.FB?.auth?.currentUser) { toast('Đăng nhập trước khi nhập lá số.'); return; }
+    if (!loaded) { toast('Danh sách lá số chưa tải xong, thử lại sau vài giây.'); return; }
+    nhapDangChay = true;
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Đang đọc tệp…';
+    try {
+      const { ok, bad } = await nhapDocZip(file);
+      const daCo = new Set(items.map(x => nhapKey(x.hoTen, x.dl, x.gio)));
+      const moi = [], trung = [], trongTep = new Set();
+      for (const x of ok) {
+        if (daCo.has(x.key) || trongTep.has(x.key)) { trung.push(`${x.hoTen} · ${x.dl.d}/${x.dl.m}/${x.dl.y} · ${window.canhGioInfo?.(x.gio)?.ten || x.gio}`); continue; }
+        trongTep.add(x.key);
+        moi.push(x);
+      }
+      const tom = `<div>Tệp: <b>${esc(file.name)}</b></div>
+        <div>Sẽ nhập: <b>${moi.length}</b> lá số mới</div>
+        <div>Trùng, bỏ qua: <b>${trung.length}</b>${bad.length ? ` · Lỗi: <b>${bad.length}</b>` : ''}</div>`
+        + (trung.length ? `<div style="margin-top:6px">Trùng (cùng tên, ngày DL, canh giờ):</div>${nhapDs(trung)}` : '')
+        + (bad.length ? `<div style="margin-top:6px">Lỗi:</div>${nhapDs(bad)}` : '');
+      if (!moi.length) {
+        await askChoice('Nhập lá số', tom + (ok.length || bad.length ? '' : '<div style="margin-top:6px">Tệp không có lá số nào (cần tệp .zip tải từ ứng dụng).</div>'),
+          [{ key: 'x', label: 'Đóng', kind: 'ok' }]);
+        return;
+      }
+      if ((await askChoice('Nhập lá số', tom, [{ key: 'no', label: 'Hủy' }, { key: 'yes', label: `Nhập ${moi.length} lá số`, kind: 'ok' }])) !== 'yes') return;
+      const loi = [];
+      let n = 0;
+      for (const x of moi) {
+        btn.textContent = `Đang nhập… ${n + loi.length + 1}/${moi.length}`;
+        try { await nhapMot(x); n++; } catch (err) { loi.push(`${x.nhan} — ${err.message}`); }
+      }
+      if (loi.length) {
+        await askChoice('Nhập lá số', `<div>Đã nhập <b>${n}</b> lá số. Lỗi <b>${loi.length}</b>:</div>${nhapDs(loi)}`, [{ key: 'x', label: 'Đóng', kind: 'ok' }]);
+      } else {
+        toast(`Đã nhập ${n} lá số.`);
+      }
+    } catch (err) {
+      toast('Không nhập được: ' + err.message);
+    } finally {
+      nhapDangChay = false;
+      btn.textContent = label;
+      btn.disabled = false;
+    }
+  }
+
+  // ═══════════ ĐĂNG XUẤT ═══════════
     window.CLOUD_beforeLogout = async () => {
         const ok = await confirmLeave();
         if (ok) await flushDeletes();                     // đăng xuất: xóa luôn các lá số đang chờ hoàn tác
@@ -648,6 +925,7 @@
       if (!authUser || !authUser.emailVerified) { box.innerHTML = ''; return; }
       if (!box.querySelector('.cl-items')) buildListControls(box);
       const list = box.querySelector('.cl-items');
+      ensureExportRow(box);                                     // nút "Tải lá số đang mở" / "Tải tất cả (.zip)"
       const count = box.querySelector('.cl-count');
       count.textContent = '';
       if (errorMsg) { list.innerHTML = `<div class="cl-empty">${esc(errorMsg)}</div>`; return; }

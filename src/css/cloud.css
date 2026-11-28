@@ -166,6 +166,30 @@ body[data-layout="desktop"] #formArea #cfgPanel {
   overflow: visible !important;
 }
 
+
+/* ── Desktop: thu gọn tạm 1 trong 2 khung (side-fold.js) ───────── */
+.side-fold-btn {
+  flex: 0 0 26px; width: 26px; height: 26px; margin-left: auto; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center; align-self: center;
+  border: 0; border-radius: 6px; background: transparent; color: #5b6b7c; cursor: pointer;
+}
+.side-fold-btn:hover { background: rgba(31, 78, 121, .1); color: #1f4e79; }
+.side-fold-btn svg { transition: transform .15s ease; }
+body.fold-form .side-fold-btn[data-fold="form"] svg,
+body.fold-cloud .side-fold-btn[data-fold="cloud"] svg { transform: rotate(-90deg); }
+#cloudPanel [data-fold-head] { display: flex; align-items: center; cursor: pointer; user-select: none; }
+body[data-layout="mobile"] .side-fold-btn { display: none; }
+
+body[data-layout="desktop"].fold-form #formArea .tab-bar ~ * { display: none !important; }
+body[data-layout="desktop"].fold-cloud #cloudPanel [data-fold-head] ~ * { display: none !important; }
+body[data-layout="desktop"].fold-cloud #cloudPanel:not(:empty) { flex: 0 0 auto; min-height: 0; }
+body[data-layout="desktop"].fold-cloud #formArea {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+
 /* ── Tìm kiếm mở rộng, sắp xếp, phím mũi tên ─────────────────── */
 .cl-row { display: flex; gap: 6px; margin-top: 6px; }
 .cl-row .cl-search { flex: 1 1 auto; min-width: 0; margin: 0; }
@@ -193,6 +217,11 @@ body[data-layout="desktop"] #formArea #cfgPanel {
 .cl-item.active .cl-snip { color: #d6e2ee; }
 .cl-snip mark { background: #fff3a0; color: inherit; padding: 0 1px; border-radius: 2px; }
 .cl-item.active .cl-snip mark { background: #f5c542; color: #1c2834; }
+
+.cl-export.ui-btn-row { margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; }
+.cl-export > [data-xuat="nhap"] { grid-column: 1 / -1; }
+.cl-nhap-ds { max-height: 40vh; overflow: auto; margin: 4px 0 0; padding-left: 18px; }
+body[data-layout="mobile"] .cl-export.ui-btn-row { display: none; }
 
 
 /* ── Xóa lá số: hộp xác nhận + thông báo "Hoàn tác" ─────────── */
