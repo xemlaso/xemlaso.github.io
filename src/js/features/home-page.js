@@ -38,6 +38,8 @@
     const INTRO_MS = 6000;              // hiệu ứng mở trang (lần đầu)
     const LEAVE_MS = 1100;              // hiệu ứng chuyển sang lá số
     const SWAY = 0.12, SWAY_MS = 50000; // Bắc Đẩu đung đưa quanh hướng tháng
+    const FPS = 30;                     // sao di chuyển chậm: 30 khung hình/giây là đủ mượt, đỡ tốn gấp 2–5 lần
+    let lastVe = 0;
     const reduce = !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const FONT_HAN = '"Noto Serif CJK SC", "Songti SC", "SimSun", serif';
     const FONT_VN = '"Playfair Display", Georgia, serif';
@@ -264,7 +266,7 @@
     // ═════════ Kích thước, ảnh dựng sẵn ═════════
     function resize() {
       const r = root.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       W = Math.max(1, r.width); H = Math.max(1, r.height);
       cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
       cv.style.width = W + 'px'; cv.style.height = H + 'px';
@@ -401,6 +403,8 @@
   
     function frame(now) {
       if (!running) return;
+      if (now - lastVe < 1000 / FPS - 2) { raf = requestAnimationFrame(frame); return; }
+      lastVe = now;
       if (!introDone && now - introAt > INTRO_MS) { introDone = true; }
       if (!introDone && now - introAt > 2600) root.classList.remove('home-intro');
       doHieuNang(now);
@@ -471,8 +475,6 @@
       ctx.restore();
   
       ctx.save();
-      ctx.strokeStyle = 'rgba(205,225,255,0.55)'; ctx.lineWidth = 1.3;
-      ctx.shadowColor = 'rgba(140,190,255,0.9)'; ctx.shadowBlur = 8;
       ctx.beginPath();
       BD_NOI.forEach(([i, j]) => {
         const k = lineK(i, j, now);
@@ -480,7 +482,8 @@
         ctx.moveTo(P[i].x, P[i].y);
         ctx.lineTo(P[i].x + (P[j].x - P[i].x) * k, P[i].y + (P[j].y - P[i].y) * k);
       });
-      ctx.stroke();
+      ctx.strokeStyle = 'rgba(140,190,255,0.18)'; ctx.lineWidth = 5; ctx.stroke();     // quầng sáng giả, thay shadowBlur
+      ctx.strokeStyle = 'rgba(205,225,255,0.55)'; ctx.lineWidth = 1.3; ctx.stroke();
       ctx.restore();
   
       P.forEach((p, i) => {
@@ -636,7 +639,7 @@
       if (lowPower || !introDone || perf.n > 120) { perf.last = now; return; }
       if (perf.last) { perf.sum += now - perf.last; perf.n++; }
       perf.last = now;
-      if (perf.n === 120 && perf.sum / perf.n > 24) {         // < ~40 fps
+      if (perf.n === 120 && perf.sum / perf.n > (1000 / FPS) * 1.4) {   // không giữ nổi 30 fps
         lowPower = true;
         resize();
       }

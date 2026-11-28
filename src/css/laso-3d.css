@@ -1,0 +1,85 @@
+/* src/css/laso-3d.css – Xem lá số 3D (desktop). Phủ vùng dưới menubar, không đụng tới lá số 2D. */
+.l3d-page { display: none; }
+body[data-layout="desktop"].mb-page-p3d .l3d-page {
+  display: block;
+  position: fixed; top: 44px; left: 0; right: 0; bottom: 0; z-index: 940;   /* dưới menubar (950) */
+  overflow: hidden; color: #e9e2cf;
+  background: radial-gradient(ellipse at 50% 55%, #18234f 0%, #0b1030 50%, #05071a 100%);
+}
+.l3d-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(closest-side at 25% 30%, rgba(80, 90, 200, .18), transparent),
+    radial-gradient(closest-side at 78% 70%, rgba(40, 120, 200, .16), transparent);
+  filter: blur(30px);
+}
+.l3d-canvas, .l3d-canvas canvas { position: absolute; inset: 0; display: block; }
+.l3d-canvas canvas { cursor: grab; touch-action: none; }
+
+.l3d-msg {
+  position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%);
+  text-align: center; font: italic 18px/1.6 'Playfair Display', Georgia, serif; color: rgba(225, 230, 255, .85);
+}
+.l3d-msg[hidden] { display: none; }
+.l3d-msg button {
+  margin-top: 14px; padding: 10px 24px; border-radius: 999px; border: 0; cursor: pointer;
+  font: 600 15px Arial, sans-serif; color: #2a1a05; background: linear-gradient(180deg, #f8dc9a, #d9a64c);
+}
+
+/* Thanh công cụ */
+.l3d-bar {
+  position: absolute; left: 50%; top: 12px; transform: translateX(-50%);
+  width: max-content; max-width: calc(100% - 32px);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;
+  padding: 6px 12px; border-radius: 999px;
+  background: rgba(10, 14, 40, .7); border: 1px solid rgba(240, 205, 135, .3);
+  backdrop-filter: blur(6px);
+  font: 13px Arial, sans-serif; color: #d8deef;
+}
+.l3d-sep { width: 1px; height: 18px; background: rgba(240, 205, 135, .25); }
+.l3d-lbl { color: rgba(200, 210, 240, .6); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.l3d-seg { display: flex; border: 1px solid rgba(240, 205, 135, .35); border-radius: 999px; overflow: hidden; }
+.l3d-seg button, .l3d-year button, .l3d-btn {
+  border: 0; background: transparent; color: #d8deef; cursor: pointer;
+  font: 13px Arial, sans-serif; padding: 4px 12px;
+}
+.l3d-seg button.on { background: linear-gradient(180deg, #f8dc9a, #d9a64c); color: #2a1a05; font-weight: 600; }
+.l3d-seg button:not(.on):hover, .l3d-year button:hover, .l3d-btn:hover { color: #ffe2a0; }
+.l3d-chk { display: flex; align-items: center; gap: 5px; cursor: pointer; user-select: none; }
+.l3d-chk input { margin: 0; accent-color: #d9a64c; }
+.l3d-chk i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 6px var(--c); }
+.l3d-year { display: flex; align-items: center; gap: 2px; }
+.l3d-year button { padding: 4px 8px; }
+.l3d-year span { min-width: 120px; text-align: center; color: #f2d38a; font-weight: 600; }
+.l3d-btn { font-size: 16px; padding: 2px 8px; }
+
+/* Bảng chi tiết cung */
+.l3d-detail {
+  position: absolute; right: 16px; top: 64px; width: 320px; max-height: calc(100% - 120px); overflow: auto;
+  padding: 14px 16px; border-radius: 12px;
+  background: rgba(10, 14, 40, .82); border: 1px solid rgba(240, 205, 135, .35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+  backdrop-filter: blur(8px);
+  font: 13px/1.5 Arial, sans-serif; color: #dfe4f5;
+}
+.l3d-detail[hidden] { display: none; }
+.l3d-x {
+  position: absolute; right: 8px; top: 8px; width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid rgba(240, 205, 135, .35); background: transparent; color: #f2d38a; cursor: pointer;
+}
+.l3d-d-head { font: bold 20px 'Playfair Display', Georgia, serif; color: #ffe2a0; padding-right: 30px; }
+.l3d-d-head span { font: 14px Arial, sans-serif; color: #e8c477; margin-left: 6px; }
+.l3d-d-tags { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 4px; }
+.l3d-d-tags b { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: rgba(242, 200, 110, .18); color: #f2d38a; }
+.l3d-d-row { display: flex; gap: 8px; padding: 5px 0; border-top: 1px solid rgba(240, 205, 135, .12); }
+.l3d-d-row > i:first-child { flex: 0 0 76px; font-style: normal; color: rgba(200, 210, 240, .6); font-size: 12px; }
+.l3d-d-row > div { flex: 1; min-width: 0; }
+.l3d-hoa {
+  display: inline-block; margin: 0 4px 4px 0; padding: 1px 8px; border-radius: 999px; font-size: 12px;
+  color: var(--c); border: 1px solid var(--c);
+}
+
+.l3d-hint {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
+  font: italic 12px 'Playfair Display', Georgia, serif; color: rgba(220, 210, 180, .55); pointer-events: none;
+}
