@@ -23,6 +23,8 @@
       document.getElementById('gio').value = gioToCanhValue(String(hhmm).split(':')[0]);
     }
 
+   
+
         // Dropdown giờ sinh: mọi lệnh gán gio.value = "HH:MM" tự quy về canh giờ
         (function initGioSelect() {
           const sel = document.getElementById('gio');
@@ -35,7 +37,10 @@
           };
           Object.defineProperty(sel, 'value', {
             get() { return native.get.call(this); },
-            set(v) { native.set.call(this, toCanh(v) ?? v); },
+            set(v) {
+              native.set.call(this, toCanh(v) ?? v);
+              if (typeof syncGioToGioXem === 'function') syncGioToGioXem();   // mở lá số / gán bằng code → cập nhật thanh ‹ ›
+            },
           });
     
           // Mặc định = canh giờ hiện tại
@@ -122,18 +127,7 @@
       });
     }, true);
 
-        // Tý sớm ("23:00", 23h–24h): ngày âm tính theo ngày DL hôm sau. Ô DL trên form giữ nguyên.
-    // Tý muộn ("00:00", 0h–1h): ngày DL đã đúng, đổi bình thường.
-    function convertDLTheoGio() {
-      const elN = document.getElementById('ngayDL');
-      const elT = document.getElementById('thangDL');
-      const elY = document.getElementById('namDL');
-      if (document.getElementById('gio')?.value !== '23:00' || !elN || !elT || !elY) { convertDL(); return; }
-      const n0 = elN.value, t0 = elT.value, y0 = elY.value;
-      const d = new Date(+y0, +t0 - 1, +n0 + 1);            // tự sang tháng / năm
-      elN.value = String(d.getDate()); elT.value = String(d.getMonth() + 1); elY.value = String(d.getFullYear());
-      try { convertDL(); } finally { elN.value = n0; elT.value = t0; elY.value = y0; }
-    }
+  
       
     function lapLaSo() {
       if ((window._currentTab || 'DL') !== 'SEARCH' && typeof clearSearchResultsState === 'function' && window._searchResults?.length) {
@@ -154,7 +148,7 @@
       }
 
       const lysoActive = typeof isLysoTemplateActive === 'function' && isLysoTemplateActive();
-      if (tab === 'DL' && typeof convertDL === 'function') convertDLTheoGio();
+      if (tab === 'DL' && typeof convertDL === 'function') convertDL();      // convertDL tự tính Tý muộn (23h) sang ngày kế tiếp
       else if (lysoActive && tab !== 'DL' && typeof syncDlInputsFromAmLich === 'function') syncDlInputsFromAmLich();
 
       if (typeof isLysoTemplateActive === 'function' && isLysoTemplateActive()) {
@@ -182,7 +176,7 @@
       const ngay = parseInt(document.getElementById('ngay').value);
       const thang = parseInt(document.getElementById('thang').value);
       const nam = parseInt(document.getElementById('nam').value);
-      const gioSinh = (v => v === '23:00' ? '00:00' : v)(document.getElementById('gio').value.trim());   // Tý sớm vẫn là giờ Tý khi an sao
+      const gioSinh = (v => v === '23:00' ? '00:00' : v)(document.getElementById('gio').value.trim());   // Tý muộn vẫn là giờ Tý khi an sao
       const gioiTinh = document.getElementById('gt').value;
 
       // Tính toán — logic.js
@@ -194,6 +188,26 @@
         errEl.textContent = '⚠ ' + e.message;
         errEl.style.display = 'block';
         return;
+      }
+
+      // Lưu lại giờ gốc của form ("23:00" = Tý muộn) để lá số hiển thị đúng; an sao đã dùng gioSinh quy về Tý
+      if (lasoJson?.meta) lasoJson.meta.gioSinh = document.getElementById('gio').value.trim();
+
+      // Ngày DL hiển thị trên lá số = ngày người dùng nhập (dân gian đổi ngày lúc 0h).
+      // Tý muộn: âm lịch đã tính sang ngày kế tiếp, nhưng DL vẫn là ngày đã nhập (vd 26/4, không phải 27/4).
+      if (lasoJson?.meta) {
+        const g = id => parseInt(document.getElementById(id)?.value, 10);
+        let dl = null;
+        if (tab === 'DL') {
+          dl = [g('ngayDL'), g('thangDL'), g('namDL')];
+        } else if (typeof lunar2Solar === 'function') {                     // tab Âm lịch: quy ngược từ ngày âm
+          const s = lunar2Solar(ngay, thang, nam, 0);
+          if (s && s[2]) {
+            const t = new Date(+s[2], +s[1] - 1, +s[0] - (document.getElementById('gio').value === '23:00' ? 1 : 0));
+            dl = [t.getDate(), t.getMonth() + 1, t.getFullYear()];
+          }
+        }
+        if (dl && dl.every(n => n > 0)) lasoJson.meta.dlNhap = { d: dl[0], m: dl[1], y: dl[2] };
       }
 
       _lastJson = lasoJson;

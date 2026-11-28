@@ -703,10 +703,18 @@ window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(d
     }
     const quanHeMenhCuc = quanheMenhCuc(hanhNapAm, hanhCuc);
     const thanCu = V ? (V.find(c => c.isThan)?.cungChuc || '—') : '—';
+    
+    // Ngày DL = ngày người dùng nhập (dân gian đổi ngày lúc 0h).
+    // Tý muộn (23h–24h): âm lịch đã tính sang ngày kế tiếp → quy ngược từ âm lịch phải lùi 1 ngày.
     let ngayDLText = '—';
-    if (typeof lunar2Solar === 'function') {
+    if (meta.dlNhap) {
+      ngayDLText = `${meta.dlNhap.d}/${meta.dlNhap.m}/${meta.dlNhap.y}`;
+    } else if (typeof lunar2Solar === 'function') {
       const sol = lunar2Solar(ngayAL, thangAL, namAL, 0);
-      if (sol && sol[0] && sol[1] && sol[2]) ngayDLText = `${sol[0]}/${sol[1]}/${sol[2]}`;
+      if (sol && sol[0] && sol[1] && sol[2]) {
+        const t = new Date(+sol[2], +sol[1] - 1, +sol[0] - (gioSinh === '23:00' ? 1 : 0));
+        ngayDLText = `${t.getDate()}/${t.getMonth() + 1}/${t.getFullYear()}`;
+      }
     }
 
     const isMono = getComputedStyle(document.documentElement).getPropertyValue('--mono-mode').trim() === '1';
@@ -749,7 +757,7 @@ window.TUVI_RENDER_SHARED.createCenterRenderer = function createCenterRenderer(d
         ${row('Năm:', `${namAL} - ${canChi}`)}
         ${row('Ngày DL:', ngayDLText)}
         ${row('Ngày AL:', `${ngayAL}/${thangAL}/${namAL}`)}
-        ${row('Giờ:', `${gioSinh} (${tenChiGio})`)}
+        ${row('Giờ:', (typeof canhGioLabel === 'function' && canhGioLabel(gioSinh)) || `${gioSinh} (${tenChiGio})`)}
       
         ${row('Âm Dương:', amDuong)}
         ${row('Nạp Âm:', napAm || '—')}

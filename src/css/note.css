@@ -6,10 +6,11 @@
     
     body[data-layout="desktop"].note-open .note-sep {
       display: block;
-      flex: 0 0 9px;
+      flex: 0 0 2px;
       cursor: col-resize;
       touch-action: none;
-      background: linear-gradient(100deg, var(--ui-brand-edge) 0%, #b8862b 22%, #f6dc8c 38%, #b8862b 52%, #7a1f1f 70%, #b8862b 86%, var(--ui-brand-edge) 100%);
+      /* background: linear-gradient(100deg, var(--ui-brand-edge) 0%, #b8862b 22%, #f6dc8c 38%, #b8862b 52%, #7a1f1f 70%, #b8862b 86%, var(--ui-brand-edge) 100%); */
+      background: black;
       
     }
     body[data-layout="desktop"].note-open .note-sep:hover,

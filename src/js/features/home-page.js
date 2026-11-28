@@ -205,7 +205,7 @@
       document.addEventListener('click', e => {
         if (e.target.closest('.m-bar [data-go="home"], #menuBar [data-page="home"]')) huyRoiTrang();
       }, true);
-      
+
     function roiTrang(p) {
       if (leave) return;
       if (reduce) { bamTab(p); return; }
@@ -544,7 +544,7 @@
   
     // Vòng 12 địa chi; cán gáo chỉ vào chi nào thì chi đó sáng lên
     function veVongChi(a, t, alpha) {
-      if (alpha <= 0) return;
+          if (alpha <= 0 || R < 40) return;                    // vùng vẽ quá nhỏ (đang đổi cỡ / màn hình quá thấp)
       ctx.save();
       ctx.globalAlpha = alpha;
       ctx.strokeStyle = 'rgba(230,200,130,0.10)'; ctx.lineWidth = 1;

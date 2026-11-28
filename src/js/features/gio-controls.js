@@ -1,4 +1,18 @@
 // src/js/features/gio-controls.js
+    // Tên canh giờ + khoảng giờ theo value của ô giờ ("00:00", "02:00" … "22:00", "23:00").
+    // Dùng chung: thanh ‹ › Xem hạn, dòng giờ trên lá số, lưu CSDL (canhGio).
+    const CANH_GIO_TEN = ['Tý sớm', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tị', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+    function canhGioInfo(v) {
+      const h = parseInt(String(v), 10);
+      if (h === 23) return { ten: 'Tý muộn', khoang: '23h–24h' };
+      if (!(h >= 0 && h <= 22)) return null;
+      const i = Math.floor(((h + 1) % 24) / 2);                 // 0 = Tý sớm … 11 = Hợi
+      return { ten: CANH_GIO_TEN[i], khoang: i === 0 ? '0h–1h' : `${i * 2 - 1}h–${i * 2 + 1}h` };
+    }
+    function canhGioLabel(v) { const c = canhGioInfo(v); return c ? `${c.ten} (${c.khoang})` : ''; }
+    window.canhGioInfo = canhGioInfo;
+    window.canhGioLabel = canhGioLabel;
+
 // ── Giờ xem hạn (sync với input #gio) ────────────────────
     // Format hiển thị: "Dậu (17:20)" — tên chi + giờ chính xác từ #gio
     function fmtHHMM(h, m) {
@@ -14,45 +28,26 @@
       return { h, m };
     }
 
-    // Sync #gio → #gioXem (hiển thị tên chi + HH:MM)
+    // Sync #gio → #gioXem: hiện tên canh + khoảng giờ, ví dụ "Tý muộn (23h–24h)", "Thân (15h–17h)"
     function syncGioToGioXem() {
-      const gioStr = document.getElementById('gio')?.value.trim() || '';
-      const t = parseHHMM(gioStr);
-      const chi = TUVI_LOGIC.chiGioFromStr(gioStr);
       const ge = document.getElementById('gioXem');
-      if (!t || chi === null || !ge) return;
-      const hhmm = fmtHHMM(t.h, t.m);
-      ge.dataset.val = hhmm;
-      ge.textContent = `${TUVI_DATA.CHI[chi]} (${hhmm})`;
+      const v = document.getElementById('gio')?.value || '';
+      const lbl = canhGioLabel(v);
+      if (!ge || !lbl) return;
+      ge.dataset.val = v;
+      ge.textContent = lbl;
     }
-
-    // ±2 giờ; qua ranh giới Tý/Hợi thì nhảy ngày ÂL (kèm tràn tháng/năm).
+    
+      // ‹ › chuyển giữa 12 canh của cùng một ngày: Tý sớm → Sửu → … → Hợi, quay vòng, KHÔNG đổi ngày.
+    // Đang ở Tý muộn: › về Tý sớm, ‹ về Hợi (cùng ngày dương lịch đã nhập).
     function changeGioXem(delta) {
       const gi = document.getElementById('gio');
       if (!gi) return;
-      const t = parseHHMM(gi.value.trim()) || { h: 0, m: 0 };
-      let newH = t.h + delta * 2;
-      let dayShift = 0;
-      while (newH < 0) { newH += 24; dayShift--; }
-      while (newH >= 24) { newH -= 24; dayShift++; }
-
-      if (dayShift !== 0) {
-        const am = normalizeAmLichInputs();
-        if (!am) return;
-        const [dd, mm, yy] = lunar2Solar(am.ngay, am.thang, am.nam, 0);
-        if (!dd || !mm || !yy) {
-          alert('Ngày âm lịch hiện tại không hợp lệ, vui lòng kiểm tra lại.');
-          return;
-        }
-        const jd = jdFromDate(dd, mm, yy) + dayShift;
-        const [nd, nm, ny] = jdToDate(jd);
-        const lunar = solar2Lunar(nd, nm, ny);
-        document.getElementById('ngay').value = lunar.ngay;
-        document.getElementById('thang').value = lunar.thang;
-        document.getElementById('nam').value = lunar.nam;
-      }
-
-      gi.value = fmtHHMM(newH, t.m);
+      const h = parseInt(gi.value, 10);
+      let i = h === 23 ? (delta > 0 ? -1 : 12) : Math.floor(((h + 1) % 24) / 2);
+      if (isNaN(i)) i = 0;
+      i = ((i + delta) % 12 + 12) % 12;
+      gi.value = String(i * 2).padStart(2, '0') + ':00';
       syncGioToGioXem();
       if (typeof syncMobilePickersFromInputs === 'function') syncMobilePickersFromInputs();
       lapLaSo();

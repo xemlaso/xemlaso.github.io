@@ -23,7 +23,7 @@ const TUVI_RENDER = (() => {
       // ── Màu ngũ hành (render tự tính từ nguHanh trong JSON) ──
       const HANH_COLOR = {
         kim: '#76767b',  // bạc
-        moc: '#2d6a2d',  // xanh lá
+        moc: '#21883a',  // xanh lá
         thuy: '#111118',  // đen
         hoa: '#c0392b',  // đỏ
         tho: '#c8960a',  // vàng

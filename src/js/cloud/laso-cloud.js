@@ -135,13 +135,21 @@
     const val = id => String($(id)?.value ?? '').trim();
     const curTab = () => (window._currentTab === 'AL' ? 'AL' : 'DL');
   
+
+      // Giờ Tý muộn (23h–24h) thuộc ngày âm hôm sau → ngày DL thật lúc sinh = (ngày DL quy từ ngày âm) − 1
+  function dlThuc(d, m, y) {
+    if (val('gio') !== '23:00') return [d, m, y];
+    const t = new Date(y, m - 1, d - 1);
+    return [t.getDate(), t.getMonth() + 1, t.getFullYear()];
+  }
+
     // Ảnh chụp form để biết đã sửa chưa: so theo ngày sinh thực (quy về dương lịch),
     // không phụ thuộc đang đứng ở tab Dương lịch hay Âm lịch
     function formSnap() {
       let d;
       if (curTab() === 'AL') {
         const s = typeof lunar2Solar === 'function' ? lunar2Solar(+val('ngay'), +val('thang'), +val('nam'), 0) : null;
-        d = s && s[2] ? [+s[0], +s[1], +s[2]] : ['AL', val('ngay'), val('thang'), val('nam')];
+        d = s && s[2] ? dlThuc(+s[0], +s[1], +s[2]) : ['AL', val('ngay'), val('thang'), val('nam')];
       } else {
         d = [+val('ngayDL'), +val('thangDL'), +val('namDL')];
       }
@@ -155,7 +163,7 @@
       let dl = null;
       if (typeof lunar2Solar === 'function') {
         const s = lunar2Solar(m.ngayAL, m.thangAL, m.namAL, 0);
-        if (s && s[2]) dl = { d: +s[0], m: +s[1], y: +s[2] };
+        if (s && s[2]) { const t = dlThuc(+s[0], +s[1], +s[2]); dl = { d: t[0], m: t[1], y: t[2] }; }
       }
       if (!dl) dl = { d: +val('ngayDL'), m: +val('thangDL'), y: +val('namDL') };
       const hoTen = val('hoTen').slice(0, 100);
@@ -169,7 +177,7 @@
         dl,
         al: { d: +m.ngayAL, m: +m.thangAL, y: +m.namAL },
         gio: val('gio').slice(0, 5),
-        canhGio: String(m.tenChiGio || '').slice(0, 10),
+        canhGio: (window.canhGioInfo?.(val('gio'))?.ten || String(m.tenChiGio || '')).slice(0, 10),
         menh: menhInfo(),
         soAnh: images.length,
         note,
@@ -506,7 +514,9 @@
     const yearOf = x => Number(x.dl?.y) || 0;
     const timeOf = x => x.updatedAt?.toMillis?.() || x.createdAt?.toMillis?.() || 0;
     const cmpName = (a, b) => String(a.hoTen || '').localeCompare(String(b.hoTen || ''), 'vi', { sensitivity: 'base' });
-  
+    // Cho Trang chủ: danh sách rút gọn và mở một lá số
+    window.CLOUD_items = () => items.map(x => ({ id: x.id, hoTen: x.hoTen, dl: x.dl, gioiTinh: x.gioiTinh, menh: x.menh, t: timeOf(x) }));
+    window.CLOUD_open = id => openLaso(id);
     function filtered() {
       const q = noDau(query);
       const years = q.match(/\b\d{4}\b/g) || [];
