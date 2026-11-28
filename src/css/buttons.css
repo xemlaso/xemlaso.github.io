@@ -27,10 +27,10 @@
   --btn-danger: #b3261e;
   --btn-focus: rgba(27, 35, 80, .45);
 
-  --btn-h: 40px;
-  --btn-h-sm: 32px;
-  --btn-radius: 10px;
-  --btn-font: 600 14px Arial, sans-serif;
+  --btn-h: 36px;
+  --btn-h-sm: 30px;
+  --btn-radius: 8px;
+  --btn-font: 600 13px Arial, sans-serif;
   --btn-font-sm: 600 12px Arial, sans-serif;
 }
 

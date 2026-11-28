@@ -5,6 +5,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#070a22">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Vận mệnh">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap&subset=vietnamese" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,900&display=swap&subset=vietnamese" rel="stylesheet">
   <title>Vận mệnh</title>
@@ -24,6 +32,13 @@
   <button type="button" onclick="settingsDownloadImage(this)"><span class="sm-icon">🖼️</span><span class="sm-label">Tải ảnh lá số</span></button>
   <button type="button" id="menuDraw" onclick="settingsToggleDraw()"><span class="sm-icon">✏️</span><span class="sm-label">Vẽ trên lá số</span><span class="sm-check">✓</span></button>
 </div>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+  }
+</script>
+
 <body data-layout="desktop">
   <div class="page">
     <div class="main-layout" id="mainLayout">
